@@ -1,0 +1,60 @@
+{% extends "frontend.html.twig" %}
+
+{% block page_stylesheets %}
+    <link rel="stylesheet" href="{{ asset("plugins/select2/css/select2.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("plugins/select2/css/select2-custom.css") }}">
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Facturas <small>preparar</small></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <label for="">Seleccione agencia</label>
+            <select id="provider" class="form-control input-sm" data-url="{{ path("app_invoices_getservicesbyprovider") }}">
+                {% if providers|length %}
+                    <option value="">Seleccione agencia</option>
+                    {% for provider in providers %}
+                        <option value="{{ provider.id }}">{{ provider.name }}</option>
+                    {% endfor %}
+                {% else %}
+                    <option value="">No hay proveedores pendientes de facturación</option>
+                {% endif %}
+            </select>
+            <div class="help-block"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <label for="servicios">Seleccion servicio pendiente de facturar</label>
+            <select id="services" class="form-control" data-url="{{ path("app_invoices_getinvoiceform") }}">
+                <option value="">Seleccione agencia</option>
+            </select>
+            <div class="help-block"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12" style="min-height: 150px;" id="frmZone" data-url="{{ path("app_invoices_getinvoiceform") }}">
+            
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_javascripts %}
+    <script src="{{ asset("plugins/select2/js/select2.min.js") }}"></script>
+    <script src="{{ asset("plugins/select2/js/i18n/es.js") }}"></script>
+    <script src="{{ asset("plugins/jquery.blockui.min.js") }}"></script>
+    <script src="{{ asset("plugins/jquery.form.js") }}"></script>
+    <script src="{{ asset("js/form-invoice.js") }}"></script>
+    <script>
+        $(document).ready(function() {
+            App.FormInvoice.init();
+        });
+    </script>
+{% endblock %}

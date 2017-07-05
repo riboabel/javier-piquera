@@ -1,0 +1,17 @@
+{% block select %}
+    {% if record.cobradoAt is empty %}
+        <input type="checkbox" name="id[]" value="{{ record.id }}"/>
+    {% endif %}
+{% endblock %}
+
+{% block start %}
+    {{ record.startAt|date("d/m/Y H:i") }}
+{% endblock %}
+
+{% block service %}
+    <span title="{{ record.serviceDescription }}">{{ record.serviceType.name }}</span>
+{% endblock %}
+
+{% block amount %}
+    <div class="text-right">{{ "%0.2f"|format(amount) }}</div>
+{% endblock %}

@@ -1,0 +1,225 @@
+{% extends "frontend.html.twig" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Reservas <small>listado</small></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-lg-12">
+            <div class="pull-right">
+                <div class="btn-group">
+                    <a href="{{ path("app_reservas_new") }}" class="btn btn-success">
+                        <i class="fa fa-plus-circle"></i>
+                        Crear reserva
+                    </a>
+                    <a href="#filter-form" class="btn btn-default" role="button" id="toggleFilter">Filtro</a>
+                </div>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Herramientas
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                        <a href="#" role="button" id="link-select-all">
+                            <i class="glyphicon glyphicon-check"></i>
+                            Seleccionar todos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" role="button" id="link-select-none">
+                            <i class="glyphicon glyphicon-unchecked"></i>
+                            Borrar selección
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="{{ path("app_reports_print_selection") }}" id="linkPrintSelection">
+                            <i class="glyphicon glyphicon-print"></i>
+                            Imprimir
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_reports_print_special_selection') }}" id="linkPrintSpecialReport">
+                            <i class="glyphicon glyphicon-print"></i>
+                            Generar informe de excursiones
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="filter-form" style="display: none;">
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Opciones de filtro</div>
+                <div class="panel-body">
+                    <form action="" class="">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="">Desde</label>
+                                        <input type="text" name="filter[startAt][from]" id="fromDate" class="datepicker form-control input-sm" value="{{ filter.startAt.from }}">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="">Hasta</label>
+                                        <input type="text" name="filter[startAt][to]" id="toDate" class="datepicker form-control input-sm" value="{{ filter.startAt.to }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-3">
+                                        <label for="">Ejecutadas</label>
+                                        <select name="filter[isExecuted]" class="form-control input-sm">
+                                            {% for value, text in {"": "", "yes": "Sí", "no": "No"} %}
+                                                <option value="{{ value }}"{{ value == filter.isExecuted ? ' selected="selected"' : '' }}>{{ text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3">
+                                        <label for="">Canceladas</label>
+                                        <select name="filter[isCancelled]" class="form-control input-sm">
+                                            {% for value, text in {"": "", "yes": "Sí", "no": "No"} %}
+                                                <option value="{{ value }}"{{ value == filter.isCancelled ? ' selected="selected"' : '' }}>{{ text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3">
+                                        <label for="" class="control-label">Asignadas</label>
+                                        <select name="filter[isDriverAssigned]" class="form-control input-sm">
+                                            {% for value, text in {"": "", "yes": "Sí", "no": "No", "with-drivers": "No con conductores"} %}
+                                                <option value="{{ value }}"{{ value == filter.isDriverAssigned ? ' selected="selected"' : '' }}>{{ text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3">
+                                        <label for="">Confirmadas</label>
+                                        <select name="filter[isDriverConfirmed]" class="form-control input-sm">
+                                            {% for value, text in {"": "", "yes": "Sí", "no": "No"} %}
+                                                <option value="{{ value }}"{{ value == filter.isDriverConfirmed ? ' selected="selected"' : '' }}>{{ text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12"{{ 'with-drivers' == filter.isDriverAssigned ? '' : ' style="display: none;"' }}>
+                                <label for="filter_withDrivers" class="control-label">Conductores</label>
+                                <select name="filter[withDrivers]" id="filter_withDrivers" class="form-control" multiple="multiple">
+                                    <option value=""></option>
+                                    {% spaceless %}
+                                        {% for driver in drivers.result %}
+                                            <option value="{{ driver.id }}"{{ driver.id in filter.withDrivers ? ' selected="selected"' : '' }}>{{ driver }}</option>
+                                        {% endfor %}
+                                    {% endspaceless %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="dataTable_wrapper">
+                <table class="table table-striped table-bordered table-hover" id="dataTables-reservas" data-serverside="true" data-ajax-url="{{ path("app_reservas_getdata") }}" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="15">&nbsp;</th>
+                            <th width="15" class="no-sort">E</th>
+                            <th>Inicio</th>
+                            <th>Agencia</th>
+                            <th>Número</th>
+                            <th>Referencia</th>
+                            <th>Cliente(s)</th>
+                            <th>Pax</th>
+                            <th>Servicio</th>
+                            <th>Conductor</th>
+                            <th>Guía</th>
+                            <th title="">I</th>
+                            <th class="no-sort" width="130">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div class="modal fade" data-for="dataTables-reservas">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                    <h4 class="modal-title">Confirmar elmiminación</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">Se dispone a eliminar un registro de reserva. ¿Desea continuar?</div>
+                </div>
+                <div class="modal-footer"><button type="button" data-url="#" class="btn btn-danger btn-md"><i class="fa fa-remove"></i> Continuar</button><button class="btn btn-default btn-md" type="button" data-dismiss="modal"><i class="fa fa-undo"></i> No, gracias</button></div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal.fade -->
+
+    <div class="modal fade" data-for="cancel-op">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                    <h4 class="modal-title">Confirmar cancelación</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">Se dispone a cancelar un registro de reserva. Esta operación no puede deshacerse. La reserva cancelada no será incluida en operaciones de cobros y pagos ni en reportes. ¿Desea continuar?</div>
+                </div>
+                <div class="modal-footer">
+                    <button data-url="#" class="btn btn-warning btn-md"><i class="fa fa-remove"></i> Continuar</button>
+                    <button class="btn btn-default btn-md" type="button" data-dismiss="modal"><i class="fa fa-undo"></i> No, gracias</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal.fade -->
+
+    {% if app.session.flashbag.has('notice') %}
+        <div class="modal fade" data-for="flash">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal" type="button">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-success">
+                            <ul>
+                                {% for notice in app.session.flashbag.get('notice') %}
+                                    <li>{{ notice }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default btn-md" type="button" data-dismiss="modal"><i class="glyphicon glyphicon-ok"></i> Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block page_javascripts %}
+    <script>
+        $(document).ready(function() {
+            App.Reservas.Index.init({"search": '{{ filter.q is defined ? filter.q : '' }}'});
+        });
+    </script>
+{% endblock %}

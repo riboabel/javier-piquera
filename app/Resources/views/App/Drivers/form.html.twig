@@ -1,0 +1,69 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Datos del conductor
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-4">
+                {{ form_label(form.name, 'Nombre', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+            <div class="col-lg-4">
+                {{ form_label(form.carIndicator, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.carIndicator, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+            <div class="col-lg-4">
+                <label>
+                    {{ form_widget(form.isDriverGuide) }}
+                    {{ form_label(form.isDriverGuide)|striptags }}
+                </label>
+                <div class="help-block"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.postalAddress, 'Dirección postal', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block">Aparece en la factura</div>
+            </div>
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.contactInfo, 'Información de contacto', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.contactInfo, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-lg-6">
+                {{ form_label(form.mobilePhone, 'Teléfono móvil', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.mobilePhone, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+            <div class="col-xs-12 col-lg-6">
+                {{ form_label(form.fixedPhone, 'Teléfono fijo', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.fixedPhone, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Datos de facturación
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.bankAccount, 'Cuenta de banco', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.bankAccount, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block">Aparece en las facturas de este conductor</div>
+            </div>
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.nit, 'Número de identificación tributaria', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.nit, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block">Aparece en las facturas de este conductor</div>
+            </div>
+        </div>
+    </div>
+</div>

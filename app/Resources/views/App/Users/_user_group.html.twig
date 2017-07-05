@@ -1,0 +1,7 @@
+{% if user.hasRole('ROLE_ADMIN') %}
+    Administrador
+{% elseif user.hasRole('ROLE_OWNER') %}
+    Jefe
+{% else %}
+    Operario
+{% endif %}

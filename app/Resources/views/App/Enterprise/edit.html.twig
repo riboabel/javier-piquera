@@ -1,0 +1,90 @@
+{% extends "frontend.html.twig" %}
+
+{% form_theme form "fields.html.twig" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Empresa <small>editar</small></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    {{ form_start(form, {"action": path("app_enterprise_edit"), "attr": {"role": "form", "id": "enterprise", 'class': 'validate'}}) }}
+        <div class="row">
+            <div class="col-lg-8 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Datos de mi empresa</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {{ form_label(form.name, 'Nombre', {'label_attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.name, {'attr': {"class": 'form-control'}}) }}
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="col-lg-12">
+                                {{ form_label(form.postalAddress, 'Dirección postal', {'label_attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control'}}) }}
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Datos de facturación</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {{ form_label(form.lastInvoiceNumber, 'Último número de factura', {'label_attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.lastInvoiceNumber, {'attr': {"class": 'form-control'}}) }}
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Logotipo</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                {{ form_widget(form.logoFile, {'no_image_url': ''}) }}
+                                {% if form.logoFile.vars.errors|length > 0 %}
+                                    <div class="text-error">
+                                        {{ form_errors(form.logoFile)|striptags|raw}}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="actions">
+                    <button class="btn btn-success" type="submit">
+                        <i class="fa fa-save"></i>
+                        Guardar
+                    </button>
+                    <a href="{{ path("app_enterprise_view") }}" class="btn btn-default">
+                        <i class="fa fa-undo"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block page_javascripts %}
+    <script src="{{ asset("js/form-enterprise.js") }}"></script>
+    <script>
+        $(document).ready(function() {
+            App.Enterprise.init();
+        });
+    </script>
+{% endblock %}

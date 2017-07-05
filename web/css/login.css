@@ -1,0 +1,9 @@
+#top-spacer {
+    height: 200px;
+}
+
+@media (max-width: 767px) {
+    #top-spacer {
+        height: 0;
+    }
+}

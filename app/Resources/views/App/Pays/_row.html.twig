@@ -1,0 +1,13 @@
+{% block select %}
+    {% if record.paidAt is null %}
+        <input type="checkbox" name="id[]" value="{{ record.id }}"/>
+    {% endif %}
+{% endblock %}
+
+{% block start %}
+    {{ record.startAt|date("d/m/Y H:i") }}
+{% endblock %}
+
+{% block amount %}
+    <div class="text-right">{{ "%0.2f"|format(amount) }}</div>
+{% endblock %}

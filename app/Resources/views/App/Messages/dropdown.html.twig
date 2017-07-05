@@ -1,0 +1,37 @@
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-messages">
+        {% if messages|length > 0 %}
+            {% for message in messages %}
+                <li>
+                    <a href="{{ path("app_messages_read", {"id": message.id}) }}" class="link-message" title="Click leer">
+                        <div>
+                            <strong>{{ message.writer }}</strong>
+                            <span class="pull-right text-muted">
+                                <em>{{ message.createdAt.format('d/m/Y H:i') }}</em>
+                            </span>
+                        </div>
+                        <div>{{ message.content|truncate(80) }}</div>
+                    </a>
+                </li>
+                {% if not loop.last %}
+                    <li class="divider"></li>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <li><a href="#" role="button">No tiene nuevos mensajes</a></li>
+        {% endif %}
+        <li class="divider"></li>
+        <li style="padding-left: 10px; padding-right: 10px;">
+            <div class="pull-right">
+                <a href="{{ path("app_messages_new") }}" class="btn btn-info" title="Escribir mensaje">
+                    <i class="fa fa-plus-circle"></i>
+                </a>
+            </div>
+        </li>
+    </ul>
+    <!-- /.dropdown-messages -->
+</li>
+<!-- /.dropdown -->

@@ -1,3 +1,31 @@
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+fos_user_security_login:
+    path:       "/ingreso"
+    methods:    [ "get", "post" ]
+    defaults:   { _controller: "FOSUserBundle:Security:login" }
+
+fos_user_security_check:
+    path:       "/comprobar-ingreso"
+    methods:    [ "post" ]
+    defaults:   { _controller: "FOSUserBundle:Security:check" }
+
+fos_user_security_logout:
+    path:       "/salir"
+    methods:    [ "get" ]
+    defaults:   { _controller: "FOSUserBundle:Security:logout" }
+
+fos_user_profile_edit:
+    path:         /editar-perfil
+    defaults:     { _controller: "FOSUserBundle:Profile:edit" }
+    methods:      [ "get", "post" ]
+
+fos_user_profile_show:
+    path:         /ver-perfil
+    defaults:     { _controller: "FOSUserBundle:Profile:show" }
+    methods:      [ "get" ]
+
 app:
     resource: '@AppBundle/Controller/'
     type: annotation

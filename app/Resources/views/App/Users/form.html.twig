@@ -1,0 +1,59 @@
+{% form_theme form "::fields.html.twig" %}
+
+<div class="col-lg-8 col-xs-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Datos del usuario
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 col-lg-6">
+                    {{ form_label(form.fullName, 'Nombre completo', {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.fullName, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block"></div>
+                </div>
+                <div class="col-lg-6 col-xs-12">
+                    {{ form_label(form.roles, 'Perfil', {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.roles, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-lg-4">
+                    {{ form_label(form.username, "Usuario", {"label_attr": {'class': "control-label"}}) }}
+                    {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block"></div>
+                </div>
+                <div class="col-xs-12 col-lg-4">
+                    {{ form_label(form.plainPassword.first, 'Contraseña', {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block"></div>
+                </div>
+                <div class="col-xs-12 col-lg-4">
+                    {{ form_label(form.plainPassword.second, 'Repetir contraseña', {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block"></div>
+                </div>
+            </div>
+            {% if form.enterprises is defined %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        {{ form_label(form.enterprises, 'Empresa', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.enterprises, {'attr': {'class': 'form-control'}}) }}
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="col-lg-4 col-xs-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Imagen
+        </div>
+        <div class="panel-body">
+            {{ form_widget(form.imageFile) }}
+        </div>
+    </div>
+</div>

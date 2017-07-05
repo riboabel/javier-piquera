@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GESTIÓN DE PIQUERA :: Ingreso</title>
+    {% stylesheets filter="cssrewrite,?scssphp" output="compiled/css/login.min.css"
+        "plugins/bootstrap/css/bootstrap.min.css"
+        "plugins/bootstrap/css/bootstrap-theme.min.css"
+        "css/login.css"
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12" id="top-spacer"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                <form action="{{ path("fos_user_security_check") }}" role="form" method="post">
+                    <div class="row-fluid">
+                        <div class="col-xs-12">
+                            <h3 class="text-center">GESTIÓN DE PIQUERA</h3>
+                        </div>
+                        {% if error %}
+                            <div class="col-xs-12">
+                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            </div>
+                        {% endif %}
+                        <div class="col-xs-12">
+                            <input type="text" class="form-control" placeholder="Nombre de usuario" autocomplete="off" name="_username" required="required">
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-xs-12">
+                            <input type="password" class="form-control" name="_password" placeholder="Contraseña" autocomplete="off" required="required">
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-xs-12">
+                            <button role="submit" class="btn btn-block btn-success">Ingresar</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                </form>
+            </div>
+        </div>
+    </div>
+    {% javascripts filter="?jsqueeze" output="compiled/js/login.min.js"
+        "../web/plugins/jquery/js/jquery.min.js"
+        "../web/plugins/bootstrap/js/bootstrap.min.js"
+        "../web/plugins/jquery.validate/jquery.validate.min.js"
+        %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+</body>
+</html>

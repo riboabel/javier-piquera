@@ -1,0 +1,114 @@
+{% form_theme form "App/Reservas/fields.html.twig" %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Cliente</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.provider, 'Agencia', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.provider, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.providerReference, 'Referencia', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.providerReference, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-xs-6">
+                {{ form_label(form.clientNames, 'Nombre(s)', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.clientNames, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+            <div class="col-lg-2 col-xs-6">
+                {{ form_label(form.pax, null, {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.pax, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.guide, 'Guía', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.guide, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Fecha y hora</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.startAt, 'Inicio', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.startAt, {'attr': {'class': 'form-control datetimepicker'}}) }}
+                {% if form.startAt.vars.errors|length > 0 %}
+                    <div class="text-danger">{{ form_errors(form.startAt)|striptags|raw }}</div>
+                {% endif %}
+                <div class="help-block"></div>
+            </div>
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.endAt, 'Terminación', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.endAt, {'attr': {'class': 'form-control datetimepicker'}}) }}
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Servicio</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                {{ form_label(form.serviceType, 'Tipo', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.serviceType, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+            <div class="col-lg-12">
+                {{ form_label(form.serviceDescription, 'Descripción', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.serviceDescription, {'attr': {'class': 'form-control'}}) }}
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Lugares</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.startPlace, 'Inicio', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.startPlace, {'attr': {'data-ajax': path('app_reservas_getplaceslist'), 'required': 'required'}}) }}
+                <div class="help-block"></div>
+            </div>
+            <div class="col-lg-6 col-xs-12">
+                {{ form_label(form.endPlace, 'Terminación', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.endPlace, {'attr': {'data-ajax': path('app_reservas_getplaceslist'), 'required': 'required'}}) }}
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Lugares de descanso (solo para servicios de varios días)</div>
+    <div class="panel-body">
+        <div class="collection-container" id="places-container" data-prototype="{{ form_row(form.passingPlaces.vars.prototype)|e }}">
+            {{ form_row(form.passingPlaces) }}
+        </div>
+        <a href="#" id="linkAddPassingPlace" role="button" class="btn btn-xs btn-block btn-info"><i class="fa fa-plus-circle"></i> Agregar lugar de paso</a>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Conductor</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-10 col-xs-9">
+                {{ form_label(form.driver, 'Conductor', {'label_attr': {'class': 'control-label'}}) }}
+                {{ form_widget(form.driver, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="col-lg-2 col-xs-3">
+                <div style="height: 30px;"></div>
+                {{ form_widget(form.isDriverConfirmed) }}
+                {{ form_label(form.isDriverConfirmed) }}
+            </div>
+        </div>
+    </div>
+</div>

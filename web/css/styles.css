@@ -1,0 +1,74 @@
+.input-wrapper > input[type="checkbox"], .input-wrapper > input[type="radio"] {
+    -moz-appearance: none;
+    display: block;
+    float: left;
+    margin-right: -2em;
+    opacity: 0;
+    width: 1em;
+    z-index: -1;
+}
+
+.input-wrapper.input-wrapper-sm > label {
+    margin-top: 4px;
+}
+
+.input-wrapper > input[type="checkbox"] + label, .input-wrapper > input[type="radio"] + label {
+    color: #777;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1em;
+    font-weight: 300;
+    padding-left: 2.55em;
+    padding-right: 0.75em;
+    position: relative;
+    text-decoration: none;
+}
+.input-wrapper > input[type="checkbox"] + label::before, .input-wrapper > input[type="radio"] + label::before {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-transform: none !important;
+}
+.input-wrapper > input[type="checkbox"] + label::before, .input-wrapper > input[type="radio"] + label::before {
+    background: #f8f8f8 none repeat scroll 0 0;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    content: "";
+    display: inline-block;
+    height: 1.8em;
+    left: 0;
+    line-height: 1.725em;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 1.8em;
+}
+
+.input-wrapper.input-wrapper-sm > input[type="checkbox"] + label::before, .input-wrapper.input-wrapper-sm > input[type="radio"] + label::before {
+    top: -1px;
+}
+
+.input-wrapper > input[type="checkbox"]:checked + label::before, .input-wrapper > input[type="radio"]:checked + label::before {
+    background: #666 none repeat scroll 0 0;
+    border-color: #666;
+    color: #ffffff;
+    content: "\f046";
+}
+
+.input-wrapper > input[type="checkbox"]:focus + label::before, .input-wrapper > input[type="radio"]:focus + label::before {
+    border-color: #e5e5e5;
+    box-shadow: 0 0 0 1px #e5e5e5;
+}
+
+.input-wrapper > input[type="checkbox"] + label::before {
+    border-radius: 6px;
+}
+
+.input-wrapper > input[type="radio"] + label::before {
+    border-radius: 100%;
+}
+
+.help-block {
+    font-size: 11px;
+    font-style: italic;
+}

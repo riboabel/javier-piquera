@@ -1,0 +1,18 @@
+{{ form_start(form, {'action': path('app_prices_print', {'id': provider ? provider.id : 0}), 'attr': {'role': 'form', 'target': '_blank'}}) }}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Servicios</h4>
+    </div>
+    <div class="modal-body">
+        <p>Seleccione servicios a mostrar en el informe</p>
+        <div class="row">
+            <div class="col-xs-12">
+                {{ form_widget(form.services) }}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm">Imprimir</button>
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+    </div>
+{{ form_end(form) }}

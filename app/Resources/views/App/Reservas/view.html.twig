@@ -1,0 +1,197 @@
+{% extends "frontend.html.twig" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Reservas <small>ver</small></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            {% if record.isCancelled or record.isExecuted %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Estado</div>
+                <div class="panel-body">
+                    {% if record.isCancelled %}
+                        <strong>Estado:</strong> <i class="glyphicon glyphicon-ban-circle"></i> Cancelada
+                    {% elseif record.isExecuted %}
+                        <strong>Estado:</strong> <i class="glyphicon glyphicon-ok"></i> Ejecutada
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Cliente</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Agencia</strong>: <br>{{ record.provider }}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Referencia</strong>: <br>{{ record.providerReference }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Nombre(s)</strong>: <br>{{ record.clientNames }}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Guía</strong>: <br>{{ record.guide }}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <dov class="col-lg-6 col-xs-12">
+                            <strong>PAX</strong>:
+                            <br>{{ record.pax }}
+                            <div class="help-block"></div>
+                        </dov>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Fecha y hora</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Inicio</strong>: <br>{{ record.startAt.format('d/m/Y H:i') }}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Terminación</strong>: <br>{{ record.endAt ? record.endat.format('d/m/Y H:i') }}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Servicio</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <strong>Tipo</strong>: <br>{{ record.serviceType }}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <strong>Descripción</strong>: <br>{{ record.serviceDescription }}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Lugares</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Inicio</strong>: <br>{{ record.startPlace }}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Terminación</strong>: <br>{{ record.endPlace }}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if record.passingPlaces.count > 0 %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">Lugares de descanso</div>
+                    <div class="panel-body">
+                        {% for place in record.passingPlaces %}
+                            <div class="row item">
+                                <div class="col-xs-3">
+                                    {{ place.stayAt.format('d/m/Y') }}
+                                    <div class="help-block"></div>
+                                </div>
+                                <div class="col-xs-9">
+                                    {{ place.place }}
+                                    <div class="help-block"></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Conductor</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <strong>Nombre</strong>: <br>{{ record.driver }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Movimientos</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Cobrar al cliente</strong>:
+                            <br>{{ "%0.2f"|format(record.clientPriceAmount) }}
+                            {% if record.cobradoAt %}
+                                (cobrado {{ record.cobradoAt.format("d/m/Y H:i") }})
+                            {% endif %}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Pagar al conductor</strong>:
+                            <br>{{ "%0.2f"|format(record.driverPayAmount) }}
+                            {% if record.paidAt %}
+                                (pagado {{ record.paidAt.format('d/m/Y H:i') }})
+                            {% endif %}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Trazabilidad</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Creado por</strong>:
+                            <br>{{ record.createdBy }}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Modificado por</strong>:
+                            <br>{{ record.updatedBy }}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                    {% if logs|length > 0 %}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">Historial de modificaciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for log in logs %}
+                                            <tr>
+                                                <td>{{ log.createdBy }}</td>
+                                                <td>{{ log.createdAt.format('d/m/Y H:i') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <a href="{{ path("app_reservas_edit", {"id": record.id}) }}" class="btn btn-info"><i class="fa fa-edit"></i> Editar</a>
+            <a href="{{ path("app_reservas_index") }}" class="btn btn-default"><i class="fa fa-table"></i> Volver al listado</a>
+        </div>
+    </div>
+    <!-- /.row -->
+{% endblock %}

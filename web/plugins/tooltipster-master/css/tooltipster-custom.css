@@ -1,0 +1,13 @@
+.tooltipster-default {
+    background: #cd2e26;
+    border: 0;
+    color: #fff;
+    max-width: 350px;
+}
+
+.tooltipster-default .tooltipster-content {
+    font-family: Loto, sans-serif;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 4px 7px;
+}

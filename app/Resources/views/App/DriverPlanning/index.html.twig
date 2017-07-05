@@ -1,0 +1,88 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Planifiación de conductores{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset("plugins/jquery.ui/css/jquery-ui.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("plugins/bootstrap/css/bootstrap.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("plugins/bootstrap/css/bootstrap-theme.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("plugins/tooltipster-master/css/tooltipster.css") }}">
+    <link rel="stylesheet" href="{{ asset("plugins/tooltipster-master/css/tooltipster-custom.css") }}">
+    <link rel="stylesheet" href="{{ asset("plugins/fontawesome/css/font-awesome.min.css") }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset("plugins/jquery.dataTables/datatables.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("plugins/select2/css/select2.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("css/sb-admin-2.css") }}">
+    <link rel="stylesheet" href="{{ asset("css/styles.css") }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12" style="min-height: 12px;"></div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pull-left">
+                    <h4>Panel de planificación de conductores</h4>
+                </div>
+                <div class="pull-right form-inline">
+                    <label for="from-date">Desde</label>
+                    <input type="text" id="from-date" class="form-control input-sm datepicker">
+                    <label for="to-date">Hasta</label>
+                    <input type="text" id="to-date" class="form-control input-sm datepicker">
+                    <a href="{{ path("homepage") }}" class="btn btn-default">
+                        Cerrar
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table id="table-records" class="table table-striped table-condensed" data-url="{{ path("app_driverplanning_getdata") }}" data-driver-url="{{ path("app_driverplanning_getdrivers") }}">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Agencia</th>
+                            <th>Referencia</th>
+                            <th>Servicio</th>
+                            <th>Descripción</th>
+                            <th>Inicio</th>
+                            <th>Terminación</th>
+                            <th>Conductor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset("plugins/jquery/js/jquery.min.js") }}"></script>
+    <script src="{{ asset("plugins/jquery-migrate-1.2.1.min.js") }}"></script>
+    <script src="{{ asset("plugins/jquery.ui/js/jquery-ui-1.11.4.min.js") }}"></script>
+    <script src="{{ asset("plugins/bootstrap/js/bootstrap.min.js") }}"></script>
+    <script src="{{ asset("plugins/jquery.validate/jquery.validate.min.js") }}"></script>
+    <script src="{{ asset("plugins/jquery.validate/localization/messages_es.min.js") }}"></script>
+    <script src="{{ asset("plugins/tooltipster-master/js/jquery.tooltipster.min.js") }}"></script>
+    <script src="{{ asset("plugins/jquery.dataTables/datatables.min.js") }}"></script>
+    <script src="{{ asset("plugins/select2/js/select2.min.js") }}"></script>
+    <script src="{{ asset("plugins/select2/js/i18n/es.js") }}"></script>
+    <script src="{{ asset("js/driver-planning.js") }}"></script>
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+{% endblock %}

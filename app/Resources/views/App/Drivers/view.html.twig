@@ -1,0 +1,103 @@
+{% extends "frontend.html.twig" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Conductores <small>ver datos</small></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Datos del conductor
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <strong>Nombre</strong><br>
+                            {{ record.name }}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-4">
+                            <strong>Indicativo del vehículo</strong><br>
+                            {{ record.carIndicator }}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-wrapper">
+                                <input type="checkbox"{{ record.isDriverGuide ? ' checked="checked"' : '' }}>
+                                <label>Es driver guide</label>
+                            </div>
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Dirección postal</strong><br>
+                            {{ record.postalAddress }}
+                            <div class="help-block">Aparece en la factura</div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Información de contacto</strong><br>
+                            {{ record.contactInfo }}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Teléfono móvil</strong><br>
+                            {{ record.mobilePhone ? record.mobilePhone|phone_number_format('INTERNATIONAL') : '' }}
+                            <div class="help-block"></div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Teléfono fijo</strong><br>
+                            {{ record.fixedPhone ? record.fixedPhone|phone_number_format('INTERNATIONAL') : '' }}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Datos de facturación
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Cuenta de banco</strong><br>
+                            {{ record.bankAccount }}
+                            <div class="help-block">Aparece en las facturas de este conductor</div>
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <strong>Número de identificación tributaria</strong><br>
+                            {{ record.nit }}
+                            <div class="help-block">Aparece en las facturas de este conductor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="{{ path("app_drivers_edit", {"id": record.id}) }}" class="btn btn-success">
+                <i class="glyphicon glyphicon-edit"></i>
+                Editar
+            </a>
+            <a href="{{ path("app_drivers_index") }}" class="btn btn-default">
+                <i class="fa fa-tables"></i>
+                Ir al listado
+            </a>
+        </div>
+    </div>
+    <!-- /.row -->
+{% endblock %}
+
+{% block page_javascripts %}
+    <script src="{{ asset("js/form-driver.js") }}"></script>
+    <script>
+        $(document).ready(function() {
+            App.Driver.init();
+        });
+    </script>
+{% endblock %}

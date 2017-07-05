@@ -1,0 +1,15 @@
+<li>
+    <a href="{{ path("app_default_listweekpdfs") }}" id="linkGenerateWeekPdfs" role="button">
+        <div>
+            <p>
+                <strong>Conciliación semanal</strong>
+                <span class="pull-right text-muted">{{ '%0.1f'|format(percent * 100) }}%</span>
+            </p>
+            <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ (percent * 100)|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ (percent * 100)|round }}%">
+                    <span class="sr-only">{{ (percent * 100)|round }}% Completado</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</li>

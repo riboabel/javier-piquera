@@ -1,0 +1,55 @@
+{% extends "frontend.html.twig" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Guías <small>ver datos</small></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Datos del guía
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <strong>Nombre</strong><br>
+                            {{ record.name }}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <strong>Información de contacto</strong><br>
+                            {{ record.contactInfo }}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <strong>Agencias asociadas</strong><br>
+                            {% for provider in record.providers %}
+                                {{ provider }}<br>
+                            {% endfor %}
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="{{ path("app_guides_edit", {"id": record.id}) }}" class="btn btn-success">
+                <i class="glyphicon glyphicon-edit"></i>
+                Editar
+            </a>
+            <a href="{{ path("app_guides_index") }}" class="btn btn-default">
+                <i class="fa fa-tables"></i>
+                Ir al listado
+            </a>
+        </div>
+    </div>
+    <!-- /.row -->
+{% endblock %}

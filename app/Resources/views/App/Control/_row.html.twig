@@ -1,0 +1,42 @@
+{% block start_at %}
+    <div title="{{ record.startPlace.name }}: {{ record.startPlace.postalAddress }} a {{ record.endPlace.name }}: {{ record.endPlace.postalAddress }}">{{ record.startAt|date('d/m/Y H:i') }}</div>
+{% endblock %}
+
+{% block provider %}
+    <div title="{{ record.provider.contactInfo }}">{{ record.provider.name }}</div>
+{% endblock %}
+
+{% block pax %}
+    <div class="center">{{ record.pax }}</div>
+{% endblock %}
+
+{% block service %}
+    <span title="{{ record.serviceDescription }}">{{ record.serviceType.name }}</span>
+{% endblock %}
+
+{% block guide %}
+    {% if record.guide is not empty %}
+        <div title="{{ record.guide.contactInfo }}">
+            {{ record.guide }}
+        </div>
+    {% else %}
+        &nbsp;
+    {% endif %}
+{% endblock %}
+
+{% block driver %}
+    {% if record.driver %}
+        <span title="{{ record.driver.contactInfo }}" class="text-{{ record.isDriverConfirmed ? 'success' : 'danger' }}">{{ record.driver.name }}</span>
+    {% else %}
+        &nbsp;
+    {% endif %}
+{% endblock %}
+
+{% block controls %}
+    {% set checked = record.control1 is not empty and record.control2 is not empty %}
+    <div class="text-center">
+        <a href="{{ path("app_control_edit", {id: record.id}) }}" class="btn btn-{{ checked ? 'success' : 'info' }} btn-control btn-xs">
+            <span class="fa fa-check"></span>
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "frontend.html.twig" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Mis datos <small>ver</small></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">Datos personales</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="control-label">Nombre completo</label>
+                            <div class="form-control">{{ app.user.fullName }}</div>
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">Imagen</div>
+                <div class="panel-body text-center">
+                    <img src="{{ vich_uploader_asset(app.user, "imageFile") }}" alt="" class="img img-thumbnail" width="200" height="150">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="actions">
+                <a href="{{ path("fos_user_profile_edit") }}" class="btn btn-info">
+                    <i class="fa fa-edit"></i>
+                    Editar
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+{% endblock %}

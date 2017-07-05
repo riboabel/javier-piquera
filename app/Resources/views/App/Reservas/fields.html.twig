@@ -1,0 +1,23 @@
+{% block collection_row %}
+    {% for record in form %}
+        {{ form_row(record) }}
+    {% endfor %}
+{% endblock %}
+
+{% block reserva_passing_place_row %}
+    <div class="row item">
+        <div class="col-lg-3 col-xs-12">
+            {{ form_widget(form.stayAt, {attr: {class: "form-control datepicker input-sm"}}) }}
+            <div class="help-block"></div>
+        </div>
+        <div class="col-lg-8 col-xs-9">
+            {{ form_widget(form.place, {attr: {class: 'passing-place', 'required': 'required'}}) }}
+            <div class="help-block"></div>
+        </div>
+        <div class="col-lg-1 col-xs-3">
+            <button class="btn btn-danger btn-block btn-sm btn-delete" type="button">
+                <i class="fa fa-minus-circle"></i>
+            </button>
+        </div>
+    </div>
+{% endblock %}

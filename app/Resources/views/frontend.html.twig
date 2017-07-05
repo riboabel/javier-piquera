@@ -1,0 +1,259 @@
+{% extends "::base.html.twig" %}
+
+{% block html_tag %}<html lang="{{ app.request.locale|split('_')[0] }}">{% endblock %}
+
+{% block metas %}
+    {{ parent() }}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+{% endblock %}
+
+{% block title %}GESTIÓN DE PIQUERA{% endblock %}
+
+{% block stylesheets %}
+    <!-- BEGIN GLOBAL STYLESHEETS -->
+    {% stylesheets filter="cssrewrite,?scssphp" output="compiled/css/plugins.min.css"
+        'plugins/iCheck/skins/all.css'
+        'plugins/jquery.ui/css/jquery-ui.min.css'
+        'plugins/bootstrap/css/bootstrap.min.css'
+        'plugins/bootstrap/css/bootstrap-theme.min.css'
+        'plugins/fontawesome/css/font-awesome.min.css'
+        'plugins/ionicons/css/ionicons.css'
+        'plugins/metisMenu/dist/metisMenu.css'
+        'plugins/tooltipster-master/css/tooltipster.css'
+        'plugins/tooltipster-master/css/tooltipster-custom.css'
+        'plugins/jquery.dataTables/datatables.min.css'
+        'plugins/select2/css/select2.min.css'
+        'plugins/select2/css/select2-custom.css'
+        'plugins/bootstrap-fileupload/bootstrap-fileupload.css'
+        'plugins/jquery.intlTelInput/css/intlTelInput.css'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+
+    {% stylesheets filter="?scssphp" output="compiled/css/styles.min.css"
+        '../web/css/sb-admin-2.css'
+        '../web/css/styles.css'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- END GLOBAL STYLESHEETS -->
+
+    <!-- BEGIN PAGE STYLESHEETS -->
+    {% block page_stylesheets %}{% endblock %}
+    <!-- END PAGE STYLESHEETS -->
+{% endblock %}
+
+{% block body %}
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ path("homepage") }}">GESTIÓN DE PIQUERA</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                {{ render(controller("AppBundle:Messages:dropdown")) }}
+                {{ render(controller("AppBundle:Default:dropdownNotifications")) }}
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <img class="img img-rounded" src="{{ app.user.imageName is not null ? vich_uploader_asset(app.user, "imageFile") : asset('images/anonimo.png') }}" alt="{{ app.user.fullName  ?: app.user.username }}" style="width: 20px; height: 20px;">
+                        {{ app.user.fullName  ?: app.user.username }}
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="{{ path("fos_user_profile_edit") }}"><i class="fa fa-user fa-fw"></i> Mis datos</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{{ path("fos_user_security_logout") }}"><i class="fa fa-sign-out fa-fw"></i> Salir</a></li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <!-- /.sidebar-search -->
+                        <li>
+                            <a href="{{ path("app_dashboard_index") }}"><i class="fa fa-dashboard fa-fw"></i> Panel de control</a>
+                        </li>
+                        <li>
+                            <a href="{{ path("app_reservas_new") }}"><i class="fa fa-plus-circle fa-fw"></i> Crear reserva</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-taxi fa-fw"></i> Gestión<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ path("app_reservas_index") }}">Reservas</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path("app_driverplanning_index") }}">Planificación de conductores</a>
+                                </li>
+                                <li><a href="{{ path('app_control_index') }}">Control de reervas</a></li>
+                                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
+                                    <li><a href="{{ path("app_prices_index") }}">Catálogo de precios</a></li>
+                                    <li><a href="{{ path("app_cobros_index") }}">Cobros a agencias</a></li>
+                                    <li><a href="{{ path("app_invoices_index") }}">Facturación de servicios</a></li>
+                                    <li><a href="{{ path("app_pays_index") }}">Pagos a conductores</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-print"></i> Informes<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="{{ path("app_reports_all_reservas_between_dates") }}" class="link-report">Servicios entre fechas</a></li>
+                                <li><a href="{{ path("app_reports_all_reservas_by_provider") }}" class="link-report">Servicios por agencia</a></li>
+                                <li><a href="{{ path("app_reports_all_reservas_by_driver") }}" class="link-report">Servicios por conductor</a></li>
+                                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
+                                    <li><a href="{{ path("app_reports_old_cobros") }}" class="link-report">Cobros realizados</a></li>
+                                    <li><a href="{{ path("app_reports_old_pays") }}" class="link-report">Pagos realizados</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-cog fa-fw"></i> Administración<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="{{ path("app_enterprise_view") }}">Datos de empresa</a></li>
+                                <li><a href="{{ path("app_drivers_index") }}">Conductores</a></li>
+                                <li><a href="{{ path("app_servicetypes_index") }}">Tipos de servicio</a></li>
+                                <li><a href="{{ path("app_providers_index") }}">Agencias</a></li>
+                                <li><a href="{{ path('app_locations_index') }}">Localidades</a></li>
+                                <li><a href="{{ path("app_places_index") }}">Lugares</a></li>
+                                <li><a href="{{ path("app_guides_index") }}">Guías</a></li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li><a href="{{ path("app_users_index") }}">Usuarios</a></li>
+                                {% endif %}
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            {% block page_content %}Page content{% endblock %}
+        </div>
+        <!-- /#page-wrapper -->
+
+        <div class="clearfix"></div>
+        <div id="footer-wrapper">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    Desarrollado por <a href="mailto:raibelbotta@gmail.com">Raibel Botta</a> en 2016
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#wrapper -->
+
+    <div class="modal fade" data-backdrop="static" data-for="message">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Leer mensaje</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" type="button" data-dismiss="modal">Cerrar</button></div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+    <!-- BEGIN GLOBAL JAVASCRIPTS -->
+    {% javascripts filter="?jsqueeze" output="compiled/js/plugins.min.js"
+        'plugins/jquery/js/jquery.min.js'
+        'plugins/jquery-migrate-1.2.1.min.js'
+        'plugins/jquery.ui/js/jquery-ui-1.11.4.min.js'
+        'plugins/jquery-ui-timepicker-addon.js'
+        'plugins/bootstrap/js/bootstrap.min.js'
+        'plugins/metisMenu/dist/metisMenu.js'
+        'plugins/jquery.validate/jquery.validate.min.js'
+        'plugins/jquery.validate/localization/messages_es.min.js'
+        'plugins/tooltipster-master/js/jquery.tooltipster.js'
+        'plugins/jquery.dataTables/datatables.min.js'
+        'plugins/select2/js/select2.js'
+        'plugins/select2/js/i18n/es.js'
+        'plugins/jquery.form.js'
+        'plugins/jquery.blockui.min.js'
+        'plugins/bootstrap-fileupload/bootstrap-fileupload.js'
+        'plugins/iCheck/icheck.js'
+        'plugins/jquery.intlTelInput/js/intlTelInput.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts filter="?jsqueeze" output="compiled/js/app.min.js"
+        'js/app.js'
+        "js/form-guide.js"
+        "js/guides.js"
+        'js/dashboard.js'
+        'js/drivers.js'
+        'js/form-driver.js'
+        'js/tables.js'
+        'js/reservas.js'
+        'js/form-reserva.js'
+        'js/users.js'
+        'js/form-user.js'
+        'js/servicetypes.js'
+        'js/form-servicetype.js'
+        'js/providers.js'
+        'js/form-provider.js'
+        'js/prices.js'
+        'js/cobros.js'
+        'js/pays.js'
+        'js/control.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            App.Main.init();
+        });
+    </script>
+    <!-- END GLOBAL JAVASCRIPTS -->
+
+    <!-- BEGIN PAGE JAVASCRIPTS -->
+    {% block page_javascripts %}{% endblock %}
+    <!-- END PAGE JAVASCRIPTS -->
+{% endblock %}
