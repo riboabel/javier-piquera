@@ -234,12 +234,15 @@ class Invoice
     /**
      * Add lines
      *
-     * @param \AppBundle\Entity\InvoiceLine $lines
+     * @param \AppBundle\Entity\InvoiceLine $line
      * @return Invoice
      */
-    public function addLine(\AppBundle\Entity\InvoiceLine $lines)
+    public function addLine(\AppBundle\Entity\InvoiceLine $line)
     {
-        $this->lines[] = $lines;
+        if (!$this->lines->contains($line)) {
+            $this->lines[] = $line;
+            $line->setInvoice($this);
+        }
 
         return $this;
     }
