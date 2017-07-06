@@ -20,7 +20,7 @@ class UpgradeInvoicesFromReservasCommand extends ContainerAwareCommand
         $this->setName('app:invoices:upgrade');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $manager = $this->getContainer()->get('doctrine.orm.entity_manager');
         $counter = 0;
