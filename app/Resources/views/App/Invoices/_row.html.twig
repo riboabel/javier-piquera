@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block actions %}
-    <a href="{{ path("app_reports_printinvoice", {'invoiceNumber': record.serialNumber}) }}" class="btn btn-xs btn-default" title="Imprimir factura" target="_blank">
+    <a href="{{ path("app_reports_printinvoice", {serialNumber: record.serialNumber}) }}" class="btn btn-xs btn-default" title="Imprimir factura" target="_blank">
         <i class="glyphicon glyphicon-print"></i>
     </a>
     {% if record.modelName == 'ATRIO' %}

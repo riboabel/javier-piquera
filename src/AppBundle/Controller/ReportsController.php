@@ -270,22 +270,25 @@ class ReportsController extends Controller
     }
 
     /**
-     * @Route("/imprimir-factura/{invoiceNumber}", requirements={"invoiceNumber": "\d{4}\/\d{4}"})
+     * @Route("/imprimir-factura/{serialNumber}", requirements={"serialNumber": "\d{4}\/\d{4}"})
      * @Method({"get"})
-     * @ParamConverter("record", class="AppBundle\Entity\Reserva")
-     * @param \AppBundle\Entity\Reserva $record
+     * @ParamConverter("record", class="AppBundle\Entity\Invoice")
+     * @param \AppBundle\Entity\Invoice $record
      * @return Response
      */
-    public function printInvoiceAction(\AppBundle\Entity\Reserva $record)
+    public function printInvoiceAction(\AppBundle\Entity\Invoice $record)
     {
-        $em = $this->getDoctrine()->getManager();
+        $manager = $this->getDoctrine()->getManager();
+        $enterprise = $manager->getRepository('AppBundle:Enterprise')->findOneBy(array());
 
         $report = new Reports\Invoice(array(
             'record' => $record,
-            'logo_path' => $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos'
-        ), $em);
+            'logo_path' => null !== $enterprise->getLogoName() ? sprintf('%s/../web/uploads/logos/%s', $this->container->getParameter('kernel.root_dir'), $enterprise->getLogoName()) : null
+        ), $manager);
 
-        return new Response($report->getContent(), 200, array('Content-Type' => 'application/pdf'));
+        return new StreamedResponse(function() use($report) {
+            file_put_contents('php://output', $report->getContent());
+        }, 200, array('Content-Type' => 'application/pdf'));
     }
 
     /**
