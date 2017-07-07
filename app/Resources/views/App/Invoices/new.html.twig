@@ -1,0 +1,137 @@
+{% extends "frontend.html.twig" %}
+
+{% form_theme form _self %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Facturas <small>crear</small></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    {{ form_start(form, {attr: {role: 'form', id: 'invoice'}}) }}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Datos de la factura
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            {{ form_label(form.provider, "Agencia") }}
+                            {{ form_widget(form.provider) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.driver, "Conductor") }}
+                            {{ form_widget(form.driver) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.modelName, "Modelo de impresión") }}
+                            {{ form_widget(form.modelName, {attr: {class: "form-control"}}) }}
+                            {% if form.modelName.vars.errors|length > 0 %}
+                                <div class="error text-danger" id="error-{{ form.modelName.vars.id }}">
+                                    {{ form_errors(form.modelName)|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default hidden" id="fakedServices">
+                    <div class="panel-heading">
+                        Servicios
+                    </div>
+                    <div class="panel-body"></div>
+                </div>
+                {{ form_row(form.lines) }}
+                <div class="row">
+                    <div class="col-sm-offset-10 col-sm-2 col-xs-12 form-group">
+                        {{ form_label(form.totalCharge) }}
+                        {{ form_widget(form.totalCharge, {attr: {class: "form-control text-right"}}) }}
+                    </div>
+                </div>
+                <button class="btn btn-success" type="submit">
+                    <i class="fa fa-save"></i>
+                    Guardar
+                </button>
+                <a href="{{ path("app_invoices_index") }}" class="btn btn-default">
+                    <i class="fa fa-undo"></i>
+                    Cancelar
+                </a>
+            </div>
+        </div>
+        <!-- /.row -->
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block _invoice_form_lines_row %}
+    <div class="panel panel-default hidden">
+        <div class="panel-heading">
+            {{ form_label(form, "Servicios")|striptags }}
+            <input type="hidden" name="services" value="{{ form.vars.data|length }}">
+        </div>
+        <div class="panel-body">
+            <div id="{{ form.vars.id }}" data-prototype="{{ form_row(form.vars.prototype)|e }}">
+                {{ form_widget(form) }}
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="pull-right">
+                <button type="button" class="btn btn-xs btn-info btn-add-item" title="Agregar servicio"><span class="fa fa-plus-circle"></span></button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block invoice_line_row %}
+    <div class="item">
+        <div class="row">
+            <div class="col-sm-4 form-group">
+                {{ form_label(form.service, "Servicio") }}
+                {{ form_widget(form.service, {attr: {required: "required"}}) }}
+                {% if form.vars.errors|length > 0 %}
+                    <div class="error text-danger" id="error-{{ form.vars.id }}">
+                        {{ form_errors(form)|striptags }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group col-sm-2">
+                {{ form_label(form.meassurementUnit, "Unidad") }}
+                {{ form_widget(form.meassurementUnit, {attr: {class: "form-control"}}) }}
+            </div>
+            <div class="col-sm-2 form-group">
+                {{ form_label(form.quantity, "Cantidad") }}
+                {{ form_widget(form.quantity, {attr: {class: "form-control text-right"}}) }}
+            </div>
+            <div class="col-sm-2 form-group">
+                {{ form_label(form.unitPrice, "Precio") }}
+                {{ form_widget(form.unitPrice, {attr: {class: "form-control text-right"}}) }}
+            </div>
+            <div class="col-sm-2 form-group">
+                {{ form_label(form.totalPrice, "Importe") }}
+                {{ form_widget(form.totalPrice, {attr: {class: "form-control text-right"}}) }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.notes, "Notas") }}
+            {{ form_widget(form.notes, {attr: {class: "form-control"}}) }}
+        </div>
+        {{ form_rest(form) }}
+        <div class="pull-right">
+            <button class="btn btn-xs btn-danger btn-delete-item" type="button"><span class="fa fa-trash"></span></button>
+        </div>
+        <div class="clearfix"></div>
+        <hr>
+    </div>
+{% endblock %}
+
+{% block page_javascripts %}
+    <script>
+        $(document).ready(function() {
+            App.Invoices.Form.init();
+        });
+    </script>
+{% endblock %}

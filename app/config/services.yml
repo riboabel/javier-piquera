@@ -24,6 +24,16 @@ services:
         arguments: [ '@security.token_storage' ]
         tags:
             - { name: form.type }
+    app.form.type.invoice_form_type:
+        class: AppBundle\Form\Type\InvoiceFormType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
+    app.form.type.invoice_line_form_type:
+        class: AppBundle\Form\Type\InvoiceLineType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
 
     app.morris_graph.area:
         class: AppBundle\Services\MorrisGraphGenerator

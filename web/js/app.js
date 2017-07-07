@@ -55,6 +55,11 @@ App.Main = function($) {
                 errorElement: 'span',
                 errorClass: 'error',
                 errorPlacement: function(error, element) {
+                    if (element.is(':hidden')) {
+                        element = element.parent();
+                    } else if (element.is('.select2-hidden-accessible')) {
+                        element = element.parent().find('.select2-container');
+                    }
                     if (!element.data('tooltipster-ns')) {
                         element.tooltipster({
                             trigger: 'custom',
@@ -67,6 +72,12 @@ App.Main = function($) {
                     element.tooltipster('show');
                 },
                 success: function (label, element) {
+                    if ($(element).is(':hidden')) {
+                        element = $(element).parent();
+                    } else if ($(element).is('.select2-hidden-accessible')) {
+                        element = $(element).parent().find('.select2-container');
+                    }
+
                     $(element).tooltipster('hide');
                 }
             }, options));

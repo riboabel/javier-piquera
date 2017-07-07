@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -35,6 +36,8 @@ class Invoice
      * @var string
      *
      * @ORM\Column(name="model_name", type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Regex("/^(ATRIO|GENERAL)$/")
      */
     private $modelName;
 

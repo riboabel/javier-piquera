@@ -144,7 +144,7 @@ class Reserva
     /**
      * @var string
      *
-     * @ORM\Column(name="client_price_amount", type="decimal", scale=2)
+     * @ORM\Column(name="client_price_amount", type="decimal", precision=10, scale=2)
      */
     private $clientPriceAmount = 0;
 

@@ -58,6 +58,7 @@ class InvoiceLine
      * @var string
      *
      * @ORM\Column(name="service_serial_number", length=20)
+     * @Assert\NotBlank
      * @Assert\Length(max=20)
      */
     private $serviceSerialNumber;
