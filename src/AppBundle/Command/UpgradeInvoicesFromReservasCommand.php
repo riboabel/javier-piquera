@@ -34,6 +34,7 @@ class UpgradeInvoicesFromReservasCommand extends ContainerAwareCommand
                     ->setProvider($reserva->getProvider())
                     ->setSerialNumber($reserva->getInvoiceNumber())
                     ->setTotalCharge($reserva->getInvoicedTotalPrice())
+                    ->setCreatedAt($reserva->getInvoicedAt())
                     ;
 
             $serviceLine = new InvoiceLine();
