@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * ReservaLog
  *
  * @ORM\Table(name="reserva_log")
- * @ORM\Entity(repositoryClass="ReservaLogRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ReservaLogRepository")
  */
 class ReservaLog
 {
@@ -49,7 +49,7 @@ class ReservaLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -72,7 +72,7 @@ class ReservaLog
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -95,7 +95,7 @@ class ReservaLog
     /**
      * Get createdBy
      *
-     * @return string 
+     * @return string
      */
     public function getCreatedBy()
     {
@@ -118,7 +118,7 @@ class ReservaLog
     /**
      * Get reserva
      *
-     * @return \AppBundle\Entity\Reserva 
+     * @return \AppBundle\Entity\Reserva
      */
     public function getReserva()
     {

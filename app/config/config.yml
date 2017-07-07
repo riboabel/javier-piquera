@@ -11,7 +11,7 @@ parameters:
 
 framework:
     #esi: ~
-    translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: [ '%locale%' ] }
     secret: '%secret%'
     router:
         resource: '%kernel.root_dir%/config/routing.yml'
@@ -21,7 +21,7 @@ framework:
     validation: { enable_annotations: true }
     #serializer: { enable_annotations: true }
     templating:
-        engines: ['twig']
+        engines: [ 'twig' ]
     default_locale: '%locale%'
     trusted_hosts: ~
     trusted_proxies: ~
@@ -100,16 +100,16 @@ vich_uploader:
     mappings:
         profile_image:
             uri_prefix:             /uploads/profile
-            upload_destination:     %kernel.root_dir%/../web/uploads/profile
+            upload_destination:     '%kernel.root_dir%/../web/uploads/profile'
             namer:                  vich_uploader.namer_uniqid
         logos:
             uri_prefix:             /uploads/logos
-            upload_destination:     %kernel.root_dir%/../web/uploads/logos
+            upload_destination:     '%kernel.root_dir%/../web/uploads/logos'
             namer:                  vich_uploader.namer_uniqid
 
 assetic:
     debug:              false
-    use_controller:     %kernel.debug%
+    use_controller:     '%kernel.debug%'
     filters:
         cssrewrite:     ~
         jsqueeze:       ~

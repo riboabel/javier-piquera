@@ -194,7 +194,9 @@ class ReportsController extends Controller
                 $data = $form->getData();
                 $report = new Reports\ServicesByDriverReport($form->getData(), $em);
 
-                return new Response($report->getContent(), 200, array('Content-Type' => 'application/pdf'));
+                return new StreamedResponse(function() use($report) {
+                    file_put_contents('php://output', $report->getContent());
+                }, 200, array('Content-Type' => 'application/pdf'));
             }
         }
 
@@ -248,7 +250,9 @@ class ReportsController extends Controller
             'prices' => $request->get('prices', array())
         ), $em);
 
-        return new Response($report->getContent(), 200, array('Content-Type' => 'application/pdf'));
+        return new StreamedResponse(function() use($report) {
+            file_put_contents('php://output', $report->getContent());
+        }, 200, array('Content-Type' => 'application/pdf'));
     }
 
     /**
@@ -266,7 +270,9 @@ class ReportsController extends Controller
             'prices' => $request->get('prices', array())
         ), $em);
 
-        return new Response($report->getContent(), 200, array('Content-Type' => 'application/pdf'));
+        return new StreamedResponse(function() use($report) {
+            file_put_contents('php://output', $report->getContent());
+        }, 200, array('Content-Type' => 'application/pdf'));
     }
 
     /**
@@ -307,7 +313,9 @@ class ReportsController extends Controller
             'logo_path' => $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos'
         ), $em);
 
-        return new Response($report->getContent(), 200, array('Content-Type' => 'application/pdf'));
+        return new StreamedResponse(function() use($report) {
+            file_put_contents('php://output', $report->getContent());
+        }, 200, array('Content-Type' => 'application/pdf'));
     }
 
     /**
@@ -326,7 +334,9 @@ class ReportsController extends Controller
             'logo_path' => $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos'
         ), $em);
 
-        return new Response($report->getContent(), 200, array('Content-Type' => 'application/pdf'));
+        return new StreamedResponse(function() use($report) {
+            file_put_contents('php://output', $report->getContent());
+        }, 200, array('Content-Type' => 'application/pdf'));
     }
 
     /**
@@ -358,7 +368,9 @@ class ReportsController extends Controller
             $em = $this->getDoctrine()->getManager();
             $report = new Reports\CobrosReport($em, $data['fromDate'], $data['toDate']);
 
-            return new Response($report->getContent(), 200, array('Content-Type' => 'application/pdf'));
+            return new StreamedResponse(function() use($report) {
+                file_put_contents('php://output', $report->getContent());
+            }, 200, array('Content-Type' => 'application/pdf'));
         }
 
         return $this->render('App/Reports/form_old_cobros.html.twig', array(
@@ -395,7 +407,9 @@ class ReportsController extends Controller
             $em = $this->getDoctrine()->getManager();
             $report = new Reports\PaysReport($em, $data['fromDate'], $data['toDate']);
 
-            return new Response($report->getContent(), 200, array('Content-Type' => 'application/pdf'));
+            return new StreamedResponse(function() use($report) {
+                file_put_contents('php://output', $report->getContent());
+            }, 200, array('Content-Type' => 'application/pdf'));
         }
 
         return $this->render('App/Reports/form_old_pays.html.twig', array(

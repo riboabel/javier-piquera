@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as gedmo;
  * Price
  *
  * @ORM\Table(name="price", uniqueConstraints={@ORM\UniqueConstraint(columns={"service_type_id", "provider_id"})})
- * @ORM\Entity(repositoryClass="PriceRepository")
+ * @ORM\Entity
  */
 class Price
 {
@@ -187,7 +187,7 @@ class Price
     /**
      * Get provider
      *
-     * @return \AppBundle\Entity\Provider 
+     * @return \AppBundle\Entity\Provider
      */
     public function getProvider()
     {
@@ -210,7 +210,7 @@ class Price
     /**
      * Get serviceType
      *
-     * @return \AppBundle\Entity\ServiceType 
+     * @return \AppBundle\Entity\ServiceType
      */
     public function getServiceType()
     {

@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *      @ORM\Index(columns={"provider_reference"}),
  *      @ORM\Index(columns={"invoice_number"})
  *  })
- * @ORM\Entity(repositoryClass="ReservaRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ReservaRepository")
  */
 class Reserva
 {

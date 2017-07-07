@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -68,7 +68,7 @@ class ReservaRepository extends EntityRepository
         }
 
         $qb->where($andX);
-        
+
         $result = $qb->getQuery()->getResult();
 
         return $result[0][1];
