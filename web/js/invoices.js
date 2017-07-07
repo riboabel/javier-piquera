@@ -1,4 +1,7 @@
-App.Invoices = function() {
+App = typeof App !== 'undefined' ? App : {};
+App.Invoices = typeof App.Invoices !== 'undefined' ? App.Invoices : {};
+
++(App.Invoices.Index = function($) {
     var drawDatatableHandler = function() {
         if ($.fn.tooltip) {
             $(this).find('[title]').tooltip({
@@ -16,35 +19,24 @@ App.Invoices = function() {
     var initDatatable = function() {
         var $table = $('#dataTables-invoices'),
             options = {
-                "aoColumns": [
+                aoColumns: [
                     {
                         title: 'Fecha',
-                        name: "invoicedAt",
-                        searchable: false,
-                        sortable: false
+                        name: "createdat",
+                        searchable: false
                     },
                     {
                         title: 'Número',
-                        name: 'invoiceNumber',
-                        searchable: false
+                        name: 'invoiceNumber'
                     },
                     {
                         title: 'Agencia',
                         name: "provider"
                     },
                     {
-                        title: 'Referencia',
-                        name: "providerReference"
-                    },
-                    {
-                        title: 'Tipo de servicio',
-                        name: "serviceType"
-                    },
-                    {
                         title: 'Importe',
                         name: "invoicedPrice",
-                        searchable: false,
-                        sortable: false
+                        searchable: false
                     },
                     {
                         title: 'Acciones',
@@ -53,7 +45,7 @@ App.Invoices = function() {
                         width: 80
                     }
                 ],
-                aaSorting: [[0, "asc"]],
+                aaSorting: [[0, "desc"]],
                 "language": {
                     "sProcessing":     "Procesando...",
                     "sLengthMenu":     "Mostrar _MENU_ registros",
@@ -66,7 +58,7 @@ App.Invoices = function() {
                     "sSearch":         "Buscar:",
                     "sUrl":            "",
                     "sInfoThousands":  ",",
-                    "sLoadingRecords": "Cargando...",   
+                    "sLoadingRecords": "Cargando...",
                     "oPaginate": {
                         "sFirst":    "Primero",
                         "sLast":     "Último",
@@ -78,12 +70,11 @@ App.Invoices = function() {
                         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                     }
                 },
-                "responsive": true,
-                "bServerSide": true,
-                "bProcessing": false,
-                "ajax": {
-                    "method": 'post',
-                    "url": $table.data('ajax-url')
+                bServerSide: true,
+                bProcessing: false,
+                ajax: {
+                    method: 'POST',
+                    url: Routing.generate('app_invoices_getdata')
                 }
             }
 
@@ -94,15 +85,9 @@ App.Invoices = function() {
         datatable = $table.dataTable(options);
     }
 
-    var handleClickCreateOrder = function(event) {
-        event.preventDefault();
-
-        
-    }
-
     return {
         init: function() {
             initDatatable();
         }
     }
-}();
+}(jQuery));

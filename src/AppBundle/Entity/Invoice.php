@@ -44,7 +44,7 @@ class Invoice
     /**
      * @var string
      *
-     * @ORM\Column(name="serial_number")
+     * @ORM\Column(name="serial_number", length=20, unique=true)
      */
     private $serialNumber;
 

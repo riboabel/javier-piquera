@@ -1,0 +1,20 @@
+{% block createdat %}
+    {{ record.createdAt|date("d/m/Y H:i") }}
+{% endblock %}
+
+{% block charge %}
+    <div class="text-right">
+        {{ "%0.2f"|format(record.totalCharge) }}
+    </div>
+{% endblock %}
+
+{% block actions %}
+    <a href="{{ path("app_reports_printinvoice", {'invoiceNumber': record.serialNumber}) }}" class="btn btn-xs btn-default" title="Imprimir factura" target="_blank">
+        <i class="glyphicon glyphicon-print"></i>
+    </a>
+    {% if record.modelName == 'ATRIO' %}
+        <a href="{{ path('app_reports_printjoborder', {'id': record.id}) }}" class="btn btn-default btn-xs" title="Imprimir orden de trabajo" target="_blank">
+            <i class="glyphicon glyphicon-list-alt"></i>
+        </a>
+    {% endif %}
+{% endblock %}

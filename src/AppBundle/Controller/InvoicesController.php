@@ -34,7 +34,7 @@ class InvoicesController extends Controller
     }
 
     /**
-     * @Route("/obtener-datos")
+     * @Route("/obtener-datos", options={"expose": true})
      * @Method({"post"})
      * @param Request $request
      * @return JsonResponse
@@ -43,42 +43,39 @@ class InvoicesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $qb = $em->getRepository('AppBundle:Reserva')
-                ->createQueryBuilder('r')
-                ->join('r.serviceType', 'st')
-                ->join('r.provider', 'p');
-
-        $andX = $qb->expr()->andX(
-            $qb->expr()->isNotNull('r.invoicedAt')
-        );
+        $qb = $em->getRepository('AppBundle:Invoice')
+                ->createQueryBuilder('n')
+                ->join('n.provider', 'p')
+                ;
 
         $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order', array());
 
         if ($search['value']) {
-            $orX = $qb->expr()->orX(
-                $qb->expr()->like('r.invoiceNumber', $qb->expr()->literal("%{$search['value']}%")),
-                $qb->expr()->like('st.name', $qb->expr()->literal("%{$search['value']}%")),
-                $qb->expr()->like('p.name', $qb->expr()->literal("%{$search['value']}%")),
-                $qb->expr()->like('r.providerReference', $qb->expr()->literal("%{$search['value']}%"))
-            );
+            $andX = $qb->expr()->andX();
 
-            $andX->add($orX);
+            if (preg_match('/^\d{4}\/\d{4}$/', $search['value'])) {
+                $andX->add($qb->expr()->eq('n.serialNumber', ':q'));
+                $qb->setParameter('q', $search['value']);
+            } else {
+                $andX->add($qb->expr()->like('p.name', ':q'));
+                $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
+            }
+
+            $qb->where($andX);
         }
-
-        $qb->where($andX);
 
         if ($orders) {
             $column = call_user_func(function($name) use ($qb) {
-                if ($name == 'invoicedAt') {
-                    return 'r.invoicedAt';
+                if ($name == 'createdat') {
+                    return 'n.createdAt';
                 } elseif ($name == 'invoiceNumber') {
-                    return 'r.invoiceNumber';
+                    return 'n.serialNumber';
                 } elseif ($name == 'provider') {
                     return 'p.name';
-                } elseif ($name == 'serviceType') {
-                    return 'st.name';
+                } elseif ($name == 'invoicedPrice') {
+                    return 'n.totalCharge';
                 } else {
                     return null;
                 }
@@ -94,23 +91,16 @@ class InvoicesController extends Controller
 
         $total = $pagination->getTotalItemCount();
 
-        $data = array();
-
-        foreach ($pagination->getItems() as $record) {
-            $row = array(
-                $record->getInvoicedAt()->format('d/m/Y H:i'),
-                $record->getInvoiceNumber(),
+        $template = $this->container->get('twig')->loadTemplate('App/Invoices/_row.html.twig');
+        $data = array_map(function(Invoice $record) use($template) {
+            return array(
+                $template->renderBlock('createdat', array('record' => $record)),
+                $record->getSerialNumber(),
                 $record->getProvider()->getName(),
-                $record->getProviderReference(),
-                sprintf('<div title="%s">%s</div>', $record->getServiceDescription(), $record->getServiceType()->getName()),
-                sprintf('<div class="text-right">%0.2f</div>', $record->getInvoicedTotalPrice()),
-                $this->renderView('App/Invoices/_index_actions.html.twig', array(
-                    'record' => $record
-                ))
+                $template->renderBlock('charge', array('record' => $record)),
+                $template->renderBlock('actions', array('record' => $record))
             );
-
-            $data[] = $row;
-        }
+        }, $pagination->getItems());
 
         return new JsonResponse(array(
             'data' => $data,
@@ -225,139 +215,5 @@ class InvoicesController extends Controller
         );
 
         return new JsonResponse($results);
-    }
-
-    /**
-     * @Route("/preparar")
-     * @Method({"get"})
-     * @return Response
-     */
-    public function prepareAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $qb = $em->getRepository('AppBundle:Reserva')
-                ->createQueryBuilder('r')
-                ->select('p.id, p.name')
-                ->join('r.provider', 'p')
-                ->groupBy('p.id', 'p.name')
-                ->orderBy('p.name');
-        $qb->where($qb->expr()->eq('p.receiveInvoice', $qb->expr()->literal(true)));
-
-        return $this->render('App/Invoices/prepare.html.twig', array(
-            'providers' => $qb->getQuery()->getResult()
-        ));
-    }
-
-    /**
-     * @Route("/obtener-servicios-por-agencia")
-     * @Method({"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getServicesByProviderAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $data = array();
-        $qb = $em->getRepository('AppBundle:Reserva')
-                ->createQueryBuilder('r')
-                ->select('r, st')
-                ->join('r.serviceType', 'st')
-                ->orderBy('r.startAt', 'DESC');
-        $qb->where($qb->expr()->andX(
-            $qb->expr()->eq('r.provider', $qb->expr()->literal($request->get('provider'))),
-            $qb->expr()->isNull('r.invoicedAt')
-        ));
-        $query = $qb->getQuery();
-
-        foreach ($query->getResult() as $record) {
-            $data[] = array(
-                'value' => $record->getId(),
-                'text' => sprintf('%s | %s | %s', $record->getSerialNumber(), $record->getStartAt()->format('d/m/Y H:i'), $record->getServiceType()->getName())
-            );
-        }
-
-        return new JsonResponse(array(
-            'data' => $data
-        ));
-    }
-
-    /**
-     * @Route("/obtener-formulario-factura")
-     * @Method({"post"})
-     * @param Request $request
-     * @return RedirectResponse|Response
-     */
-    public function getInvoiceFormAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $record = $em->find('AppBundle:Reserva', $request->get('id'));
-
-        if ($record->getInvoicedAt()) {
-            return new RedirectResponse($this->generateUrl('app_invoices_getfinishedinvoice', array('id' => $record->getId())));
-        }
-
-        $record
-                ->setInvoicedKilometers(0)
-                ->setInvoicedHours(0)
-                ->setInvoicedKilometersPrice(0)
-                ->setInvoicedKilometerPrice(0)
-                ->setInvoicedHourPrice(0)
-                ->setInvoicedHoursPrice(0)
-                ->setInvoicedTotalPrice(0)
-                ->setInvoiceDriver($record->getDriver());
-
-        $form = $this->createForm(new InvoiceType($em), $record);
-
-        return $this->render('App/Invoices/invoice_form.html.twig', array(
-            'form' => $form->createView()
-        ));
-    }
-
-    /**
-     * @Route("/crear-factura/{id}", requirements={"id": "\d+"})
-     * @ParamConverter("record", class="AppBundle\Entity\Reserva")
-     * @param Reserva $record
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function createAction(Reserva $record, Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $enterprise = $record->getEnterprise();
-        $form = $this->createForm(new InvoiceType($em), $record);
-
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $invoiceNumber = $enterprise->getLastInvoiceNumber() + 1;
-            $record
-                ->setInvoicedAt(new \DateTime('now'))
-                ->setInvoiceNumber(sprintf('%04d/%s', $invoiceNumber, date('Y')));
-            $enterprise->setLastInvoiceNumber($invoiceNumber);
-
-            $em->flush();
-
-            return $this->redirectToRoute('app_invoices_getfinishedinvoice', array(
-                'id' => $record->getId()
-            ));
-        }
-
-        return $this->render('App/Invoices/invoice_form.html.twig', array(
-            'form' => $form->createView()
-        ));
-    }
-
-    /**
-     * @Route("/{id}/ver-factura-terminada", requirements={"id": "\d+"})
-     * @ParamConverter("record", class="AppBundle\Entity\Reserva")
-     * @param Reserva $record
-     * @return array
-     */
-    public function getFinishedInvoiceAction(Reserva $record)
-    {
-        return $this->render('App/Invoices/invoice_finished.html.twig', array(
-            'record' => $record
-        ));
     }
 }
