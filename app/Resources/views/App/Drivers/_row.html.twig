@@ -1,6 +1,6 @@
 {% block phone %}
     {% if phone is not empty %}
-        {{ phone|phone_number_format("INTERNATIONAL") }}
+        {{ phone|phone_number_format("NATIONAL") }}
     {% endif %}
 {% endblock %}
 
