@@ -56,6 +56,14 @@ class TravelGuide
      */
     private $enterprise;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->providers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     public function __toString()
     {
         return (string) $this->getName();
@@ -64,7 +72,7 @@ class TravelGuide
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -87,7 +95,7 @@ class TravelGuide
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -110,19 +118,11 @@ class TravelGuide
     /**
      * Get contactInfo
      *
-     * @return string 
+     * @return string
      */
     public function getContactInfo()
     {
         return $this->contactInfo;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->providers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -151,7 +151,7 @@ class TravelGuide
     /**
      * Get providers
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getProviders()
     {
@@ -174,7 +174,7 @@ class TravelGuide
     /**
      * Get enterprise
      *
-     * @return \AppBundle\Entity\Enterprise 
+     * @return \AppBundle\Entity\Enterprise
      */
     public function getEnterprise()
     {
