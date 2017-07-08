@@ -6,7 +6,7 @@ use AppBundle\Lib\Test\WebTestCase;
 
 class DriversControllerTest extends WebTestCase
 {
-    public function testIndexActionA()
+    public function testIndexAction()
     {
         $this->clearTable('AppBundle:Driver');
         $this->signIn('admin', 'admin');
@@ -15,22 +15,6 @@ class DriversControllerTest extends WebTestCase
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertEquals(1, $crawler->filter('h1.page-header:contains("Conductores")')->count());
-        $this->assertEquals(0, $crawler->filter('table#dataTables-drivers tbody tr')->count());
-    }
-
-    public function testIndexActionB()
-    {
-        $this->clearTable('AppBundle:Driver');
-        $this->createDriver('Test driver', null, true);
-
-        $this->signIn('admin', 'admin');
-
-        $crawler = $this->client->request('GET', '/conductores/');
-
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter('h1.page-header:contains("Conductores")')->count());
-        $this->assertEquals(1, $crawler->filter('table#dataTables-drivers tbody tr')->count());
-        $this->assertEquals(1, $crawler->filter('html:contains("Test driver")')->count());
     }
 
     public function testViewAction()

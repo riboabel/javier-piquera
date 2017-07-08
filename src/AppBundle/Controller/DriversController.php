@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use AppBundle\Entity\Driver;
 use AppBundle\Form\Type\DriverType;
@@ -23,13 +24,80 @@ class DriversController extends Controller
     /**
      * @Route("/")
      * @Method({"get"})
+     * @return Response
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        return $this->render('App/Drivers/index.html.twig');
+    }
 
-        return $this->render('App/Drivers/index.html.twig', array(
-            'records' => $em->getRepository('AppBundle:Driver')->findAll()
+    /**
+     * @Route("/obtener-datos", options={"expose": true})
+     * @Method({"post"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDataAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $qb = $manager->getRepository('AppBundle:Driver')
+                ->createQueryBuilder('d')
+                ;
+
+        $search = $request->get('search');
+        $columns = $request->get('columns');
+        $orders = $request->get('order', array());
+
+        if ($search['value']) {
+            $orX = $qb->expr()->orX();
+
+            $orX->add($qb->expr()->like('d.name', ':q'));
+            $orX->add($qb->expr()->like('d.contactInfo', ':q'));
+
+            $qb
+                    ->where($orX)
+                    ->setParameter('q', sprintf('%%%s%%', $search['value']))
+                    ;
+        }
+
+        if ($orders) {
+            $column = call_user_func(function($name) {
+                if ($name == 'name') {
+                    return 'd.name';
+                } elseif ($name === 'isDriverGuide') {
+                    return 'd.isDriverGuide';
+                }
+                return null;
+            }, $columns[$orders[0]['column']]['name']);
+            if (null !== $column) {
+                $qb->orderBy($column, strtoupper($orders[0]['dir']));
+            }
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $page = $request->get('start', 0) / $request->get('length') + 1;
+        $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
+
+        $total = $pagination->getTotalItemCount();
+
+        $template = $this->container->get('twig')->loadTemplate('App/Drivers/_row.html.twig');
+        $data = array_map(function(Driver $record) use($template) {
+            return array(
+                $record->getName(),
+                $template->renderBlock('phone', array('phone' => $record->getMobilePhone())),
+                $template->renderBlock('phone', array('phone' => $record->getFixedPhone())),
+                $template->renderBlock('contact_info', array('record' => $record)),
+                $template->renderBlock('is_guide', array('record' => $record)),
+                $template->renderBlock('actions', array('record' => $record))
+            );
+        }, $pagination->getItems());
+
+        return new JsonResponse(array(
+            'data' => $data,
+            'draw' => $request->get('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total
         ));
     }
 
@@ -130,6 +198,7 @@ class DriversController extends Controller
      * @Route("/{id}/eliminar", requirements={"id": "\d+"})
      * @Method({"get", "post"})
      * @ParamConverter("driver", class="AppBundle\Entity\Driver")
+     * @param Driver $driver
      * @return RedirectResponse
      */
     public function deleteAction(Driver $driver)
@@ -138,6 +207,6 @@ class DriversController extends Controller
         $em->remove($driver);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('app_drivers_index'));
+        return $this->redirectToRoute('app_drivers_index');
     }
 }
