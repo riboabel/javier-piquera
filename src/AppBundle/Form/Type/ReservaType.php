@@ -92,12 +92,12 @@ class ReservaType extends AbstractType
                     $data = $event->getData();
 
                     $form->add('startPlace', null, array(
-                        'choices' => isset($data['startPlace']) && $data['startPlace'] ? $manager->find('AppBundle:Place', $data['startPlace']) : null,
+                        'choices' => isset($data['startPlace']) && $data['startPlace'] ? array($manager->find('AppBundle:Place', $data['startPlace'])) : null,
                         'required' => true
                     ));
 
                     $form->add('endPlace', null, array(
-                        'choices' => isset($data['endPlace']) && $data['endPlace'] ? $manager->find('AppBundle:Place', $data['endPlace']) : null,
+                        'choices' => isset($data['endPlace']) && $data['endPlace'] ? array($manager->find('AppBundle:Place', $data['endPlace'])) : null,
                         'required' => true
                     ));
                 });
