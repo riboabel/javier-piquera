@@ -168,7 +168,8 @@ class InvoicesController extends Controller
         $andX = $qb->expr()->andX(
                 $qb->expr()->eq('p.id', ':provider'),
                 $qb->expr()->isNull('r.invoiceNumber'),
-                $qb->expr()->eq('r.isCancelled', 'false')
+                $qb->expr()->eq('r.isCancelled', 'false'),
+                $qb->expr()->isNull('r.cobradoAt')
                 );
         
         $qb->setParameter('provider', $provider->getId());
