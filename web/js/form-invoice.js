@@ -52,7 +52,7 @@ App.Invoices = typeof App.Invoices !== 'undefined' ? App.Invoices : {};
         $(this).closest('.item').find('input[name$="[clientsName]"]').val(data[0].clientNames);
         $(this).closest('.item').find('input[name$="[clientReference]"]').val(data[0].reference);
         $(this).closest('.item').find('input[name$="[serviceSerialNumber]"]').val(data[0].serialNumber);
-        $(this).closest('.item').find('input[name$="[totalPrice]"]').val(data[0].price);
+        $(this).closest('.item').find('input[name$="[totalPrice]"]').val(data[0].price).trigger('change');
     }
 
     var serviceSelect2Options = {
@@ -150,6 +150,19 @@ App.Invoices = typeof App.Invoices !== 'undefined' ? App.Invoices : {};
                 url: Routing.generate('app_invoices_getservices', {id: $('#invoice_form_provider').val()})
             }
         }));
+
+        var updateTotalCharge = function() {
+            var value = 0;
+            $.map($('#invoice_form_lines input[name$="[totalPrice]"]'), function(element) {
+                value += $(element).val() ? $(element).val() * 1 : 0;
+            });
+
+            $('input[name="invoice_form[totalCharge]"]').val(value);
+        }
+
+        $('body').on('change', 'input[name$="[totalPrice]"]', function() {
+            updateTotalCharge();
+        });
     }
 
     return {
