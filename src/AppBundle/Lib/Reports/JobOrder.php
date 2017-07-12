@@ -5,7 +5,13 @@ namespace AppBundle\Lib\Reports;
 use AppBundle\Lib\Reports\Report;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\Reserva;
+use AppBundle\Entity\Invoice;
 
+/**
+ * @JobOrder
+ *
+ * @author Raibel Botta <raibelbotta@gmail.com>
+ */
 class JobOrder extends Report
 {
     /**
@@ -59,6 +65,11 @@ class JobOrder extends Report
 
     private function renderBody()
     {
+        $invoice = $this->getInvoice();
+        $invoiceLines = $invoice->getLines();
+        $kilometers = $invoiceLines[0]->getQuantity();
+        $hours = $invoiceLines[1]->getQuantity();
+        
         $this->pdf->SetFontSize(12);
         $this->pdf->Cell(42, 0, 'TAXI ARRENDADO:', 'LBT', 0, 'L');
         $this->pdf->SetFont('', 'B');
@@ -95,9 +106,9 @@ class JobOrder extends Report
         $this->pdf->Cell(40, 0, 'Tipo de servicio', 1);
         $this->pdf->Cell(0, 0, 'A disposición', 1, 1);
         $this->pdf->Cell(40, 0, 'Kms recorridos', 1);
-        $this->pdf->Cell(30, 0, sprintf('%0.1f', $this->record->getInvoicedKilometers()), 1);
+        $this->pdf->Cell(30, 0, sprintf('%0.1f', $kilometers), 1);
         $this->pdf->Cell(40, 0, 'Horas', 1);
-        $this->pdf->Cell(0, 0, sprintf('%0.1f', $this->record->getInvoicedHours()), 1, 1);
+        $this->pdf->Cell(0, 0, sprintf('%0.1f', $hours), 1, 1);
         $this->pdf->Cell(0, 0, 'Precio pactado:', 1, 1);
         $this->pdf->Cell(40, 0, 'Kms adicionales', 1);
         $this->pdf->Cell(30, 0, '', 1);
@@ -106,7 +117,7 @@ class JobOrder extends Report
         $this->pdf->Cell(40, 0, 'Costo adicional', 1);
         $this->pdf->Cell(30, 0, '', 1);
         $this->pdf->Cell(40, 0, 'Precio final', 1);
-        $this->pdf->Cell(0, 0, sprintf('%0.2f', $this->record->getInvoicedTotalPrice()), 1, 1);
+        $this->pdf->Cell(0, 0, sprintf('%0.2f', $invoice->getTotalCharge()), 1, 1);
 
         $this->pdf->Cell(0, 0, 'Descripción', 'LTR', 1);
         $this->pdf->SetFontSize(9);
@@ -123,5 +134,26 @@ class JobOrder extends Report
         $this->pdf->Cell(0, 0, '', 'LTR', 1);
         $this->pdf->Cell(50, 0, 'CI:', 'LBR');
         $this->pdf->Cell(0, 0, 'Firma:', 'LBR', 1);
+    }
+
+    /**
+     * @return Invoice
+     * @throws \RuntimeException
+     */
+    private function getInvoice()
+    {
+        if (null === $this->record->getInvoiceNumber()) {
+            throw new \RuntimeException('Esta reserva no fue facturada');
+        }
+
+        $invoice = $this->em->getRepository('AppBundle:Invoice')->findOneBy(array(
+            'serialNumber' => $this->record->getInvoiceNumber()
+        ));
+
+        if ('ATRIO' !== $invoice->getModelName()) {
+            throw new \RuntimeException('Esta reserva no fue facturada con el modelo ATRIO');
+        }
+
+        return $invoice;
     }
 }

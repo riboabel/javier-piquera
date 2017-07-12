@@ -298,9 +298,9 @@ class ReportsController extends Controller
     }
 
     /**
-     * @Route("/imprimir-orden-de-trabajo/{id}", requirements={"id": "\d+"})
+     * @Route("/imprimir-orden-de-trabajo/{serialNumber}", requirements={"serialNumber": "T\d{5}-\d{4}"})
      * @Method({"get"})
-     * @ParamConverter("record", class="AppBundle\Entity\Reserva")
+     * @ParamConverter("record", class="AppBundle\Entity\Reserva", options={"repository_method": "findBySerialNumber", "map_method_signature": true})
      * @param \AppBundle\Entity\Reserva $record
      * @return Respnse
      */
