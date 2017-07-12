@@ -153,7 +153,7 @@ App.Invoices = typeof App.Invoices !== 'undefined' ? App.Invoices : {};
 
         var updateTotalCharge = function() {
             var value = 0;
-            $.map($('#invoice_form_lines input[name$="[totalPrice]"]'), function(element) {
+            $.map($('input[name$="[totalPrice]"]'), function(element) {
                 value += $(element).val() ? $(element).val() * 1 : 0;
             });
 
