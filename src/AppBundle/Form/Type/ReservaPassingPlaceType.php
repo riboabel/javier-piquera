@@ -45,7 +45,7 @@ class ReservaPassingPlaceType extends AbstractType
                     $data = $event->getData();
 
                     $form->add('place', null, array(
-                        'choices' => isset($data['place']) && $data['place'] ? $manager->find('AppBundle:Place', $data['place']) : null,
+                        'choices' => isset($data['place']) && $data['place'] ? array($manager->find('AppBundle:Place', $data['place'])) : null,
                         'required' => true
                     ));
                 });
