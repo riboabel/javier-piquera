@@ -35,7 +35,6 @@ class WebTestCase extends BaseClass
         $this->em->createQuery('DELETE FROM AppBundle:Enterprise')->execute();
         $enterprise = new \AppBundle\Entity\Enterprise('Test enterprise');
         $this->em->persist($enterprise);
-        $this->em->flush();
 
         $userManager = $this->client->getContainer()->get('fos_user.user_manager');
         $user = $userManager->createUser();
