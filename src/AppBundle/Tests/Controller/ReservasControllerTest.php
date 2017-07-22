@@ -11,7 +11,7 @@ use AppBundle\Lib\Test\WebTestCase;
  */
 class ReservasControllerTest extends WebTestCase
 {
-    public function testIndexActionA()
+    public function testIndexAction()
     {
         $this->clearTable('AppBundle:Reserva');
         $this->signIn('admin', 'admin');
