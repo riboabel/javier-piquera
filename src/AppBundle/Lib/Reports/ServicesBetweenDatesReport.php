@@ -32,7 +32,12 @@ class ServicesBetweenDatesReport extends Report
      */
     private $em;
 
-    public function __construct($start, $end, $includePlacesAddress, array $services, EntityManager $em)
+    /**
+     * @var string
+     */
+    private $logoPath;
+
+    public function __construct($start, $end, $includePlacesAddress, array $services, EntityManager $em, $logoPath)
     {
         parent::__construct('L', 'A4');
 
@@ -41,6 +46,7 @@ class ServicesBetweenDatesReport extends Report
         $this->includePlacesAddress = $includePlacesAddress;
         $this->services = $services;
         $this->em = $em;
+        $this->logoPath = $logoPath;
     }
 
     public function getContent()
@@ -74,20 +80,24 @@ class ServicesBetweenDatesReport extends Report
         $this->pdf->SetFont('Helvetica', '', 10);
 
         $records = $this->getQuery()->getResult();
-        foreach ($records as $key => $record) {
+        foreach ($records as $record) {
             $h = $this->getRowHeight(array(
                 array(24, $record->getSerialNumber()),
                 array(30, $record->getStartAt()->format('d/m/Y H:i')),
                 array(30, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : ''),
                 array(25, $record->getProviderReference()),
                 array(46, $record->getServiceType()->getName()),
-                array(25, $record->getProvider()->getName()),
+                array(25, null !== $record->getProvider()->getLogoName() ? '' : $record->getProvider()->getName()),
                 array(40, $record->getClientNames()),
                 array(10, $record->getPax()),
                 array(20, $record->getGuide() ? $record->getGuide()->getName() : ''),
                 array(0, $record->getDriver() ? $record->getDriver()->getName() : '')
             ));
 
+            if ($h < 20 && null !== $record->getProvider()->getLogoName()) {
+                $h = 20;
+            }
+            
             if ($this->pdf->GetY() + $h > $this->pdf->getPageHeight() - $this->pdf->getMargins()['bottom']) {
                 $this->pdf->AddPage();
             }
@@ -97,7 +107,11 @@ class ServicesBetweenDatesReport extends Report
             $this->pdf->MultiCell(30, $h, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : '', 1, 'L', false, 0);
             $this->pdf->MultiCell(25, $h, $record->getProviderReference(), 1, 'L', false, 0);
             $this->pdf->MultiCell(46, $h, $record->getServiceType()->getName(), 1, 'L', false, 0);
-            $this->pdf->MultiCell(25, $h, $record->getProvider()->getName(), 1, 'L', false, 0);
+            if (null !== $record->getProvider()->getLogoName()) {
+                $this->pdf->writeHTMLCell(25, $h, $this->pdf->GetX(), $this->pdf->GetY(), sprintf('<img src="%s" width="42", height="42"/>', sprintf('%s/%s', $this->logoPath, $record->getProvider()->getLogoName())), 1, 0, false, true, 'C');
+            } else {
+                $this->pdf->MultiCell(25, $h, $record->getProvider()->getName(), 1, 'L', false, 0);
+            }
             $this->pdf->MultiCell(40, $h, $record->getClientNames(), 1, 'L', false, 0);
             $this->pdf->MultiCell(10, $h, $record->getPax(), 1, 'C', false, 0);
             $this->pdf->MultiCell(20, $h, $record->getGuide() ? $record->getGuide()->getName() : '', 1, 'L', false, 0);

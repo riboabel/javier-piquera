@@ -65,8 +65,9 @@ class ReportsController extends Controller
             if ($form->isValid()) {
                 $data = $form->getData();
                 $report = new Reports\ServicesBetweenDatesReport($data['fromDate'], $data['toDate'],
-                    $data['includePlacesAddress'], $data['services']->toArray(), $manager);
-
+                        $data['includePlacesAddress'], $data['services']->toArray(),
+                        $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
+                
                 return new StreamedResponse(function() use($report) {
                     file_put_contents('php://output', $report->getContent());
                 }, 200, array(
@@ -125,7 +126,7 @@ class ReportsController extends Controller
             if ($form->isValid()) {
                 $data = $form->getData();
                 $report = new Reports\ServicesByProviderReport($data['fromDate'], $data['toDate'],
-                    $data['provider'], $data['services']->toArray(), $em);
+                    $data['provider'], $data['services']->toArray(), $em, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
 
                 return new StreamedResponse(function() use($report) {
                     file_put_contents('php://output', $report->getContent());
@@ -193,7 +194,7 @@ class ReportsController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $data = $form->getData();
-                $report = new Reports\ServicesByDriverReport($form->getData(), $em);
+                $report = new Reports\ServicesByDriverReport($form->getData(), $em, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
 
                 return new StreamedResponse(function() use($report) {
                     file_put_contents('php://output', $report->getContent());

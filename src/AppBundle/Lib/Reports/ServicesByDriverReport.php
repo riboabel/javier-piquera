@@ -39,7 +39,12 @@ class ServicesByDriverReport extends Report
      */
     private $em;
 
-    public function __construct($parameters, EntityManager $em)
+    /**
+     * @var string
+     */
+    private $logoPath;
+
+    public function __construct($parameters, EntityManager $em, $logoPath)
     {
         parent::__construct('L', 'A4');
 
@@ -50,6 +55,8 @@ class ServicesByDriverReport extends Report
         $this->serviceType = $parameters['serviceType'];
 
         $this->em = $em;
+
+        $this->logoPath = $logoPath;
     }
 
     public function getContent()
@@ -90,19 +97,31 @@ class ServicesByDriverReport extends Report
                 array(30, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : ''),
                 array(25, $record->getProviderReference()),
                 array(61, $record->getServiceType()->getName()),
-                array(20, $record->getProvider()->getName()),
+                array(20, null !== $record->getProvider()->getLogoName() ? '' : $record->getProvider()->getName()),
                 array(30, $record->getClientNames()),
                 array(10, $record->getPax()),
                 array(20, $record->getGuide() ? $record->getGuide()->getName() : ''),
                 array(0, $record->getDriver() ? $record->getDriver()->getName() : '')
             ));
 
+            if ($h < 20 && null !== $record->getProvider()->getLogoName()) {
+                $h = 20;
+            }
+
+            if ($this->pdf->GetY() + $h > $this->pdf->getPageHeight() - $this->pdf->getMargins()['bottom']) {
+                $this->pdf->AddPage();
+            }
+            
             $this->pdf->MultiCell(24, $h, $record->getSerialNumber(), 1, 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $record->getStartAt()->format('d/m/Y H:i'), 1, 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : '', 1, 'L', false, 0);
             $this->pdf->MultiCell(25, $h, $record->getProviderReference(), 1, 'L', false, 0);
             $this->pdf->MultiCell(61, $h, $record->getServiceType()->getName(), 1, 'L', false, 0);
-            $this->pdf->MultiCell(20, $h, $record->getProvider()->getName(), 1, 'L', false, 0);
+            if (null !== $record->getProvider()->getLogoName()) {
+                $this->pdf->writeHTMLCell(20, $h, $this->pdf->GetX(), $this->pdf->GetY(), sprintf('<img src="%s" width="42", height="42"/>', sprintf('%s/%s', $this->logoPath, $record->getProvider()->getLogoName())), 1, 0, false, true, 'C');
+            } else {
+                $this->pdf->MultiCell(20, $h, $record->getProvider()->getName(), 1, 'L', false, 0);
+            }
             $this->pdf->MultiCell(30, $h, $record->getClientNames(), 1, 'L', false, 0);
             $this->pdf->MultiCell(10, $h, $record->getPax(), 1, 'C', false, 0);
             $this->pdf->MultiCell(20, $h, $record->getGuide() ? $record->getGuide()->getName() : '', 1, 'L', false, 0);
