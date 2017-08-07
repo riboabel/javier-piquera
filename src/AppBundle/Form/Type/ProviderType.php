@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 use AppBundle\Entity\Provider;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
  * Description of ProviderType
@@ -35,7 +36,12 @@ class ProviderType extends AbstractType
                 ))
                 ->add('contractNumber', null, array(
                     'required' => false
-                ));
+                ))
+                ->add('logoFile', VichImageType::class, array(
+                    'label' => 'Logotipo',
+                    'required' => false
+                ))
+                ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
