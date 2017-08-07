@@ -115,7 +115,8 @@ class ReportsController extends Controller
                     'class' => \AppBundle\Entity\ServiceType::class,
                     'query_builder' => $em->getRepository('AppBundle:ServiceType')
                             ->createQueryBuilder('st')
-                            ->orderBy('st.name')
+                            ->orderBy('st.name'),
+                    'required' => false
                 ))
                 ->getForm();
 
