@@ -300,7 +300,7 @@ class ReservasController extends Controller
             $em->persist($reserva);
             $em->flush();
 
-            $request->getSession()->getFlashBag()->add('notice', sprintf('La reserva %s fue creada.', $form->getData()->getSerialNumber()));
+            $request->getSession()->getFlashBag()->add('notice', sprintf('Reservado con el número de confirmación %s.', $form->getData()->getSerialNumber()));
 
             return $this->redirect($this->generateUrl('app_reservas_index'));
         }
