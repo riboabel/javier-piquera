@@ -163,6 +163,24 @@ App.Invoices = typeof App.Invoices !== 'undefined' ? App.Invoices : {};
         $('body').on('change', 'input[name$="[totalPrice]"]', function() {
             updateTotalCharge();
         });
+
+        $('body').on('change', 'input[name$="[quantity]"], input[name$="[unitPrice]"]', function() {
+            var $item = $(this).closest('.item'),
+                $up = $item.find('input[name$="[unitPrice]"]'),
+                $q = $item.find('input[name$="[quantity]"]');
+
+            if ($up.val() === '' || $q.val() === '' || isNaN($q.val() * $up.val())) {
+                if ($('#invoice_form_modelName').val() === 'GENERAL') {
+                    var data = $item.find('select[name$="[service]"]').select2('data');
+                    $item.find('input[name$="[totalPrice]"]').val(data.length > 0 ? data[0].price : 0);
+                } else {
+                    $item.find('input[name$="[totalPrice]"]').val(0);
+                }
+            } else {
+                var t = ($up.val() * $q.val()).toFixed(2);
+                $item.find('input[name$="[totalPrice]"]').val(t);
+            }
+        });
     }
 
     return {
