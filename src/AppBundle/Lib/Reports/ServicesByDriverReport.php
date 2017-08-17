@@ -104,8 +104,8 @@ class ServicesByDriverReport extends Report
                 array(0, $record->getDriver() ? $record->getDriver()->getName() : '')
             ));
 
-            if ($h < 20 && null !== $record->getProvider()->getLogoName()) {
-                $h = 20;
+            if ($h < 15 && null !== $record->getProvider()->getLogoName()) {
+                $h = 15;
             }
 
             if ($this->pdf->GetY() + $h > $this->pdf->getPageHeight() - $this->pdf->getMargins()['bottom']) {
@@ -118,7 +118,9 @@ class ServicesByDriverReport extends Report
             $this->pdf->MultiCell(25, $h, $record->getProviderReference(), 1, 'L', false, 0);
             $this->pdf->MultiCell(61, $h, $record->getServiceType()->getName(), 1, 'L', false, 0);
             if (null !== $record->getProvider()->getLogoName()) {
-                $this->pdf->writeHTMLCell(20, $h, $this->pdf->GetX(), $this->pdf->GetY(), sprintf('<img src="%s" width="42", height="42"/>', sprintf('%s/%s', $this->logoPath, $record->getProvider()->getLogoName())), 1, 0, false, true, 'C');
+                $imagePath = sprintf('%s/%s', $this->logoPath, $record->getProvider()->getLogoName());
+                $imageSizes = $this->getSizesForImage($imagePath, 20, $h);
+                $this->pdf->writeHTMLCell(20, $h, $this->pdf->GetX(), $this->pdf->GetY(), sprintf('<img src="%s" width="%s", height="%s"/>', $imagePath, $imageSizes['w'], $imageSizes['h']), 1, 0, false, true, 'C');
             } else {
                 $this->pdf->MultiCell(20, $h, $record->getProvider()->getName(), 1, 'L', false, 0);
             }

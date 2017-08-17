@@ -34,6 +34,39 @@ abstract class Report implements ReportInterface
         return $maxH;
     }
 
+
+    protected function getSizesForImage($imagePath, $maxHeight, $maxWidth)
+    {
+        $info = getimagesize($imagePath);
+
+        if ($info[0] <= $maxWidth && $info[1] <= $maxHeight) {
+            return array(
+                'w' => $info[0],
+                'h' => $info[1]
+            );
+        } else {
+            $f = $info[0] / $info[1];
+
+            if ($maxWidth > $info[0]) {
+                return array(
+                    'w' => $maxWidth,
+                    'h' => round($maxWidth / $f)
+                );
+            } else {
+                return array(
+                    'w' => $f * $maxHeight,
+                    'h' => $maxHeight
+                );
+            }
+        }
+
+        return array(
+            'w' => 0,
+            'h' => 0
+        );
+    }
+
+
     protected function getPdfContent()
     {
         ob_start();
