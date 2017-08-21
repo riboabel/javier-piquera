@@ -42,9 +42,11 @@
                                 </td>
                                 <td class="text-right">{{ "%0.2f"|format(record.defaultPrice) }}</td>
                                 <td width="100" class="text-right">
-                                    <a href="{{ path("app_servicetypes_view", {"id": record.id}) }}" class="btn btn-default btn-xs" title="Ver detalle"><i class="glyphicon glyphicon-file"></i></a>
-                                    <a href="{{ path("app_servicetypes_edit", {"id": record.id}) }}" class="btn btn-info btn-xs" title="Editar"><i class="glyphicon glyphicon-edit"></i></a>
-                                    <a href="{{ path("app_servicetypes_delete", {"id": record.id}) }}" class="btn btn-danger btn-xs btn-delete" title="Eliminar"><i class="glyphicon glyphicon-remove"></i></a>
+                                    <div class="btn-group">
+                                        <a href="{{ path("app_servicetypes_view", {"id": record.id}) }}" class="btn btn-default btn-xs" title="Ver detalle"><i class="glyphicon glyphicon-file"></i></a>
+                                        <a href="{{ path("app_servicetypes_edit", {"id": record.id}) }}" class="btn btn-info btn-xs" title="Editar"><i class="glyphicon glyphicon-edit"></i></a>
+                                        <a href="{{ path("app_servicetypes_delete", {"id": record.id}) }}" class="btn btn-danger btn-xs btn-delete" title="Eliminar"><i class="glyphicon glyphicon-remove"></i></a>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -66,7 +68,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger">
-                        Se dispone a eliminar la información de un tipo de servicio. Todos los viajes realizados bajo este tipo de servicio serán eliminados del sistema ¿Desea continuar?
+                        Se dispone a eliminar la información de un tipo de servicio. <strong>Todos los viajes realizados con este tipo de servicio serán eliminados del sistema.</strong> ¿Desea continuar?
                     </div>
                 </div>
                 <div class="modal-footer">

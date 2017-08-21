@@ -34,11 +34,13 @@
                             <tr>
                                 <td>{{ record.name }}</td>
                                 <td class="text-right">
-                                    <a href="{{ path("app_providers_view", {"id": record.id}) }}" class="btn btn-default btn-xs" title="Ver detalle"><i class="glyphicon glyphicon-file"></i></a>
-                                    <a href="{{ path("app_providers_edit", {"id": record.id}) }}" class="btn btn-info btn-xs" title="Editar"><i class="glyphicon glyphicon-edit"></i></a>
-                                    {#
-                                    <a href="{{ path("app_providers_delete", {"id": record.id}) }}" class="btn btn-danger btn-xs btn-delete" title="Eliminar"><i class="glyphicon glyphicon-remove"></i></a>
-                                    #}
+                                    <div class="btn-group">
+                                        <a href="{{ path("app_providers_view", {"id": record.id}) }}" class="btn btn-default btn-xs" title="Ver detalle"><i class="glyphicon glyphicon-file"></i></a>
+                                        <a href="{{ path("app_providers_edit", {"id": record.id}) }}" class="btn btn-info btn-xs" title="Editar"><i class="glyphicon glyphicon-edit"></i></a>
+                                        {% if is_granted("ROLE_OWNER") %}
+                                            <a href="{{ path("app_providers_delete", {"id": record.id}) }}" class="btn btn-danger btn-xs btn-delete" title="Eliminar"><i class="glyphicon glyphicon-remove"></i></a>
+                                        {% endif %}
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -60,7 +62,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger">
-                        Se dispone a eliminar la información de una agencia. Todos los viajes realizados para esta agencia serán eliminados del sistema ¿Desea continuar?
+                        Se dispone a eliminar la información de una agencia. <strong>Todos los viajes realizados para esta agencia serán eliminados del sistema.</strong> ¿Desea continuar?
                     </div>
                 </div>
                 <div class="modal-footer">

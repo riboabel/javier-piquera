@@ -73,11 +73,11 @@
                 </li>
             </ul>
         {% endif %}
-        {#
-        <a href="{{ path("app_reservas_delete", {"id": record.id}) }}" class="btn btn-danger btn-delete btn-xs"
-            title="Eliminar">
-            <i class="glyphicon glyphicon-remove"></i>
-        </a>
-        #}
+        {% if is_granted("ROLE_OWNER") %}
+            <a href="{{ path("app_reservas_delete", {"id": record.id}) }}" class="btn btn-danger btn-delete btn-xs"
+                title="Eliminar">
+                <i class="glyphicon glyphicon-remove"></i>
+            </a>
+        {% endif %}
     </div>
 {% endblock %}

@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Form\Type\ReservaType;
@@ -297,6 +298,7 @@ class ReservasController extends Controller
      * @Route("/{id}/eliminar", requirements={"id": "\d+"})
      * @@Method({"post"})
      * @ParamConverter("record", class="AppBundle\Entity\Reserva")
+     * @Security("is_granted('ROLE_OWNER')")
      * @param Reserva $record
      * @return RedirectResponse
      */
