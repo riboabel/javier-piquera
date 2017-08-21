@@ -34,6 +34,11 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
+    app.form.type.reserva_assigned_filter_type:
+        class: AppBundle\Form\Type\ReservaAssignedFilterType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
 
     app.morris_graph.area:
         class: AppBundle\Services\MorrisGraphGenerator

@@ -205,19 +205,21 @@ App.Reservas.Index = function($) {
                     "method": 'post',
                     "url": $table.data('ajax-url'),
                     "data": function(baseData) {
+                        var filter = [];
+                        $.each($('form#filter').serializeArray(), function(i, e) {
+                            if (/^(?!filter\[)/.test(e['name'])) {
+                                filter[e['name']] = e['value'];
+                            }
+                        });
                         return $.extend(true, baseData, {
                             "filter": {
-                                "startAt": {
-                                    "from": $('[name="filter[startAt][from]"]').val(),
-                                    "to": $('[name="filter[startAt][to]"]').val()
-                                },
                                 "isExecuted": $('[name="filter[isExecuted]"]').val(),
                                 "isCancelled": $('[name="filter[isCancelled]"]').val(),
                                 "isDriverConfirmed": $('[name="filter[isDriverConfirmed]"]').val(),
                                 "isDriverAssigned": $('select[name="filter[isDriverAssigned]"]').val(),
                                 "withDrivers": $('select[name="filter[withDrivers]"]').val()
                             }
-                        });
+                        }, filter);
                     }
                 }
             }
@@ -252,32 +254,21 @@ App.Reservas.Index = function($) {
         });
     }
 
-    var initFilterToggler = function() {
-        $('a#toggleFilter').on('click', handleFilterTogglerClick);
-    }
-
-    var handleFilterTogglerClick = function(event) {
-        event.preventDefault();
-
-        $($(this).attr('href')).slideToggle();
-    }
-
     var initFilter = function() {
         initFilterDatepickers();
-        initFilterToggler();
 
         $('#filter-form').find('input, select').on('change', function() {
-            if ($(this).is('select[name="filter[isDriverAssigned]"]')) {
+            if ($(this).is('select[name="reserva_filter_form[isDriverAssigned][choice]"]')) {
                 if ($(this).val() === 'with-drivers') {
-                    $('#filter-form [name="filter[withDrivers]"]').parent().show();
+                    $('#filter-form [name="reserva_filter_form[isDriverAssigned][drivers][]"]').parent().show();
                 } else {
-                    $('#filter-form [name="filter[withDrivers]"]').parent().hide();
+                    $('#filter-form [name="reserva_filter_form[isDriverAssigned][drivers][]"]').parent().hide();
                 }
             }
-            datatable.DataTable().draw(true);
+            datatable.DataTable().draw();
         });
 
-        $('#filter-form [name="filter[withDrivers]"]').select2({
+        $('#filter-form [name="reserva_filter_form[isDriverAssigned][drivers][]"]').select2({
             width: '100%'
         });
     }

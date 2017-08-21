@@ -17,7 +17,7 @@
                         <i class="fa fa-plus-circle"></i>
                         Crear reserva
                     </a>
-                    <a href="#filter-form" class="btn btn-default" role="button" id="toggleFilter">Filtro</a>
+                    <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#filter-form" aria-expanded="false" aria-controls="filter-form"><span class="fa fa-filter"></span></button>
                 </div>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Herramientas
@@ -53,73 +53,53 @@
             </div>
         </div>
     </div>
-    <div class="row" id="filter-form" style="display: none;">
+    <div class="collapse row" id="filter-form">
         <div class="col-xs-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Opciones de filtro</div>
+                <div class="panel-heading">
+                    <h4 class="panel-title">Opciones de filtro</h4>
+                </div>
                 <div class="panel-body">
-                    <form action="" class="">
+                    <form action="" role="form" id="filter">
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <label for="">Desde</label>
-                                        <input type="text" name="filter[startAt][from]" id="fromDate" class="datepicker form-control input-sm" value="{{ filter.startAt.from }}">
+                                        {{ form_label(form.startAt.left_date, "Desde") }}
+                                        {{ form_widget(form.startAt.left_date, {attr: {class: "datepicker form-control input-sm"}}) }}
                                     </div>
                                     <div class="col-sm-6">
-                                        <label for="">Hasta</label>
-                                        <input type="text" name="filter[startAt][to]" id="toDate" class="datepicker form-control input-sm" value="{{ filter.startAt.to }}">
+                                        {{ form_label(form.startAt.right_date, "Hasta")}}
+                                        {{ form_widget(form.startAt.right_date, {attr: {class: "datepicker form-control input-sm"}}) }}
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div class="row">
                                     <div class="col-sm-6 col-md-3">
-                                        <label for="">Ejecutadas</label>
-                                        <select name="filter[isExecuted]" class="form-control input-sm">
-                                            {% for value, text in {"": "", "yes": "Sí", "no": "No"} %}
-                                                <option value="{{ value }}"{{ value == filter.isExecuted ? ' selected="selected"' : '' }}>{{ text }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {{ form_label(form.isExecuted, "Ejecutadas") }}
+                                        {{ form_widget(form.isExecuted, {attr: {class: "form-control input-sm"}}) }}
                                     </div>
                                     <div class="col-sm-6 col-md-3">
-                                        <label for="">Canceladas</label>
-                                        <select name="filter[isCancelled]" class="form-control input-sm">
-                                            {% for value, text in {"": "", "yes": "Sí", "no": "No"} %}
-                                                <option value="{{ value }}"{{ value == filter.isCancelled ? ' selected="selected"' : '' }}>{{ text }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {{ form_label(form.isCancelled, "Canceladas") }}
+                                        {{ form_widget(form.isCancelled, {attr: {class: "form-control input-sm"}}) }}
                                     </div>
                                     <div class="col-sm-6 col-md-3">
-                                        <label for="" class="control-label">Asignadas</label>
-                                        <select name="filter[isDriverAssigned]" class="form-control input-sm">
-                                            {% for value, text in {"": "", "yes": "Sí", "no": "No", "with-drivers": "No con conductores"} %}
-                                                <option value="{{ value }}"{{ value == filter.isDriverAssigned ? ' selected="selected"' : '' }}>{{ text }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {{ form_label(form.isDriverAssigned.choice, "Asignadas") }}
+                                        {{ form_widget(form.isDriverAssigned.choice, {attr: {class: "form-control input-sm"}}) }}
                                     </div>
                                     <div class="col-sm-6 col-md-3">
-                                        <label for="">Confirmadas</label>
-                                        <select name="filter[isDriverConfirmed]" class="form-control input-sm">
-                                            {% for value, text in {"": "", "yes": "Sí", "no": "No"} %}
-                                                <option value="{{ value }}"{{ value == filter.isDriverConfirmed ? ' selected="selected"' : '' }}>{{ text }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {{ form_label(form.isDriverConfirmed, "Confirmadas") }}
+                                        {{ form_widget(form.isDriverConfirmed, {attr: {class: "form-control input-sm"}}) }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12"{{ 'with-drivers' == filter.isDriverAssigned ? '' : ' style="display: none;"' }}>
-                                <label for="filter_withDrivers" class="control-label">Conductores</label>
-                                <select name="filter[withDrivers]" id="filter_withDrivers" class="form-control" multiple="multiple">
-                                    <option value=""></option>
-                                    {% spaceless %}
-                                        {% for driver in drivers.result %}
-                                            <option value="{{ driver.id }}"{{ driver.id in filter.withDrivers ? ' selected="selected"' : '' }}>{{ driver }}</option>
-                                        {% endfor %}
-                                    {% endspaceless %}
-                                </select>
+                            <div class="col-sm-12 col-md-12"{{ 'with-drivers' == form.isDriverAssigned.choice.vars.data ? "" : ' style="display: none;"' }}>
+                                {{ form_label(form.isDriverAssigned.drivers, "Conductores") }}
+                                {{ form_widget(form.isDriverAssigned.drivers) }}
                             </div>
                         </div>
+                        {{ form_rest(form) }}
                     </form>
                 </div>
             </div>

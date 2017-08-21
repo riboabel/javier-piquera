@@ -2,6 +2,36 @@
     <input type="checkbox" name="selection[]" value="{{ record.id }}" checked="checked"/>
 {% endblock %}
 
+{% block state %}
+    {% if record.isCancelled %}
+        <i class="glyphicon glyphicon-ban-circle" title="Cancelada"></i>
+    {% elseif record.isExecuted %}
+        <i class="fa fa-check" title="Ejecutada"></i>
+    {% endif %}
+{% endblock %}
+
+{% block inicio %}
+    <div title="{{ "%s: %s a %s: %s"|format(record.startPlace.name, record.startPlace.postalAddress, record.endPlace.name, record.endPlace.postalAddress) }}">{{ record.startAt|date("d/m/Y H:i") }}</div>
+{% endblock %}
+
+{% block provider %}
+    <div title="{{ record.provider.contactInfo }}">{{ record.provider.name }}</div>
+{% endblock %}
+
+{% block pax %}
+    <div class="center">{{ record.pax }}</div>
+{% endblock %}
+
+{% block service %}
+    <span title="{{ record.serviceDescription }}">{{ record.serviceType }}</span>
+{% endblock %}
+
+{% block driver %}
+    {% if record.driver is not empty %}
+        <span title="{{ record.driver.contactInfo }}" class="text-{{ record.isDriverConfirmed ? "success" : "danger" }}">{{ record.driver.name }}</span>
+    {% endif %}
+{% endblock %}
+
 {% block guide %}
     {% if record.guide is not empty %}
         <div title="{{ record.guide.contactInfo }}">
