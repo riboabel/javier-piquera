@@ -81,11 +81,3 @@
     {% endif %}
 {% endblock %}
 
-{% block page_javascripts %}
-    <script src="{{ asset("js/form-driver.js") }}"></script>
-    <script>
-        $(document).ready(function() {
-            App.Driver.init();
-        });
-    </script>
-{% endblock %}
