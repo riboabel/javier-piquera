@@ -119,8 +119,10 @@ class ServicesByDriverReport extends Report
             $this->pdf->MultiCell(61, $h, $record->getServiceType()->getName(), 1, 'L', false, 0);
             if (null !== $record->getProvider()->getLogoName()) {
                 $imagePath = sprintf('%s/%s', $this->logoPath, $record->getProvider()->getLogoName());
-                $imageSizes = $this->getSizesForImage($imagePath, 20, $h);
-                $this->pdf->writeHTMLCell(20, $h, $this->pdf->GetX(), $this->pdf->GetY(), sprintf('<img src="%s" width="%s", height="%s"/>', $imagePath, $imageSizes['w'], $imageSizes['h']), 1, 0, false, true, 'C');
+                $x = $this->pdf->GetX();
+                $y = $this->pdf->GetY();
+                $this->pdf->MultiCell(20, $h, '', 1, 'L', false, 0);
+                $this->pdf->Image($imagePath, $x + 0.5, $y + 0.5, 19, $h - 1, '', '', '', 2, 300, '', false, false, 0, 'CM');
             } else {
                 $this->pdf->MultiCell(20, $h, $record->getProvider()->getName(), 1, 'L', false, 0);
             }
