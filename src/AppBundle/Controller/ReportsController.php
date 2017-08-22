@@ -67,7 +67,7 @@ class ReportsController extends Controller
                 $report = new Reports\ServicesBetweenDatesReport($data['fromDate'], $data['toDate'],
                         $data['includePlacesAddress'], $data['services']->toArray(),
                         $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
-                
+
                 return new StreamedResponse(function() use($report) {
                     file_put_contents('php://output', $report->getContent());
                 }, 200, array(
