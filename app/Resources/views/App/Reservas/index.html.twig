@@ -199,7 +199,7 @@
 {% block page_javascripts %}
     <script>
         $(document).ready(function() {
-            App.Reservas.Index.init({"search": '{{ filter.q is defined ? filter.q : '' }}'});
+            App.Reservas.Index.init({"search": '{{ q }}'});
         });
     </script>
 {% endblock %}

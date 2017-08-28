@@ -224,7 +224,7 @@ App.Reservas.Index = function($) {
                 }
             }
 
-        options.oSearch = {"sSearch": settings.search};
+        $.extend(options, {oSearch: {"sSearch": settings.search}});
 
         datatable = $table.dataTable(options);
     }

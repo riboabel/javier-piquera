@@ -48,7 +48,8 @@ class ReservasController extends Controller
         $form = $this->createForm(ReservaFilterFormType::class, $filter);
 
         return $this->render('App/Reservas/index.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'q' => $filter['q']
         ));
     }
 
