@@ -28,7 +28,17 @@
 
 {% block driver %}
     {% if record.driver is not empty %}
-        <span title="{{ record.driver.contactInfo }}" class="text-{{ record.isDriverConfirmed ? "success" : "danger" }}">{{ record.driver.name }}</span>
+        {% set info = [] %}
+        {%- if record.driver.mobilePhone is not empty -%}
+            {% set info = info|merge(["Móvil: %s"|format(record.driver.mobilePhone|phone_number_format("NATIONAL"))]) %}
+        {%- endif -%}
+        {%- if record.driver.fixedPhone is not empty -%}
+            {% set info = info|merge(["Fijo: %s"|format(record.driver.fixedPhone|phone_number_format("NATIONAL"))]) %}
+        {%- endif -%}
+        {%- if record.driver.contactInfo is not empty -%}
+            {% set info = info|merge(["Contacto: %s"|format(record.driver.contactInfo)]) %}
+        {%- endif -%}
+        <span title="{{ info|join(" | ") }}" class="text-{{ record.isDriverConfirmed ? "success" : "danger" }}">{{ record.driver.name }}</span>
     {% endif %}
 {% endblock %}
 

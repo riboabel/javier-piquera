@@ -77,7 +77,7 @@ class ReservasController extends Controller
         $filter['q'] = $search['value'];
 
         if ($search['value'] && 1 === preg_match('/^(T|t)(?P<year>\d{1})(?P<month>\d{2})(?P<day>\d{2})(|-(?P<id>(\d{2}|\d{4})))$/', $search['value'], $matches)) {
-            $andX = $qb->expr()->orX();
+            $andX = $qb->expr()->andX();
 
             $date = new \DateTime(sprintf('%s-%s-%s', substr(date('y'), 0, 1).$matches['year'], $matches['month'], $matches['day']));
             $andX->add($qb->expr()->gte('r.startAt', $qb->expr()->literal($date->format('Y-m-d 00:00:00'))));
