@@ -157,7 +157,7 @@ App.Invoices = typeof App.Invoices !== 'undefined' ? App.Invoices : {};
                 value += $(element).val() ? $(element).val() * 1 : 0;
             });
 
-            $('input[name="invoice_form[totalCharge]"]').val(value);
+            $('input[name="invoice_form[totalCharge]"]').val(value.toFixed(2));
         }
 
         $('body').on('change', 'input[name$="[totalPrice]"]', function() {
@@ -172,13 +172,13 @@ App.Invoices = typeof App.Invoices !== 'undefined' ? App.Invoices : {};
             if ($up.val() === '' || $q.val() === '' || isNaN($q.val() * $up.val())) {
                 if ($('#invoice_form_modelName').val() === 'GENERAL') {
                     var data = $item.find('select[name$="[service]"]').select2('data');
-                    $item.find('input[name$="[totalPrice]"]').val(data.length > 0 ? data[0].price : 0);
+                    $item.find('input[name$="[totalPrice]"]').val(data.length > 0 ? data[0].price.toFixed(2) : "0.00").trigger('change');
                 } else {
-                    $item.find('input[name$="[totalPrice]"]').val(0);
+                    $item.find('input[name$="[totalPrice]"]').val("0.00").trigger('change');
                 }
             } else {
                 var t = ($up.val() * $q.val()).toFixed(2);
-                $item.find('input[name$="[totalPrice]"]').val(t);
+                $item.find('input[name$="[totalPrice]"]').val(t).trigger('change');
             }
         });
     }
