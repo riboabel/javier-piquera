@@ -250,7 +250,7 @@ class ReportsController extends Controller
         $report = new Reports\Payrole(array(
             'ids' => $request->get('ids', array()),
             'prices' => $request->get('prices', array())
-        ), $em);
+        ), $em, $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos');
 
         return new StreamedResponse(function() use($report) {
             file_put_contents('php://output', $report->getContent());
@@ -270,7 +270,7 @@ class ReportsController extends Controller
         $report = new Reports\ChargeForm(array(
             'ids' => $request->get('ids', array()),
             'prices' => $request->get('prices', array())
-        ), $em);
+        ), $em, $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos');
 
         return new StreamedResponse(function() use($report) {
             file_put_contents('php://output', $report->getContent());

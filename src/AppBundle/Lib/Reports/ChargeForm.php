@@ -22,13 +22,19 @@ class ChargeForm extends Report
      */
     private $data;
 
-    public function __construct(array $params, EntityManager $em)
+    /**
+     * @var string
+     */
+    private $logoPath;
+
+    public function __construct(array $params, EntityManager $em, $logoPath)
     {
         parent::__construct('P', 'LETTER');
 
         $this->em = $em;
 
         $this->params = $params;
+        $this->logoPath = $logoPath;
     }
 
     public function getContent()
@@ -50,7 +56,7 @@ class ChargeForm extends Report
 
         $this->pdf->SetFont('Helvetica', '', 10);
         $this->pdf->Cell(20, 0, sprintf('Fecha de impresión: %s', date('d/m/Y')), 0, 1, 'L');
-        $this->pdf->MultiCell(0, 0, sprintf('Agencia(s): %s', $this->getProvidersLine()), 0, 'L', false, 1);
+        $this->renderProvidersLine();
         $this->pdf->ln(4);
     }
 
@@ -116,6 +122,40 @@ class ChargeForm extends Report
         }
 
         return $this->data;
+    }
+
+    private function renderProvidersLine()
+    {
+        $withLogo = array();
+        $withoutLogo = array();
+
+        foreach ($this->getData() as $record) {
+            if (null !== $record['record']->getProvider()->getLogoName()) {
+                $withLogo[$record['record']->getProvider()->getId()] = $record['record']->getProvider();
+            } else {
+                $withoutLogo[$record['record']->getProvider()->getId()] = $record['record']->getProvider();
+            }
+        }
+
+        $this->pdf->MultiCell(25, 0, 'Agencia(s):', 0, 'L', false, 0);
+        
+        if ($withLogo) {
+            $x = $this->pdf->GetX();
+            $y = $this->pdf->GetY();
+
+            $i = 0;
+            foreach ($withLogo as $provider) {
+                $imagePath = sprintf('%s/%s', $this->logoPath, $provider->getLogoName());
+                $this->pdf->Image($imagePath, $x + ($i * 25), $y + 0.5, 19, 24, '', '', '', 2, 300, '', false, false, 0, 'CT');
+                $i++;
+            }
+
+            $this->pdf->SetY($y + 25);
+        }
+
+        if ($withoutLogo) {
+            $this->pdf->MultiCell(0, 0, implode(', ', array_map(function($provider) {return $provider->getName();}, $withoutLogo)), 0, 'L');
+        }
     }
 
     private function getProvidersLine()

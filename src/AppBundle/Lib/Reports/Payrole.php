@@ -22,13 +22,19 @@ class Payrole extends Report
      */
     private $data;
 
-    public function __construct(array $params, EntityManager $em)
+    /**
+     * @var string
+     */
+    private $logoPath;
+
+    public function __construct(array $params, EntityManager $em, $logoPath)
     {
         parent::__construct('P', 'LETTER');
 
         $this->em = $em;
 
         $this->params = $params;
+        $this->logoPath = $logoPath;
     }
 
     public function getContent()
@@ -60,7 +66,7 @@ class Payrole extends Report
         $this->pdf->Cell(24, 0, 'NÚMERO', 1, 0, 'C');
         $this->pdf->Cell(20, 0, 'FECHA', 1, 0, 'C');
         $this->pdf->Cell(40, 0, 'SERVICIO', 1, 0, 'C');
-        $this->pdf->Cell(48, 0, 'AGENCIA', 1, 0, 'C');
+        $this->pdf->Cell(30, 0, 'AGENCIA', 1, 0, 'C');
         $this->pdf->Cell(46, 0, 'CLIENTE', 1, 0, 'C');
         $this->pdf->Cell(0, 0, 'IMPORTE', 1, 1, 'C');
 
@@ -70,15 +76,29 @@ class Payrole extends Report
                 array(24, $data['record']->getSerialNumber()),
                 array(20, $data['record']->getStartAt()->format('d/m/Y')),
                 array(40, $data['record']->getServiceType()->getName()),
-                array(40, $data['record']->getProvider()->getName()),
+                array(30, $data['record']->getProvider()->getName()),
                 array(46, $data['record']->getClientNames()),
                 array(0, sprintf('%0.2f', $data['price']))
             ));
 
+            if (null !== $data['record']->getProvider()->getLogoName()) {
+                if ($h < 20) {
+                    $h = 20;
+                }
+            }
+
             $this->pdf->MultiCell(24, $h, $data['record']->getSerialNumber(), 'LBR', 'C', false, 0);
             $this->pdf->MultiCell(20, $h, $data['record']->getStartAt()->format('d/m/Y'), 'BR', 'L', false, 0);
             $this->pdf->MultiCell(40, $h, $data['record']->getServiceType()->getName(), 'BR', 'L', false, 0);
-            $this->pdf->MultiCell(48, $h, $data['record']->getProvider()->getName(), 'BR', 'L', false, 0);
+            if (null !== $data['record']->getProvider()->getLogoName()) {
+                $imagePath = sprintf('%s/%s', $this->logoPath, $data['record']->getProvider()->getLogoName());
+                $x = $this->pdf->GetX();
+                $y = $this->pdf->GetY();
+                $this->pdf->MultiCell(30, $h, '', 'BR', 'L', false, 0);
+                $this->pdf->Image($imagePath, $x + 0.5, $y + 0.5, 28, $h - 1, '', '', '', 2, 300, '', false, false, 0, 'CM');
+            } else {
+                $this->pdf->MultiCell(30, $h, $data['record']->getProvider()->getName(), 'BR', 'L', false, 0);
+            }
             $this->pdf->MultiCell(46, $h, $data['record']->getClientNames(), 'BR', 'L', false, 0);
             $this->pdf->MultiCell(0, $h, sprintf('%0.2f', $data['price']), 'BR', 'R', false, 1);
         }
