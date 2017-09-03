@@ -72,19 +72,16 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
                         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                     }
                 },
-                "responsive": true,
                 "bServerSide": true,
                 "bProcessing": false,
                 "ajax": {
                     data: function(data) {
-                        return $.extend(true, data, {
-                            filter: {
-                                from: $('#fromDate').val(),
-                                to: $('#toDate').val(),
-                                provider: $('#filter_provider').val(),
-                                state: $('#filter_state').val()
-                            }
+                        var filter = [];
+                        $.each($('#frmFilter').serializeArray(), function(i, e) {
+                            filter[e['name']] = e['value'];
                         });
+
+                        return $.extend(true, data, filter);
                     },
                     'method': 'post',
                     'url': $table.data('ajax-url')
@@ -197,18 +194,13 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
         });
     }
 
-    var handleClickFilter = function(event) {
-        $('#filter').slideToggle();
-    }
-
     var initFilter = function() {
-        $('#btnFilter').on('click', handleClickFilter);
-        $('#fromDate, #toDate').on('change', function() {
+        $('#frmFilter input.datepicker').on('change', function() {
             datatable.DataTable().draw();
         }).datepicker({
             dateFormat: 'dd/mm/yy'
         });
-        $('select#filter_provider, #filter_state').on('change', function() {
+        $('#frmFilter select').on('change', function() {
             datatable.DataTable().draw();
         });
     }

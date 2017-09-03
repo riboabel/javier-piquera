@@ -22,53 +22,41 @@
                         <li class="divider"></li>
                         <li><a href="#" data-toggle="modal" data-target="#modal-historico">Ver cobros anteriores</a></li>
                     </ul>
-                    <button class="btn btn-default" type="button" id="btnFilter"><i class="fa fa-search"></i></button>
+                    <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#filter" aria-expanded="fase" aria-controls="filter"><i class="fa fa-filter"></i></button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row" id="filter" style="display: none;">
-        <div class="col-xs-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">Opciones de filtro</div>
-                <div class="panel-body">
-                    <form action="" class="form-inline" id="frmFilter">
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-3">
-                                <label for="fromDate">Desde</label>
-                                <input type="text" name="filter[startAt][from]" id="fromDate" class="datepicker form-control input-sm" value="">
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <label for="toDate">Hasta</label>
-                                <input type="text" name="filter[startAt][to]" id="toDate" class="datepicker form-control input-sm" value="">
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <label for="filter_provider">Agencia</label>
-                                <select name="filter[provider]" id="filter_provider" class="form-control input-sm">
-                                    <option value="" selected></option>
-                                    {% for provider in providers.result %}
-                                        <option value="{{ provider.id }}">{{ provider }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <label for="">Estado</label>
-                                <select name="filter[state]" id="filter_state" class="form-control input-sm">
-                                    <option value=""></option>
-                                    <option value="no-cobrado" selected>No cobrado</option>
-                                    <option value="cobrado">Cobrado</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
+    <div class="panel panel-default collapse" id="filter">
+        <div class="panel-heading">Opciones de filtro</div>
+        <div class="panel-body">
+            <form action="" class="form-inline" id="frmFilter">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-3 form-group">
+                        {{ form_label(form.startAt.left_date, "Desde") }}
+                        {{ form_widget(form.startAt.left_date, {attr: {class: "datepicker form-control input-sm"}}) }}
+                    </div>
+                    <div class="col-xs-6 col-sm-3 form-group">
+                        {{ form_label(form.startAt.right_date, "Hasta") }}
+                        {{ form_widget(form.startAt.right_date, {attr: {class: "datepicker form-control input-sm"}}) }}
+                    </div>
+                    <div class="col-xs-6 col-sm-3 form-group">
+                        {{ form_label(form.provider, "Agencia") }}
+                        {{ form_widget(form.provider, {attr: {class: "form-control input-sm"}}) }}
+                    </div>
+                    <div class="col-xs-6 col-sm-3 form-group">
+                        {{ form_label(form.cobradoAt, "Estado") }}
+                        {{ form_widget(form.cobradoAt, {attr: {class: "form-control input-sm"}}) }}
+                    </div>
                 </div>
-            </div>
+                {{ form_rest(form) }}
+            </form>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="dataTable_wrapper">
-                <table class="table table-striped table-bordered table-hover" id="dataTables-cobros" data-ajax-url="{{ path("app_cobros_getdata") }}">
+                <table class="table table-striped table-bordered table-hover" id="dataTables-cobros" data-ajax-url="{{ path("app_cobros_getdata") }}" width="100%">
                     <thead>
                         <tr>
                             <th width="10" class="no-sort">&nbsp;</th>
