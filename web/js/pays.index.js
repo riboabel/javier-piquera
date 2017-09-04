@@ -41,7 +41,7 @@ App.Pagos = typeof App.Pagos !== 'undefined' ? App.Pagos : {};
                     "sProcessing":     "Procesando...",
                     "sLengthMenu":     "Mostrar _MENU_ registros",
                     "sZeroRecords":    "No se encontraron resultados",
-                    "sEmptyTable":     "No hay pagoss pendientes",
+                    "sEmptyTable":     "No hay pagos pendientes",
                     "sInfo":           "Mostrando del _START_ al _END_ (de _TOTAL_)",
                     "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
                     "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
@@ -61,18 +61,15 @@ App.Pagos = typeof App.Pagos !== 'undefined' ? App.Pagos : {};
                         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                     }
                 },
-                "responsive": true,
                 "bServerSide": true,
                 'ajax': {
                     data: function(data) {
-                        return $.extend(true, data, {
-                            filter: {
-                                from: $('#fromDate').val(),
-                                to: $('#toDate').val(),
-                                driver: $('#filter_driver').val(),
-                                state: $('#filter_state').val()
-                            }
+                        var filter = [];
+                        $.each($('#frmFilter').serializeArray(), function(i, e) {
+                            filter[e['name']] = e['value'];
                         });
+
+                        return $.extend(true, data, filter);
                     },
                     "method": 'post',
                     "url": $table.data('ajax-url')
@@ -180,18 +177,13 @@ App.Pagos = typeof App.Pagos !== 'undefined' ? App.Pagos : {};
         });
     }
 
-     var handleClickFilter = function() {
-        $('#filter').slideToggle();
-    }
-
     var initFilter = function() {
-        $('#btnFilter').on('click', handleClickFilter);
-        $('#fromDate, #toDate').on('change', function() {
-            datatable.DataTable().draw(true);
+        $('#frmFilter input.datepicker').on('change', function() {
+            datatable.DataTable().draw();
         }).datepicker({
             dateFormat: 'dd/mm/yy'
         });
-        $('#filter_driver, #filter_state').on('change', function() {
+        $('#frmFilter select').on('change', function() {
             datatable.DataTable().draw();
         });
     }

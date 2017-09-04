@@ -22,47 +22,35 @@
                         <li class="divider"></li>
                         <li><a href="#" data-toggle="modal" data-target="#modal-historico">Ver pagos anteriores</a></li>
                     </ul>
-                    <button type="button" class="btn btn-default" id="btnFilter"><i class="fa fa-search"></i></button>
+                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#filter" aria-expanded="false" aria-controls="filter"><i class="fa fa-filter"></i></button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row" id="filter" style="display: none;">
-        <div class="col-xs-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">Opciones de filtro</div>
-                <div class="panel-body">
-                    <form action="" class="form-inline">
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-3">
-                                <label for="">Desde</label>
-                                <input type="text" name="filter[startAt][from]" id="fromDate" class="datepicker form-control input-sm" value="">
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <label for="">Hasta</label>
-                                <input type="text" name="filter[startAt][to]" id="toDate" class="datepicker form-control input-sm" value="">
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <label for="filter_driver">Conductor</label>
-                                <select name="filter[driver]" id="filter_driver" class="form-control input-sm">
-                                    <option value=""></option>
-                                    {% for driver in drivers.result %}
-                                        <option value="{{ driver.id }}">{{ driver }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <label for="filter_state">Estado</label>
-                                <select name="filter[state]" id="filter_state" class="form-control input-sm">
-                                    <option value=""></option>
-                                    <option value="no-pagado" selected>No pagado</option>
-                                    <option value="pagado">Pagado</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
+    <div class="panel panel-default collapse" id="filter">
+        <div class="panel-heading">Opciones de filtro</div>
+        <div class="panel-body">
+            <form action="" class="form-inline" id="frmFilter">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-3">
+                        {{ form_label(form.startAt.left_date, "Desde") }}
+                        {{ form_widget(form.startAt.left_date, {attr: {class: "datepicker form-control input-sm"}}) }}
+                    </div>
+                    <div class="col-xs-6 col-sm-3">
+                        {{ form_label(form.startAt.right_date, "Hasta") }}
+                        {{ form_widget(form.startAt.right_date, {attr: {class: "datepicker form-control input-sm"}}) }}
+                    </div>
+                    <div class="col-xs-6 col-sm-3">
+                        {{ form_label(form.driver, "Conductor") }}
+                        {{ form_widget(form.driver, {attr: {class: "form-control input-sm"}}) }}
+                    </div>
+                    <div class="col-xs-6 col-sm-3">
+                        {{ form_label(form.paidAt, "Estado") }}
+                        {{ form_widget(form.paidAt, {attr: {class: "form-control input-sm"}}) }}
+                    </div>
                 </div>
-            </div>
+                {{ form_rest(form) }}
+            </form>
         </div>
     </div>
     <div class="row">
@@ -180,7 +168,7 @@
                         <p>
                             <select name="id" class="form-control">
                                 {% for act in charges %}
-                                    <option value="{{ act.id }}">{{ act.createdAt.format('d/m/Y H:i') }} - {{ act.charges.count }} servicios</option>
+                                    <option value="{{ act.id }}">{{ act.createdAt|date('d/m/Y H:i') }} - {{ act.charges.count }} servicios</option>
                                 {% endfor %}
                             </select>
                         </p>

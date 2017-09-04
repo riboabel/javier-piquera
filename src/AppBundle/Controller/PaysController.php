@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\ReservaLog;
+use AppBundle\Form\Type\PayFilterFormType;
 
 /**
  * Description of PaysController
@@ -27,11 +28,11 @@ class PaysController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $acts = $em->createQuery('SELECT p FROM AppBundle:PayAct p ORDER BY p.createdAt')->getResult();
-        $drivers = $em->createQuery('SELECT d FROM AppBundle:Driver d ORDER BY d.name');
+        $form = $this->createForm(PayFilterFormType::class, array('paidAt' => 'no-pagado'));
 
         return $this->render('App/Pays/index.html.twig', array(
             'charges' => $acts,
-            'drivers' => $drivers
+            'form' => $form->createView()
         ));
     }
 
@@ -59,33 +60,7 @@ class PaysController extends Controller
         $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order', array());
-        $filter = $request->get('filter', array());
-
-        if (isset($filter['from']) && preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $filter['from'])) {
-            $from = date_create_from_format('d/m/Y', $filter['from']);
-            $andX->add($qb->expr()->gte('r.startAt', ':from'));
-            $qb->setParameter('from', $from->format('Y-m-d 00:00:00'));
-        }
-
-        if (isset($filter['to']) && preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $filter['to'])) {
-            $to = date_create_from_format('d/m/Y', $filter['to']);
-            $andX->add($qb->expr()->lte('r.startAt', ':to'));
-            $qb->setParameter('to', $to->format('Y-m-d 23:59:59'));
-        }
-
-        if (isset($filter['driver']) && $filter['driver']) {
-            $andX->add($qb->expr()->eq('d.id', ':driver'));
-            $qb->setParameter('driver', $filter['driver']);
-        }
-
-        if (isset($filter['state'])) {
-            if ($filter['state'] === 'pagado') {
-                $andX->add($qb->expr()->isNotNull('r.paidAt'));
-            } elseif ($filter['state'] === 'no-pagado') {
-                $andX->add($qb->expr()->isNull('r.paidAt'));
-            }
-        }
-
+        
         if ($search['value']) {
             $orX = $qb->expr()->orX();
 
@@ -94,23 +69,23 @@ class PaysController extends Controller
                     $qb->expr()->gte('r.startAt', $qb->expr()->literal(sprintf('%s-01-01 00:00', $search['value']))),
                     $qb->expr()->lte('r.startAt', $qb->expr()->literal(sprintf('%s-12-31 23:59', $search['value'])))
                 ));
-            } elseif (1 === preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $search['value'])) {
-                $date = date_create_from_format('d/m/Y', $search['value']);
-                $orX->add($qb->expr()->andX(
-                    $qb->expr()->gte('r.startAt', $qb->expr()->literal(sprintf('%s 00:00', $date->format('Y-m-d')))),
-                    $qb->expr()->lte('r.startAt', $qb->expr()->literal(sprintf('%s 23:59', $date->format('Y-m-d'))))
-                ));
             }
 
-            $orX->add($qb->expr()->like('st.name', $qb->expr()->literal("%{$search['value']}%")));
-            $orX->add($qb->expr()->like('p.name', $qb->expr()->literal("%{$search['value']}%")));
-            $orX->add($qb->expr()->like('d.name', $qb->expr()->literal("%{$search['value']}%")));
-
+            $orX->add($qb->expr()->like('st.name', ':q'));
+            $orX->add($qb->expr()->like('p.name', ':q'));
+            $orX->add($qb->expr()->like('d.name', ':q'));
+            $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
+            
             $andX->add($orX);
         }
 
         $qb->where($andX);
 
+        $form = $this->createForm(PayFilterFormType::class);
+        $form->submit($request->request->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')
+                ->addFilterConditions($form, $qb);
+        
         if ($orders) {
             $column = call_user_func(function($name) use ($qb) {
                 if ($name == 'provider') {
