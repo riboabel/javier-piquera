@@ -198,28 +198,27 @@ App.Reservas.Index = function($) {
                         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                     }
                 },
-                "responsive": true,
                 "bServerSide": true,
                 "bProcessing": false,
-                "ajax": {
-                    "method": 'post',
-                    "url": $table.data('ajax-url'),
-                    "data": function(baseData) {
+                ajax: {
+                    method: 'post',
+                    url: $table.data('ajax-url'),
+                    data: function(baseData) {
                         var filter = [];
                         $.each($('form#filter').serializeArray(), function(i, e) {
-                            if (/^(?!filter\[)/.test(e['name'])) {
+                            if (/\[\]$/.test(e['name'])) {
+                                var sName = e['name'].replace(/\[\]$/, '');
+                                if (!filter[sName]) {
+                                    filter[sName] = [];
+                                }
+
+                                filter[sName].push(e['value']);
+                            } else {
                                 filter[e['name']] = e['value'];
                             }
                         });
-                        return $.extend(true, baseData, {
-                            "filter": {
-                                "isExecuted": $('[name="filter[isExecuted]"]').val(),
-                                "isCancelled": $('[name="filter[isCancelled]"]').val(),
-                                "isDriverConfirmed": $('[name="filter[isDriverConfirmed]"]').val(),
-                                "isDriverAssigned": $('select[name="filter[isDriverAssigned]"]').val(),
-                                "withDrivers": $('select[name="filter[withDrivers]"]').val()
-                            }
-                        }, filter);
+
+                        return $.extend(true, baseData, filter);
                     }
                 }
             }
