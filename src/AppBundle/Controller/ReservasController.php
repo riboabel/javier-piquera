@@ -102,8 +102,6 @@ class ReservasController extends Controller
 
                 $andX->add($qb->expr()->orX(
                         $qb->expr()->like('r.providerReference', $qb->expr()->literal("%{$search['value']}%")),
-                        $qb->expr()->like('st.name', $qb->expr()->literal("%{$search['value']}%")),
-                        $qb->expr()->like('p.name', $qb->expr()->literal("%{$search['value']}%")),
                         $qb->expr()->like('d.name', $qb->expr()->literal("%{$search['value']}%")),
                         $wordX
                         ));

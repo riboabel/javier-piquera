@@ -260,15 +260,15 @@ App.Reservas.Index = function($) {
         $('#filter-form').find('input, select').on('change', function() {
             if ($(this).is('select[name="reserva_filter_form[isDriverAssigned][choice]"]')) {
                 if ($(this).val() === 'with-drivers') {
-                    $('#filter-form [name="reserva_filter_form[isDriverAssigned][drivers][]"]').parent().show();
+                    $('#filter-form [name="reserva_filter_form[isDriverAssigned][drivers][]"]').closest('div.row').show();
                 } else {
-                    $('#filter-form [name="reserva_filter_form[isDriverAssigned][drivers][]"]').parent().hide();
+                    $('#filter-form [name="reserva_filter_form[isDriverAssigned][drivers][]"]').closest('div.row').hide();
                 }
             }
             datatable.DataTable().draw();
         });
 
-        $('#filter-form [name="reserva_filter_form[isDriverAssigned][drivers][]"]').select2({
+        $('[name="reserva_filter_form[isDriverAssigned][drivers][]"], select[name="reserva_filter_form[serviceType][]"]', '#filter-form').select2({
             width: '100%'
         });
     }

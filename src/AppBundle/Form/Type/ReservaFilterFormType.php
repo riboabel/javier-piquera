@@ -7,6 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Lexik\Bundle\FormFilterBundle\Filter\Form\Type as Filters;
 use Lexik\Bundle\FormFilterBundle\Filter\Query\QueryInterface;
+use AppBundle\Entity\Provider;
+use AppBundle\Entity\ServiceType;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Description of ReservaFilterFormType
@@ -15,6 +18,16 @@ use Lexik\Bundle\FormFilterBundle\Filter\Query\QueryInterface;
  */
 class ReservaFilterFormType extends AbstractType
 {
+    /**
+     * @var EntityManager
+     */
+    private $manager;
+
+    public function __construct(EntityManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -78,6 +91,33 @@ class ReservaFilterFormType extends AbstractType
                         return $filterQuery->createCondition($expression);
                     }
                 ))
+                ->add('provider', Filters\ChoiceFilterType::class, array(
+                    'choices' => $this->getProviderChoices(),
+                    'choices_as_values' => true,
+                    'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
+                        if (empty($values['value'])) {
+                            return null;
+                        }
+
+                        $expression = $filterQuery->getExpr()->eq('p.id', ':p_provider');
+
+                        return $filterQuery->createCondition($expression, array('p_provider' => $values['value']));
+                    }
+                ))
+                ->add('serviceType', Filters\ChoiceFilterType::class, array(
+                    'choices' => $this->getServiceTypeChoices(),
+                    'choices_as_values' => true,
+                    'multiple' => true,
+                    'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
+                        if (empty($values['value'])) {
+                            return null;
+                        }
+
+                        $expression = $filterQuery->getExpr()->in('st.id', $values['value']);
+
+                        return $filterQuery->createCondition($expression);
+                    }
+                ))
                 ;
     }
 
@@ -98,5 +138,37 @@ class ReservaFilterFormType extends AbstractType
         $expression = $filterQuery->getExpr()->eq($field, $filterQuery->getExpr()->literal($values['value'] == 'yes'));
 
         return $filterQuery->createCondition($expression);
+    }
+
+    /**
+     * @return array
+     */
+    private function getProviderChoices()
+    {
+        $choices = array();
+
+        $query = $this->manager->createQuery('SELECT p FROM AppBundle:Provider AS p ORDER BY p.name');
+
+        foreach ($query->getResult() as $provider) {
+            $choices[$provider->getName()] = $provider->getId();
+        }
+
+        return $choices;
+    }
+
+    /**
+     * @return array
+     */
+    private function getServiceTypeChoices()
+    {
+        $choices = array();
+
+        $query = $this->manager->createQuery('SELECT s FROM AppBundle:ServiceType AS s ORDER BY s.name');
+
+        foreach ($query->getResult() as $service) {
+            $choices[$service->getName()] = $service->getId();
+        }
+
+        return $choices;
     }
 }
