@@ -201,7 +201,7 @@ App.Reservas.Index = function($) {
                 "bServerSide": true,
                 "bProcessing": false,
                 ajax: {
-                    method: 'post',
+                    method: 'POST',
                     url: $table.data('ajax-url'),
                     data: function(baseData) {
                         var filter = [];
