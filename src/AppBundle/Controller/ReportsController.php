@@ -9,10 +9,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Lib\Reports;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Entity\Reserva;
 
 /**
  * Description of ReportsController
@@ -417,5 +419,81 @@ class ReportsController extends Controller
         return $this->render('App/Reports/form_old_pays.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * @Route("/mostrar-formulario-imprimir-programa")
+     * @Method({"get"})
+     * @return Response
+     */
+    public function showProgramModelFormAction()
+    {
+        return $this->render('App/Reports/form_program_model.html.twig');
+    }
+
+    /**
+     * @Route("/obtener-servicios-por-fecha", options={"expose": true})
+     * @Method({"get"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getServicesByDatesAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $qb = $manager->getRepository('AppBundle:Reserva')
+                ->createQueryBuilder('r')
+                ->orderBy('r.startAt')
+                ;
+
+        if (!empty($from = $request->query->get('from'))) {
+            $qb->andWhere($qb->expr()->gte('r.startAt', ':from'));
+            $qb->setParameter('from', date_create_from_format('d/m/Y', $from)->format('Y-m-d'));
+        }
+        if (!empty($to = $request->query->get('to'))) {
+            $qb->andWhere($qb->expr()->lte('r.startAt', ':to'));
+            $qb->setParameter('to', date_create_from_format('d/m/Y', $to)->format('Y-m-d 23:59:59'));
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($qb->getQuery(), $request->get('page', 1), 10);
+        $vicheService = $this->container->get('vich_uploader.templating.helper.uploader_helper');
+
+        return new JsonResponse(array(
+            'results' => array_map(function(Reserva $record) use($vicheService) {
+                return array(
+                    'id' => $record->getId(),
+                    'text' => (string) $record,
+                    'extra_data' => array(
+                        'start_at' => $record->getStartAt()->format('d/m/Y H:i'),
+                        'provider' => $record->getProvider()->getName(),
+                        'service_name' => $record->getServiceType()->getName(),
+                        'provider_image' => null !== $record->getProvider()->getLogoName() ? $vicheService->asset($record->getProvider(), 'logoFile') : null
+                    )
+                );
+            }, $pagination->getItems()),
+            'pagination' => array(
+                'more' => $pagination->getPageCount() !== (integer) $pagination->getPage()
+            )
+        ));
+    }
+
+    /**
+     * @Route("/imprimir-modelo-programa/reserva-{id}", requirements={"id": "\d+"}, options={"expose": true})
+     * @Method({"get", "post"})
+     * @param Reserva $record
+     * @return StreamedResponse
+     */
+    public function printProgramServiceModelAction(Reserva $record)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $phoneService = $this->container->get('libphonenumber.phone_number_util');
+        $logoPath = $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos';
+
+        $report = new Reports\ProgramServiceModel($record, $phoneService, $manager, $logoPath);
+
+        return new StreamedResponse(function() use($report) {
+            file_put_contents('php://output', $report->getContent());
+        }, 200, array('Content-Type' => 'application/pdf'));
     }
 }

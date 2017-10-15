@@ -27,6 +27,9 @@
                         <tr>
                             <th data-name="name">Nombre</th>
                             <th data-name="postalAddress">Dirección postal</th>
+                            <th data-name="location">Localidad</th>
+                            <th data-name="mobilePhone" class="no-sort no-search">Móvil</th>
+                            <th data-name="fixedPhone" class="no-sort no-search">Fijo</th>
                             <th class="no-sort no-search" width="80">Acciones</th>
                         </tr>
                     </thead>
@@ -67,10 +70,9 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script src="{{ asset("js/places.js") }}"></script>
     <script>
         $(document).ready(function() {
-            App.Places.init();
+            App.Places.Index.init();
         });
     </script>
 {% endblock %}

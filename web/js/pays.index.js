@@ -181,7 +181,8 @@ App.Pagos = typeof App.Pagos !== 'undefined' ? App.Pagos : {};
         $('#frmFilter input.datepicker').on('change', function() {
             datatable.DataTable().draw();
         }).datepicker({
-            dateFormat: 'dd/mm/yy'
+            format: 'dd/mm/yyyy',
+            autoclose: true
         });
         $('#frmFilter select').on('change', function() {
             datatable.DataTable().draw();

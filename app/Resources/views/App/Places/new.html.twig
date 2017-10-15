@@ -28,10 +28,9 @@
 {% endblock %}
 
 {% block page_javascripts %}
-    <script src="{{ asset("js/form-place.js") }}"></script>
     <script>
         $(document).ready(function() {
-            App.Place.init();
+            App.Places.Form.init();
         });
     </script>
 {% endblock %}

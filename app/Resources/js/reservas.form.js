@@ -91,7 +91,8 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
         }
 
         $newItem.find('.datepicker').val(prevDate).datepicker({
-            dateFormat: 'dd/mm/yy'
+            format: 'dd/mm/yyyy',
+            autoclose: true
         });
         $newItem.find('button.btn-delete').on('click', clickDeleteItemHandler);
     }
@@ -110,7 +111,8 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
         $('#linkAddPassingPlace').on('click', clickAddItemToCollectionHandler);
 
         $('#places-container .datepicker').datepicker({
-            dateFormat: 'dd/mm/yy'
+            format: 'dd/mm/yyyy',
+            autoclose: true
         });
 
         $('#places-container').find('button.btn-delete').on('click', clickDeleteItemHandler);

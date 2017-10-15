@@ -29,6 +29,9 @@
 {{ form_end(form) }}
 <script>
     $(document).ready(function() {
-        $('#{{ form.fromDate.vars.id }}, #{{ form.toDate.vars.id }}').datepicker({dateFormat: 'dd/mm/yy'});
+        $('#{{ form.fromDate.vars.id }}, #{{ form.toDate.vars.id }}').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true
+        });
     });
 </script>

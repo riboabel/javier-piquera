@@ -39,7 +39,6 @@ class ReservaPassingPlaceType extends AbstractType
                         'choices' => null !== $data && null !== $data->getId() ? array($data->getPlace()->getId() => $data->getPlace()) : array(),
                         'required' => true
                     ));
-
                 })->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) use($manager) {
                     $form = $event->getForm();
                     $data = $event->getData();

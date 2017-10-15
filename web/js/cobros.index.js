@@ -198,7 +198,8 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
         $('#frmFilter input.datepicker').on('change', function() {
             datatable.DataTable().draw();
         }).datepicker({
-            dateFormat: 'dd/mm/yy'
+            format: 'dd/mm/yyyy',
+            autoclose: true
         });
         $('#frmFilter select').on('change', function() {
             datatable.DataTable().draw();

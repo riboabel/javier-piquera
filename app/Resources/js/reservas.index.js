@@ -249,7 +249,8 @@ App.Reservas.Index = function($) {
 
     var initFilterDatepickers = function() {
         $('#filter-form .datepicker').datepicker({
-            dateFormat: 'dd/mm/yy'
+            format: 'dd/mm/yyyy',
+            autoclose: true
         });
     }
 

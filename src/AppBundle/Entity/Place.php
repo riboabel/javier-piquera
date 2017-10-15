@@ -47,6 +47,20 @@ class Place
     private $location;
 
     /**
+     * @var Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
+     *
+     * @ORM\Column(name="mobile_phone_number", type="phone_number", nullable=true)
+     */
+    private $mobilePhone;
+
+    /**
+     * @var Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
+     *
+     * @ORM\Column(name="fixede_phone_number", type="phone_number", nullable=true)
+     */
+    private $fixedPhone;
+
+    /**
      * @var Enterprise
      *
      * @ORM\ManyToOne(targetEntity="Enterprise")
@@ -159,5 +173,53 @@ class Place
     public function getLocation()
     {
         return $this->location;
+    }
+
+    /**
+     * Set mobilePhone
+     *
+     * @param phone_number $mobilePhone
+     *
+     * @return Place
+     */
+    public function setMobilePhone($mobilePhone)
+    {
+        $this->mobilePhone = $mobilePhone;
+
+        return $this;
+    }
+
+    /**
+     * Get mobilePhone
+     *
+     * @return phone_number
+     */
+    public function getMobilePhone()
+    {
+        return $this->mobilePhone;
+    }
+
+    /**
+     * Set fixedPhone
+     *
+     * @param phone_number $fixedPhone
+     *
+     * @return Place
+     */
+    public function setFixedPhone($fixedPhone)
+    {
+        $this->fixedPhone = $fixedPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get fixedPhone
+     *
+     * @return phone_number
+     */
+    public function getFixedPhone()
+    {
+        return $this->fixedPhone;
     }
 }

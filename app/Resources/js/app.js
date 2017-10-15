@@ -1,6 +1,6 @@
 App = typeof App !== 'undefined' ? App : {};
 
-App.Main = function($) {
++(App.Main = function($) {
     "use strict";
 
     var initMetisMenu = function() {
@@ -87,7 +87,7 @@ App.Main = function($) {
     var initDatetimepicker = function() {
         if ($.datepicker) {
             var options = {
-                //Datepicker options
+                //jQuery UI Datepicker options
                 closeText: "Listo", // Display text for close link
                 prevText: "Anterior", // Display text for previous month link
                 nextText: "Siguiente", // Display text for next month link
@@ -120,10 +120,16 @@ App.Main = function($) {
                 showTime: false
             }
 
+            // Usamos el datepicker de jQuery UI para estos controles
+            // pero mantenemos una referencia al nuevo para posterior uso
+            var newDP = $.fn.datepicker.noConflict();
+
             $('.datetimepicker').each(function() {
                 var $element = $(this);
-                $($element).datetimepicker(options);
+                $element.datetimepicker(options);
             });
+
+            $.fn.datepicker = newDP;
         } else {
             console.log('Datepicker is not present');
         }
@@ -193,4 +199,4 @@ App.Main = function($) {
         },
         validate: initValidator
     }
-}(jQuery);
+}(jQuery));

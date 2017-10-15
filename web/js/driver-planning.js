@@ -42,7 +42,7 @@ App = function() {
 
     var initTable = function() {
         $table = $('table#table-records');
-        
+
         $table.on('draw.dt', handleDrawTable);
         datatable = $table.dataTable({
             aoColumns: [
@@ -84,7 +84,7 @@ App = function() {
                 "sSearch":         'Buscar:',
                 "sUrl":            '',
                 "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",   
+                "sLoadingRecords": "Cargando...",
                 "oPaginate": {
                     "sFirst":    "Primero",
                     "sLast":     "Último",
@@ -118,10 +118,9 @@ App = function() {
             datatable.DataTable().draw(true);
         });
         $('.datepicker').datepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'dd/mm/yy',
-            showButtonPanel: true
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            clearBtn: true
         });
     }
 

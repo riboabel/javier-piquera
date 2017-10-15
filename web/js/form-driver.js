@@ -17,12 +17,12 @@ App.Drivers = App.Drivers !== 'undefined' ? App.Drivers : {};
             autoHideDialCode: true,
             autoPlaceholder: false,
             defaultCountry: 'auto',
-            //geoIpLookup: function(callback) {
-            //    $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-            //        var countryCode = (resp && resp.country) ? resp.country : '';
-            //        callback(countryCode);
-            //    });
-            //},
+            geoIpLookup: function(callback) {
+                $.get('http://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+                    var countryCode = (resp && resp.country) ? resp.country : '';
+                    callback(countryCode);
+                });
+            },
             nationalMode: false,
             numberType: 'MOBILE',
             preferredCountries: ['cu'],

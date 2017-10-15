@@ -7,7 +7,10 @@
 {% block reserva_passing_place_row %}
     <div class="row item">
         <div class="col-lg-3 col-xs-12">
-            {{ form_widget(form.stayAt, {attr: {class: "form-control datepicker input-sm"}}) }}
+            <div class="input-group date datepicker" style="padding: 0;">
+                {{ form_widget(form.stayAt, {attr: {class: "form-control input-sm"}}) }}
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
             <div class="help-block"></div>
         </div>
         <div class="col-lg-8 col-xs-9">

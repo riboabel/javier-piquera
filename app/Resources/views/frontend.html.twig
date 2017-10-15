@@ -29,6 +29,7 @@
         'plugins/select2/css/select2-custom.css'
         'plugins/bootstrap-fileupload/bootstrap-fileupload.css'
         'plugins/jquery.intlTelInput/css/intlTelInput.css'
+        "plugins/datepicker/datepicker3.css"
         %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
@@ -133,6 +134,7 @@
                                 <li><a href="{{ path("app_reports_all_reservas_between_dates") }}" class="link-report">Servicios entre fechas</a></li>
                                 <li><a href="{{ path("app_reports_all_reservas_by_provider") }}" class="link-report">Servicios por agencia</a></li>
                                 <li><a href="{{ path("app_reports_all_reservas_by_driver") }}" class="link-report">Servicios por conductor</a></li>
+                                <li><a href="{{ path("app_reports_showprogrammodelform") }}" class="link-report">Modelo de programa</a></li>
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
                                     <li><a href="{{ path("app_reports_old_cobros") }}" class="link-report">Cobros realizados</a></li>
                                     <li><a href="{{ path("app_reports_old_pays") }}" class="link-report">Pagos realizados</a></li>
@@ -218,20 +220,20 @@
         'plugins/bootstrap-fileupload/bootstrap-fileupload.js'
         'plugins/iCheck/icheck.js'
         'plugins/jquery.intlTelInput/js/intlTelInput.js'
+        "plugins/datepicker/bootstrap-datepicker.js"
+        "plugins/datepicker/locales/bootstrap-datepicker.es.js"
         %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     {% javascripts filter="?jsqueeze" output="compiled/js/app.min.js"
-        "js/app.js"
+        "../app/Resources/js/*.js"
         "js/form-guide.js"
         "js/guides.js"
         'js/dashboard.js'
         'js/drivers.js'
         'js/form-driver.js'
         'js/tables.js'
-        'js/reservas.index.js'
-        'js/reservas.form.js'
         'js/users.js'
         'js/form-user.js'
         'js/servicetypes.js'

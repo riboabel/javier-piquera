@@ -42,7 +42,8 @@
     $(document).ready(function() {
         $('#{{ form.services.vars.id }}, #{{ form.provider.vars.id }}').select2({'width': '100%'});
         $('#{{ form.toDate.vars.id }}, #{{ form.fromDate.vars.id }}').datepicker({
-            dateFormat: 'dd/mm/yy'
+            format: 'dd/mm/yyyy',
+            autoclose: true
         });
     });
 </script>

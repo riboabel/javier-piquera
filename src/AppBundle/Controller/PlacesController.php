@@ -40,7 +40,8 @@ class PlacesController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $qb = $em->getRepository('AppBundle:Place')
-                ->createQueryBuilder('p');
+                ->createQueryBuilder('p')
+                ->leftJoin('p.location', 'loc');
 
         $search = $request->get('search');
         $columns = $request->get('columns');
@@ -49,9 +50,13 @@ class PlacesController extends Controller
         if ($search['value']) {
             $orX = $qb->expr()->orX();
 
-            $orX->add($qb->expr()->like('p.name', $qb->expr()->literal("%{$search['value']}%")));
-            $orX->add($qb->expr()->like('p.postalAddress', $qb->expr()->literal("%{$search['value']}%")));
+            $orX->add($qb->expr()->like('p.name', ':q'));
+            $orX->add($qb->expr()->like('p.postalAddress', ':q'));
+            $orX->add($qb->expr()->andX($qb->expr()->isNotNull('p.location'),
+                    $qb->expr()->like('loc.name', ':q')
+                    ));
 
+            $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
             $qb->where($orX);
         }
 
@@ -61,7 +66,10 @@ class PlacesController extends Controller
                     return 'p.name';
                 } elseif ($name == 'postalAddress') {
                     return 'p.postalAddress';
+                } elseif ('location' === $name) {
+                    return 'loc.name';
                 }
+
                 return null;
             }, $columns[$orders[0]['column']]['name']);
             if (null !== $column) {
@@ -72,20 +80,20 @@ class PlacesController extends Controller
         $paginator = $this->get('knp_paginator');
         $page = $request->get('start', 0) / $request->get('length') + 1;
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
-
         $total = $pagination->getTotalItemCount();
 
-        $data = array();
-
-        foreach ($pagination->getItems() as $record) {
-            $row = array(
-                $record->getName(),
-                $record->getPostalAddress(),
-                $this->renderView('App/Places/index_actions.html.twig', array('record' => $record))
+        $phoneService = $this->container->get('libphonenumber.phone_number_util');
+        $template = $this->container->get('twig')->loadTemplate('App/Places/_cells.html.twig');
+        $data = array_map(function(Place $place) use($phoneService, $template) {
+            return array(
+                $place->getName(),
+                $place->getPostalAddress(),
+                (string) $place->getLocation(),
+                null !== $place->getMobilePhone() ? $phoneService->format($place->getMobilePhone(), \libphonenumber\PhoneNumberFormat::NATIONAL) : '',
+                null !== $place->getFixedPhone() ? $phoneService->format($place->getFixedPhone(), \libphonenumber\PhoneNumberFormat::NATIONAL) : '',
+                $template->renderBlock('actions', array('record' => $place))
             );
-
-            $data[] = $row;
-        }
+        }, $pagination->getItems());
 
         return new JsonResponse(array(
             'data' => $data,
