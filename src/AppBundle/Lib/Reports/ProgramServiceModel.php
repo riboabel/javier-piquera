@@ -65,6 +65,9 @@ class ProgramServiceModel extends Report
                 array(20, ''),
                 array(0, $this->reserva->getProvider()->getPostalAddress())
             ));
+
+            if ($h < 20) {$h = 20;}
+
             $this->pdf->MultiCell(110, $h, '', 0, 'J', false, 0);
             $imagePath = sprintf('%s/%s', $this->logoPath, $this->reserva->getProvider()->getLogoName());
             $x = $this->pdf->GetX();
