@@ -44,11 +44,10 @@ class ReservaPassingPlace
      */
     private $stayAt;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -71,7 +70,7 @@ class ReservaPassingPlace
     /**
      * Get stayAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStayAt()
     {
@@ -94,7 +93,7 @@ class ReservaPassingPlace
     /**
      * Get place
      *
-     * @return \AppBundle\Entity\Place 
+     * @return \AppBundle\Entity\Place
      */
     public function getPlace()
     {
@@ -117,7 +116,7 @@ class ReservaPassingPlace
     /**
      * Get reserva
      *
-     * @return \AppBundle\Entity\Reserva 
+     * @return \AppBundle\Entity\Reserva
      */
     public function getReserva()
     {
