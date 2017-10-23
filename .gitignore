@@ -9,6 +9,7 @@
 /vendor/
 /bin/
 /composer.phar
+/web/assets/
 /web/bundles/
 /web/uploads
 /nbproject/private/
