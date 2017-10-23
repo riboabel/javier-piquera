@@ -446,14 +446,36 @@ class ReportsController extends Controller
                 ->orderBy('r.startAt')
                 ;
 
-        if (!empty($from = $request->query->get('from'))) {
-            $qb->andWhere($qb->expr()->gte('r.startAt', ':from'));
-            $qb->setParameter('from', date_create_from_format('d/m/Y', $from)->format('Y-m-d'));
+        if (null !== $request->query->get('q') && 1 === preg_match('/^(T|t)(?P<year>\d{1})(?P<month>\d{2})(?P<day>\d{2})(|-(?P<id>(\d{2}|\d{4})))$/', $request->query->get('q'), $matches)) {
+            $andX = $qb->expr()->andX();
+
+            $date = new \DateTime(sprintf('%s-%s-%s', substr(date('y'), 0, 1).$matches['year'], $matches['month'], $matches['day']));
+            $andX->add($qb->expr()->gte('r.startAt', $qb->expr()->literal($date->format('Y-m-d 00:00:00'))));
+            $andX->add($qb->expr()->lte('r.startAt', $qb->expr()->literal($date->format('Y-m-d 23:59:59'))));
+
+            if (isset($matches['id'])) {
+                $andX->add($qb->expr()->like('r.id', $qb->expr()->literal(sprintf('%%%s', ltrim($matches['id'], '0')))));
+                if (2 === strlen($matches['id'])) {
+                    $andX->add($qb->expr()->lte('r.id', $qb->expr()->literal(2493)));
+                }
+            }
+            $qb->where($andX);
+        } else {
+            if (null !== $request->query->get('q')) {
+
+            }
+
+            if (!empty($from = $request->query->get('from'))) {
+                $qb->andWhere($qb->expr()->gte('r.startAt', ':from'));
+                $qb->setParameter('from', date_create_from_format('d/m/Y', $from)->format('Y-m-d'));
+            }
+            if (!empty($to = $request->query->get('to'))) {
+                $qb->andWhere($qb->expr()->lte('r.startAt', ':to'));
+                $qb->setParameter('to', date_create_from_format('d/m/Y', $to)->format('Y-m-d 23:59:59'));
+            }
         }
-        if (!empty($to = $request->query->get('to'))) {
-            $qb->andWhere($qb->expr()->lte('r.startAt', ':to'));
-            $qb->setParameter('to', date_create_from_format('d/m/Y', $to)->format('Y-m-d 23:59:59'));
-        }
+
+
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate($qb->getQuery(), $request->get('page', 1), 10);
