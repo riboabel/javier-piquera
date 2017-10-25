@@ -462,7 +462,18 @@ class ReportsController extends Controller
             $qb->where($andX);
         } else {
             if (null !== $request->query->get('q')) {
-
+                $qb
+                        ->leftJoin('r.driver', 'd')
+                        ->join('r.provider', 'p')
+                        ;
+                $qb->andWhere($qb->expr()->orX(
+                        $qb->expr()->andX(
+                                $qb->expr()->isNotNull('r.driver'),
+                                $qb->expr()->like('d.name', ':q')
+                                ),
+                        $qb->expr()->like('p.name', ':q')
+                        ));
+                $qb->setParameter('q', sprintf('%%%s%%', $request->query->get('q')));
             }
 
             if (!empty($from = $request->query->get('from'))) {
@@ -490,7 +501,8 @@ class ReportsController extends Controller
                         'start_at' => $record->getStartAt()->format('d/m/Y H:i'),
                         'provider' => $record->getProvider()->getName(),
                         'service_name' => $record->getServiceType()->getName(),
-                        'provider_image' => null !== $record->getProvider()->getLogoName() ? $vicheService->asset($record->getProvider(), 'logoFile') : null
+                        'provider_image' => null !== $record->getProvider()->getLogoName() ? $vicheService->asset($record->getProvider(), 'logoFile') : null,
+                        'driver_name' => $record->getDriver() !== null ? (string) $record->getDriver() : null
                     )
                 );
             }, $pagination->getItems()),
