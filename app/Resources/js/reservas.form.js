@@ -85,15 +85,16 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
         $newItem.find('.select2-container').css('width', '');
         $newItem.find('.select2-selection').css('height', '30px');
 
-        var prevDate = '';
-        if ($container.find('.item').length > 1) {
-            prevDate = $newItem.prev().find('.datepicker').val();
-        }
-
-        $newItem.find('.datepicker').val(prevDate).datepicker({
+        $newItem.find('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true
         });
+
+        if ($container.find('.item').length > 1) {
+            console.log($newItem.prev().find('.datepicker input').val());
+            $newItem.find('.datepicker').datepicker('setDate', $newItem.prev().find('.datepicker input').val());
+        }
+
         $newItem.find('button.btn-delete').on('click', clickDeleteItemHandler);
     }
 
