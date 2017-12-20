@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Place;
 use AppBundle\Form\Type\PlaceType;
@@ -34,6 +33,8 @@ class PlacesController extends Controller
     /**
      * @Route("/get-data")
      * @Method({"post"})
+     * @param Request $request
+     * @return JsonResponse
      */
     public function getDataAction(Request $request)
     {
