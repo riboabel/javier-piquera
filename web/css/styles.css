@@ -1,3 +1,8 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+}
+
 .input-wrapper > input[type="checkbox"], .input-wrapper > input[type="radio"] {
     -moz-appearance: none;
     display: block;
