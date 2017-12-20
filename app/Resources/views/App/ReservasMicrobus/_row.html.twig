@@ -1,0 +1,29 @@
+{% block selector %}
+    <input type="checkbox" name="selection[]" value="{{ record.id }}" checked="checked"/>
+{% endblock %}
+
+{% block startAt %}
+    <div title="{{ "%s: %s a %s: %s"|format(record.startIn.name, record.startIn.postalAddress, record.endIn.name, record.endIn.postalAddress) }}">{{ record.startAt|date("d/m/Y H:i") }}</div>
+{% endblock %}
+
+{% block pax %}
+    <div class="text-center">{{ record.pax }}</div>
+{% endblock %}
+
+{% block service %}
+    <div title="{{ record.serviceDescription }}">{{ record.serviceType }}</div>
+{% endblock %}
+
+{% block actions %}
+    <div class="btn-group">
+        <a href="#" class="btn btn-default btn-xs">
+            <span class="fa fa-file"></span>
+        </a>
+        <a href="{{ path("app_reservasmicrobus_edit", {id: record.id}) }}" class="btn btn-primary btn-xs">
+            <span class="fa fa-edit"></span>
+        </a>
+        <a href="{{ path("app_reservasmicrobus_delete", {id: record.id}) }}" class="btn btn-danger btn-xs btn-delete">
+            <span class="fa fa-remove"></span>
+        </a>
+    </div>
+{% endblock %}

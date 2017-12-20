@@ -1,0 +1,172 @@
+<?php
+
+namespace AppBundle\Controller;
+
+use AppBundle\Form\Type\ReservaMicrobusFormType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\ReservaTercero;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+/**
+ * ReservasMicrobusController
+ *
+ * @author Raibel Botta <raibelbotta@gmail.com>
+ * @Route("/reservas-microbus")
+ */
+class ReservasMicrobusController extends Controller
+{
+    /**
+     * @Route("/")
+     * @Method({"GET"})
+     * @return Response
+     */
+    public function indexAction()
+    {
+        return $this->render('App/ReservasMicrobus/index.html.twig');
+    }
+
+    /**
+     * @Route("/get-data", options={"expose": true})
+     * @Method({"GET"})
+     * @param Request $request
+     * @return Response
+     */
+    public function getDataAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $qb = $em->getRepository('AppBundle:ReservaTercero')
+                ->createQueryBuilder('r')
+                ->where('r.type = :microbus')
+                ->setParameter('microbus', ReservaTercero::TYPE_MICROBUS)
+                ;
+
+        $search = $request->get('search');
+        $columns = $request->get('columns');
+        $orders = $request->get('order', array());
+        $filter['q'] = $search['value'];
+
+        if ($orders) {
+            $column = call_user_func(function($name) {
+                if ($name == 'startat') {
+                    return 'r.startAt';
+                } elseif ($name == 'provider') {
+                    return 'p.name';
+                } elseif ($name == 'serviceType') {
+                    return 'st.name';
+                } elseif ($name == 'driver') {
+                    return 'd.name';
+                } elseif ($name == 'clientNames') {
+                    return 'r.clientNames';
+                } elseif ($name == 'pax') {
+                    return 'r.pax';
+                } elseif ($name == 'providerReference') {
+                    return 'r.providerReference';
+                }
+                return null;
+            }, $columns[$orders[0]['column']]['name']);
+            if (null !== $column) {
+                $qb->orderBy($column, strtoupper($orders[0]['dir']));
+            }
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $page = $request->get('start', 0) / $request->get('length') + 1;
+        $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
+        $total = $pagination->getTotalItemCount();
+
+        $template = $this->container->get('twig')->loadTemplate('App/ReservasMicrobus/_row.html.twig');
+        $data = array_map(function(ReservaTercero $record) use($template) {
+            return array(
+                $template->renderBlock('selector', array('record' => $record)),
+                $template->renderBlock('startAt', array('record' => $record)),
+                $template->renderBlock('service', array('record' => $record)),
+                $record->getClient()->getName(),
+                $record->getClientSerial(),
+                $template->renderBlock('provider', array('record' => $record)),
+                $record->getProviderSerial(),
+                $record->getClientNames(),
+                $template->renderBlock('pax', array('record' => $record)),
+                $template->renderBlock('actions', array('record' => $record))
+            );
+        }, $pagination->getItems());
+
+        return new JsonResponse(array(
+            'data' => $data,
+            'draw' => $request->get('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total
+        ));
+    }
+
+    /**
+     * @Route("/nuevo")
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function newAction(Request $request)
+    {
+        $reserva = new ReservaTercero();
+        $reserva->setType(ReservaTercero::TYPE_MICROBUS);
+
+        $form = $this->createForm(ReservaMicrobusFormType::class, $reserva);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($reserva);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_reservasmicrobus_index');
+        }
+
+        return $this->render('App/ReservasMicrobus/new.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/{id}/editar", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param ReservaTercero $reserva
+     * @param Request $request
+     * @return Response
+     */
+    public function editAction(ReservaTercero $reserva, Request $request)
+    {
+        $form = $this->createForm(ReservaMicrobusFormType::class, $reserva);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($reserva);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_reservasmicrobus_index');
+        }
+
+        return $this->render('App/ReservasMicrobus/edit.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/{id}/eliminar", requirements={"id": "\d+"})
+     * @Method({"POST"})
+     * @param ReservaTercero $reserva
+     * @return Response
+     */
+    public function deleteAction(ReservaTercero $reserva)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($reserva);
+        $manager->flush();
+
+        return new JsonResponse(array('result' => 'success'));
+    }
+}

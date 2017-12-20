@@ -128,6 +128,13 @@
                                     <li><a href="{{ path("app_invoices_index") }}">Facturación de servicios</a></li>
                                     <li><a href="{{ path("app_pays_index") }}">Pagos a conductores</a></li>
                                 {% endif %}
+                                <li>
+                                    <a href="#">Reservas de terceros <span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href="{{ path("app_reservasmicrobus_index") }}">Microbus</a></li>
+                                        <li><a href="#">Clásicos</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li>
@@ -225,6 +232,7 @@
         'plugins/jquery.intlTelInput/js/intlTelInput.js'
         "plugins/datepicker/bootstrap-datepicker.js"
         "plugins/datepicker/locales/bootstrap-datepicker.es.js"
+        "plugins/moment.min.js"
         %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

@@ -1,6 +1,7 @@
 body {
     font-family: 'Open Sans', sans-serif;
     font-size: 13px;
+    font-weight: 400;
 }
 
 .input-wrapper > input[type="checkbox"], .input-wrapper > input[type="radio"] {

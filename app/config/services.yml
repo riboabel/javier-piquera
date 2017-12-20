@@ -54,6 +54,16 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
+    app.form.type.service_type_selector_type:
+        class: AppBundle\Form\Type\ServiceTypeSelectorType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
+    app.form.type.place_selector_type:
+        class: AppBundle\Form\Type\PlaceSelectorType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
 
     app.morris_graph.area:
         class: AppBundle\Services\MorrisGraphGenerator
