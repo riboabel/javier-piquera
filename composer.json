@@ -22,6 +22,7 @@
         "datatables/datatables": "~1.10.10",
         "doctrine/doctrine-bundle": "~1.4",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
+        "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.4.8",
         "egeloen/ckeditor-bundle": "^5.0",
         "friendsofsymfony/jsrouting-bundle": "dev-master",
