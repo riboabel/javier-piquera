@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * ReservasMicrobusController
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
- * @Route("/reservas-microbus")
+ * @Route("/reservas-clasicos")
  */
-class ReservasMicrobusController extends Controller
+class ReservasClasicosController extends Controller
 {
     /**
      * @Route("/")
@@ -26,7 +26,7 @@ class ReservasMicrobusController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('App/ReservasMicrobus/index.html.twig');
+        return $this->render('App/ReservasClasicos/index.html.twig');
     }
 
     /**
@@ -42,7 +42,7 @@ class ReservasMicrobusController extends Controller
         $qb = $em->getRepository('AppBundle:ReservaTercero')
                 ->createQueryBuilder('r')
                 ->where('r.type = :microbus')
-                ->setParameter('microbus', ReservaTercero::TYPE_MICROBUS)
+                ->setParameter('microbus', ReservaTercero::TYPE_CLASICOS)
                 ;
 
         $search = $request->get('search');
@@ -54,19 +54,8 @@ class ReservasMicrobusController extends Controller
             $column = call_user_func(function($name) {
                 if ($name == 'startat') {
                     return 'r.startAt';
-                } elseif ($name == 'provider') {
-                    return 'p.name';
-                } elseif ($name == 'serviceType') {
-                    return 'st.name';
-                } elseif ($name == 'driver') {
-                    return 'd.name';
-                } elseif ($name == 'clientNames') {
-                    return 'r.clientNames';
-                } elseif ($name == 'pax') {
-                    return 'r.pax';
-                } elseif ($name == 'providerReference') {
-                    return 'r.providerReference';
                 }
+
                 return null;
             }, $columns[$orders[0]['column']]['name']);
             if (null !== $column) {
@@ -79,7 +68,7 @@ class ReservasMicrobusController extends Controller
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
         $total = $pagination->getTotalItemCount();
 
-        $template = $this->container->get('twig')->loadTemplate('App/ReservasMicrobus/_row.html.twig');
+        $template = $this->container->get('twig')->loadTemplate('App/ReservasClasicos/_row.html.twig');
         $data = array_map(function(ReservaTercero $record) use($template) {
             return array(
                 $template->renderBlock('selector', array('record' => $record)),
@@ -113,7 +102,7 @@ class ReservasMicrobusController extends Controller
     public function newAction(Request $request)
     {
         $reserva = new ReservaTercero();
-        $reserva->setType(ReservaTercero::TYPE_MICROBUS);
+        $reserva->setType(ReservaTercero::TYPE_CLASICOS);
 
         $form = $this->createForm(ReservaMicrobusFormType::class, $reserva);
         $form->handleRequest($request);
@@ -123,10 +112,10 @@ class ReservasMicrobusController extends Controller
             $manager->persist($reserva);
             $manager->flush();
 
-            return $this->redirectToRoute('app_reservasmicrobus_index');
+            return $this->redirectToRoute('app_reservasclasicos_index');
         }
 
-        return $this->render('App/ReservasMicrobus/new.html.twig', array(
+        return $this->render('App/ReservasClasicos/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -148,10 +137,10 @@ class ReservasMicrobusController extends Controller
             $manager->persist($reserva);
             $manager->flush();
 
-            return $this->redirectToRoute('app_reservasmicrobus_index');
+            return $this->redirectToRoute('app_reservasclasicos_index');
         }
 
-        return $this->render('App/ReservasMicrobus/edit.html.twig', array(
+        return $this->render('App/ReservasClasicos/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -182,7 +171,7 @@ class ReservasMicrobusController extends Controller
             ));
         }
 
-        return $this->render('App/ReservasMicrobus/execute.html.twig', array(
+        return $this->render('App/ReservasClasicos/execute.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -213,7 +202,7 @@ class ReservasMicrobusController extends Controller
             ));
         }
 
-        return $this->render('App/ReservasMicrobus/cancel.html.twig', array(
+        return $this->render('App/ReservasClasicos/cancel.html.twig', array(
             'form' => $form->createView()
         ));
     }

@@ -24,17 +24,17 @@
 
 {% block actions %}
     <div class="btn-group">
-        <a href="#" class="btn btn-default btn-xs" title="Ver detalle">
+        <a href="javascript:;" class="btn btn-default btn-xs" title="Ver detalle">
             <span class="fa fa-file"></span>
         </a>
-        <a href="{{ path("app_reservasmicrobus_edit", {id: record.id}) }}" class="btn btn-primary btn-xs" title="Modificar">
+        <a href="{{ path("app_reservasclasicos_edit", {id: record.id}) }}" class="btn btn-primary btn-xs" title="Modificar">
             <span class="fa fa-edit"></span>
         </a>
         {% if record.state == constant("AppBundle\\Entity\\ReservaTercero::STATE_CREATED") %}
-            <a href="{{ path("app_reservasmicrobus_setexecuted", {id: record.id}) }}" class="btn btn-success btn-xs btn-execute" title="Ejecutar"><span class="fa fa-check"></span></a>
-            <a href="{{ path("app_reservasmicrobus_setcancelled", {id: record.id}) }}" class="btn btn-warning btn-xs btn-change-state" title="Cancelar"><span class="fa fa-ban"></span></a>
+            <a href="{{ path("app_reservasclasicos_setexecuted", {id: record.id}) }}" class="btn btn-success btn-xs btn-execute" title="Ejecutar"><span class="fa fa-check"></span></a>
+            <a href="{{ path("app_reservasclasicos_setcancelled", {id: record.id}) }}" class="btn btn-warning btn-xs btn-change-state" title="Cancelar"><span class="fa fa-ban"></span></a>
         {% endif %}
-        <a href="{{ path("app_reservasmicrobus_delete", {id: record.id}) }}" class="btn btn-danger btn-xs btn-delete" title="Eliminar">
+        <a href="{{ path("app_reservasclasicos_delete", {id: record.id}) }}" class="btn btn-danger btn-xs btn-delete" title="Eliminar">
             <span class="fa fa-remove"></span>
         </a>
     </div>

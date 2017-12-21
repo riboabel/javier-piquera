@@ -1,0 +1,17 @@
+{{ form_start(form, {action: path("app_reservasmicrobus_setexecuted", {id: form.vars.data.id}), attr: {'role': 'form'}}) }}
+    <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title">Ejecutar reserva</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            {{ form_label(form.executionIssues, "Notas de ejecución") }}
+            {{ form_widget(form.executionIssues, {attr: {class: "form-control"}}) }}
+        </div>
+        {{ form_rest(form) }}
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Ejecutar y guardar</button>
+    </div>
+{{ form_end(form) }}

@@ -23,6 +23,10 @@ class ReservaTercero
     const TYPE_MICROBUS = 'microbus';
     const TYPE_CLASICOS = 'clasicos';
 
+    const STATE_CREATED = 'created';
+    const STATE_EXECUTED = 'executed';
+    const STATE_CANCELLED = 'cancelled';
+
     /**
      * @var integer
      *
@@ -39,6 +43,14 @@ class ReservaTercero
      * @Assert\Regex("/^(microbus|clasicos)$/")
      */
     private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(length=20)
+     * @Assert\Regex("/^(created|executed|cancelled)$/")
+     */
+    private $state;
 
     /**
      * @var ServiceType
@@ -111,14 +123,6 @@ class ReservaTercero
     private $endIn;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $createdAt;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="service_description", type="text", nullable=true)
@@ -140,6 +144,43 @@ class ReservaTercero
      * @ORM\Column(type="integer", nullable=true)
      */
     private $pax;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="execution_issues", type="text", nullable=true)
+     * @Assert\Length(max=32000)
+     */
+    private $executionIssues;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cancellation_issues", type="text", nullable=true)
+     * @Assert\Length(max=32000)
+     */
+    private $cancellationIssues;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
+
+    public function __construct()
+    {
+        $this->state = self::STATE_CREATED;
+    }
 
     /**
      * Get id
@@ -485,5 +526,101 @@ class ReservaTercero
     public function getPax()
     {
         return $this->pax;
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return ReservaTercero
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set executionIssues
+     *
+     * @param string $executionIssues
+     *
+     * @return ReservaTercero
+     */
+    public function setExecutionIssues($executionIssues)
+    {
+        $this->executionIssues = $executionIssues;
+
+        return $this;
+    }
+
+    /**
+     * Get executionIssues
+     *
+     * @return string
+     */
+    public function getExecutionIssues()
+    {
+        return $this->executionIssues;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return ReservaTercero
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set cancellationIssues
+     *
+     * @param string $cancellationIssues
+     *
+     * @return ReservaTercero
+     */
+    public function setCancellationIssues($cancellationIssues)
+    {
+        $this->cancellationIssues = $cancellationIssues;
+
+        return $this;
+    }
+
+    /**
+     * Get cancellationIssues
+     *
+     * @return string
+     */
+    public function getCancellationIssues()
+    {
+        return $this->cancellationIssues;
     }
 }

@@ -1,0 +1,17 @@
+{{ form_start(form, {action: path("app_reservasmicrobus_setcancelled", {id: form.vars.data.id}), attr: {'role': 'form'}}) }}
+    <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title">Cancelar reserva</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            {{ form_label(form.cancellationIssues, "Notas de cancelación") }}
+            {{ form_widget(form.cancellationIssues, {attr: {class: "form-control"}}) }}
+        </div>
+        {{ form_rest(form) }}
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Cancelar y guardar</button>
+    </div>
+{{ form_end(form) }}

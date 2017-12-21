@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
-App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.ReservasMicrobus : {};
+App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.ReservasClasicos : {};
 
-+(App.ReservasMicrobus.Index = function() {
++(App.ReservasClasicos.Index = function() {
     var $table = $('#dataTables-reservas');
 
     var initTable = function() {
@@ -17,7 +17,7 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
 
         $table.dataTable({
             ajax: {
-                url: Routing.generate('app_reservasmicrobus_getdata'),
+                url: Routing.generate('app_reservasclasicos_getdata'),
                 method: 'GET',
                 error: function() {
                     alert('Error obteniendo datos de listado')

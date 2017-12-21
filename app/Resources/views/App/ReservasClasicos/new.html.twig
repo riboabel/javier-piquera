@@ -1,0 +1,36 @@
+{% extends "frontend.html.twig" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Reservas de clásicos <small>crear</small></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+
+    {{ form_start(form, {"attr": {"role": "form", "id": "reserva-clasicos"}}) }}
+        <div class="row">
+            <div class="col-lg-12">
+                {{ include("App/ReservasClasicos/form.html.twig") }}
+                <button class="btn btn-success" type="submit">
+                    <i class="fa fa-save"></i>
+                    Guardar
+                </button>
+                <a href="{{ path("app_reservasclasicos_index") }}" class="btn btn-default">
+                    <i class="fa fa-undo"></i>
+                    Cancelar
+                </a>
+            </div>
+        </div>
+        <!-- /.row -->
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block page_javascripts %}
+    <script>
+        $(document).ready(function() {
+            App.ReservasClasicos.Form.init();
+        });
+    </script>
+{% endblock %}
