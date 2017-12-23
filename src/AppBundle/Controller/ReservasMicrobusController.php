@@ -232,4 +232,45 @@ class ReservasMicrobusController extends Controller
 
         return new JsonResponse(array('result' => 'success'));
     }
+
+    /**
+     * @Route("/get-places", options={"expose": true})
+     * @Method({"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getPlacesAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $qb = $manager->getRepository('AppBundle:Place')
+            ->createQueryBuilder('p')
+            ->select('p.id, p.name')
+            ->orderBy('p.name');
+
+        if ($request->get('q')) {
+            $qb
+                ->where($qb->expr()->like('p.name', ':q'))
+                ->setParameter('q', sprintf('%%%s%%', $request->get('q')))
+            ;
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($qb->getQuery(), $request->get('page', 1), 10);
+
+        $total = $pagination->getTotalItemCount();
+
+        $results = array(
+            'results' => array_map(function(array $record) {
+                return array(
+                    'id' => $record['id'],
+                    'text' => $record['name']
+                );
+            }, $pagination->getItems()),
+            'pagination' => array(
+                'more' => ($request->get('page', 1) * 10) < $total
+            )
+        );
+
+        return new JsonResponse($results);
+    }
 }

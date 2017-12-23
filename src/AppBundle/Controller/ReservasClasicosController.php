@@ -68,7 +68,7 @@ class ReservasClasicosController extends Controller
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
         $total = $pagination->getTotalItemCount();
 
-        $template = $this->container->get('twig')->loadTemplate('App/ReservasClasicos/_row.html.twig');
+        $template = $this->container->get('twig')->load('App/ReservasClasicos/_row.html.twig');
         $data = array_map(function(ReservaTercero $record) use($template) {
             return array(
                 $template->renderBlock('selector', array('record' => $record)),
@@ -220,5 +220,46 @@ class ReservasClasicosController extends Controller
         $manager->flush();
 
         return new JsonResponse(array('result' => 'success'));
+    }
+
+    /**
+     * @Route("/get-places", options={"expose": true})
+     * @Method({"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getPlacesAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $qb = $manager->getRepository('AppBundle:Place')
+            ->createQueryBuilder('p')
+            ->select('p.id, p.name')
+            ->orderBy('p.name');
+
+        if ($request->get('q')) {
+            $qb
+                ->where($qb->expr()->like('p.name', ':q'))
+                ->setParameter('q', sprintf('%%%s%%', $request->get('q')))
+            ;
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($qb->getQuery(), $request->get('page', 1), 10);
+
+        $total = $pagination->getTotalItemCount();
+
+        $results = array(
+            'results' => array_map(function(array $record) {
+                return array(
+                    'id' => $record['id'],
+                    'text' => $record['name']
+                );
+            }, $pagination->getItems()),
+            'pagination' => array(
+                'more' => ($request->get('page', 1) * 10) < $total
+            )
+        );
+
+        return new JsonResponse($results);
     }
 }

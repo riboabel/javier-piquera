@@ -33,7 +33,23 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
     }
 
     var initControls = function() {
-
+        $('#reserva_microbus_form_startIn, #reserva_microbus_form_endIn').select2({
+            ajax: {
+                url: Routing.generate('app_reservasmicrobus_getplaces'),
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term,
+                        page: params.page
+                    }
+                }
+            },
+            language: 'es',
+            minimunInputLength: 1,
+            placeholder: 'Seleccione un lugar',
+            width: 'resolve'
+        });
     }
 
     return {
