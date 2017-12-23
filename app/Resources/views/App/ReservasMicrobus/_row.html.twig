@@ -22,6 +22,10 @@
     <div title="{{ record.serviceDescription }}">{{ record.serviceType }}</div>
 {% endblock %}
 
+{% block provider %}
+    {{ record.provider }}
+{% endblock %}
+
 {% block actions %}
     <div class="btn-group">
         <a href="#" class="btn btn-default btn-xs" title="Ver detalle">
