@@ -88,10 +88,8 @@ App = typeof App !== 'undefined' ? App : {};
         if ($.datepicker) {
             var options = {
                 //jQuery UI Datepicker options
-                closeText: "Listo", // Display text for close link
                 prevText: "Anterior", // Display text for previous month link
                 nextText: "Siguiente", // Display text for next month link
-                currentText: "Hoy", // Display text for current month link
                 monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
                     "Julio","Agosto","Septiembre","Octubre","Noviembre","Deciembre"], // Names of months for drop-down and formatting
                 monthNamesShort: ["Ene", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], // For formatting
@@ -186,6 +184,35 @@ App = typeof App !== 'undefined' ? App : {};
         });
     }
 
+    var initDatatable = function() {
+        $.extend($.fn.dataTable.defaults, {
+            oLanguage: {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando del _START_ al _END_ (de _TOTAL_)",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
+        });
+    }
+
     return {
         init: function() {
             initMetisMenu();
@@ -196,6 +223,7 @@ App = typeof App !== 'undefined' ? App : {};
             initializeReportLinks();
             initializeMessageSystem();
             initWeekPdfsControls();
+            initDatatable();
         },
         validate: initValidator
     }

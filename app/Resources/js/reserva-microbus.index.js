@@ -6,7 +6,9 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
 
     var initTable = function() {
         $table.on('preDraw.dt', function() {
-            $(this).block();
+            $(this).block({
+                message: 'Cargando datos...'
+            });
         }).on('draw.dt', function() {
             $(this).unblock();
             $(this).find('input:checkbox').iCheck({

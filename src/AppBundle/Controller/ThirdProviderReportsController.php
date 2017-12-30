@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Lib\Reports;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * ThirdProviderReportsController
@@ -44,7 +45,6 @@ class ThirdProviderReportsController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $manager = $this->getDoctrine()->getManager();
-                $data = $form->getData();
                 $report = new Reports\ServicesForThirdProviderReport($form->getData(), $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
 
                 return new StreamedResponse(function() use($report) {
