@@ -84,7 +84,7 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
 
             if (confirm('¿Seguro desea borrar esta reserva?')) {
                 var url = $(this).attr('href');
-                $(this).closet('td').text('Eliminando...')
+                $(this).closest('td').text('Eliminando...')
                 $.ajax({
                     method: 'POST',
                     success: function(json) {
