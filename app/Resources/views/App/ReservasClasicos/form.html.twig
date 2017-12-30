@@ -1,17 +1,12 @@
 <div class="row">
-    <div class="col-sm-6 form-group">
-        {{ form_label(form.client, "Agencia") }}
-        {{ form_widget(form.client, {attr: {class: "form-control"}}) }}
+    <div class="col-sm-6">
+        {{ form_row(form.client, {label: "Agencia"}) }}
     </div>
-    <div class="col-sm-6 form-group">
-        {{ form_label(form.clientSerial, "Referencia del cliente") }}
-        {{ form_widget(form.clientSerial, {attr: {class: "form-control"}}) }}
+    <div class="col-sm-6">
+        {{ form_row(form.clientSerial, {label: "Referencia del cliente"}) }}
     </div>
 </div>
-<div class="form-group">
-    {{ form_label(form.serviceType, "Tipo de servicio") }}
-    {{ form_widget(form.serviceType, {attr: {class: "form-control"}}) }}
-</div>
+{{ form_row(form.serviceType, {label: "Tipo de servicio"}) }}
 <div class="row">
     <div class="col-sm-6 form-group">
         {{ form_label(form.startAt, "Inicio") }}
@@ -23,34 +18,14 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-6 form-group">
-        {{ form_label(form.startIn, "Desde") }}
-        {{ form_widget(form.startIn, {attr: {class: "form-control"}}) }}
+    <div class="col-sm-6">
+        {{ form_row(form.startIn, {label: "Desde"}) }}
     </div>
-    <div class="col-sm-6 form-group">
-        {{ form_label(form.endIn, "Hasta") }}
-        {{ form_widget(form.endIn, {attr: {class: "form-control"}}) }}
+    <div class="col-sm-6">
+        {{ form_row(form.endIn, {label: "Hasta"}) }}
     </div>
 </div>
-<div class="form-group">
-    {{ form_label(form.serviceDescription, "Descripción del servicio") }}
-    {{ form_widget(form.serviceDescription, {attr: {class: "form-control"}}) }}
-</div>
-<div class="form-group">
-    {{ form_label(form.pax, "Pax") }}
-    {{ form_widget(form.pax, {attr: {class: "form-control text-right"}}) }}
-</div>
-<div class="form-group">
-    {{ form_label(form.clientNames, "Nombres de los clientes") }}
-    {{ form_widget(form.clientNames, {attr: {class: "form-control"}}) }}
-</div>
-<div class="row">
-    <div class="col-sm-6 form-group">
-        {{ form_label(form.provider, "Proveedor") }}
-        {{ form_widget(form.provider, {attr: {class: "form-control"}}) }}
-    </div>
-    <div class="col-sm-6 form-group">
-        {{ form_label(form.providerSerial, "Número de confirmación del proveedor") }}
-        {{ form_widget(form.providerSerial, {attr: {class: "form-control"}}) }}
-    </div>
-</div>
+{{ form_row(form.serviceDescription, {label: "Descripción del servicio"}) }}
+{{ form_row(form.pax, {label: "Pax", attr: {class: 'text-right'}}) }}
+{{ form_row(form.clientNames, {label: "Nombres de los clientes"}) }}
+{{ form_row(form.provider, {label: "Proveedor"}) }}

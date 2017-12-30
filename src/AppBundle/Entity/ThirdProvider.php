@@ -13,6 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ThirdProvider
 {
+    const TYPE_MICROBUS = 'microbus';
+    const TYPE_CLASICOS = 'clasicos';
+
     /**
      * @var string
      *
@@ -25,7 +28,16 @@ class ThirdProvider
     /**
      * @var string
      *
+     * @ORM\Column(length=10)
+     * @Assert\Regex("/^(clasicos|microbus)$/")
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
      * @ORM\Column
+     * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
     private $name;
@@ -67,5 +79,29 @@ class ThirdProvider
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return ThirdProvider
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

@@ -12,12 +12,12 @@
     {{ form_start(form, {attr: {role: 'form', id: 'place'}}) }}
         <div class="row">
             <div class="col-lg-12">
-                {{ include("App/Places/form.html.twig") }}
+                {{ include("App/Admin/Providers/form.html.twig") }}
                 <button class="btn btn-success" type="submit">
                     <i class="fa fa-save"></i>
                     Guardar
                 </button>
-                <a href="{{ path("app_places_index") }}" class="btn btn-default">
+                <a href="{{ path("app_admin_providers_index") }}" class="btn btn-default">
                     <i class="fa fa-undo"></i>
                     Cancelar
                 </a>

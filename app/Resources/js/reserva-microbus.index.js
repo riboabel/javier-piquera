@@ -70,11 +70,11 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
                 {
                     searchable: false,
                     sortable: false,
-                    width: '120px'
+                    width: '130px'
                 }
             ],
             serverSide: true,
-            sorting: [[2, 'desc']]
+            sorting: [[2, 'asc']]
         });
     }
 

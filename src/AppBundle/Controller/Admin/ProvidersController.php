@@ -73,10 +73,13 @@ class ProvidersController extends Controller
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
         $total = $pagination->getTotalItemCount();
 
-        $template = $this->container->get('twig')->loadTemplate('App/Admin/Providers/_row.html.twig');
+        $template = $this->container->get('twig')->load('App/Admin/Providers/_row.html.twig');
         $data = array_map(function(ThirdProvider $provider) use($template) {
             return array(
                 $provider->getName(),
+                $template->renderBlock('type', array(
+                    'record' => $provider
+                )),
                 $template->renderBlock('actions', array('record' => $provider))
             );
         }, $pagination->getItems());
@@ -135,7 +138,7 @@ class ProvidersController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function editAction(ThirdPorvider $provider, Request $request)
+    public function editAction(ThirdProvider $provider, Request $request)
     {
         $form = $this->createForm(ThirdProviderFormType::class, $provider);
         $form->handleRequest($request);

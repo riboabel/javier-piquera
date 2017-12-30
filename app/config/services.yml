@@ -64,6 +64,16 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
+    app.form.type.reserva_microbus_form_type:
+        class: AppBundle\Form\Type\ReservaMicrobusFormType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
+    app.form.type.reserva_clasicos_form_type:
+            class: AppBundle\Form\Type\ReservaClasicosFormType
+            arguments: [ '@doctrine.orm.entity_manager' ]
+            tags:
+                - { name: form.type }
 
     app.morris_graph.area:
         class: AppBundle\Services\MorrisGraphGenerator

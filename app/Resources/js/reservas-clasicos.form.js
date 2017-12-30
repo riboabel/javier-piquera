@@ -33,7 +33,7 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
     }
 
     var initControls = function() {
-        $('#reserva_microbus_form_startIn, #reserva_microbus_form_endIn').select2({
+        $('#reserva_clasicos_form_startIn, #reserva_clasicos_form_endIn').select2({
             ajax: {
                 url: Routing.generate('app_reservasclasicos_getplaces'),
                 dataType: 'json',

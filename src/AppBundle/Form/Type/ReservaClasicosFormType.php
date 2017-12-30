@@ -11,11 +11,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ReservaTerceroFormType
+ * ReservaClasicosFormType
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
  */
-class ReservaMicrobusFormType extends AbstractType
+class ReservaClasicosFormType extends AbstractType
 {
     /**
      * @var EntityManager
@@ -33,7 +33,6 @@ class ReservaMicrobusFormType extends AbstractType
             ->add('serviceType', ServiceTypeSelectorType::class)
             ->add('client')
             ->add('clientSerial')
-            ->add('providerSerial')
             ->add('startAt', DateTimeType::class, array(
                 'format' => 'dd/MM/yyyy HH:mm',
                 'widget' => 'single_text',
@@ -56,7 +55,7 @@ class ReservaMicrobusFormType extends AbstractType
             ->createQueryBuilder('p')
             ->where('p.type = :type')
             ->orderBy('p.name')
-            ->setParameter('type', ThirdProvider::TYPE_MICROBUS)
+            ->setParameter('type', ThirdProvider::TYPE_CLASICOS)
             ;
         $builder->add('provider', null, array(
             'query_builder' => $qb

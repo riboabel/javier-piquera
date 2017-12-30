@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\Type\ReservaClasicosFormType;
 use AppBundle\Form\Type\ReservaMicrobusFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -104,7 +105,7 @@ class ReservasClasicosController extends Controller
         $reserva = new ReservaTercero();
         $reserva->setType(ReservaTercero::TYPE_CLASICOS);
 
-        $form = $this->createForm(ReservaMicrobusFormType::class, $reserva);
+        $form = $this->createForm(ReservaClasicosFormType::class, $reserva);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -129,7 +130,7 @@ class ReservasClasicosController extends Controller
      */
     public function editAction(ReservaTercero $reserva, Request $request)
     {
-        $form = $this->createForm(ReservaMicrobusFormType::class, $reserva);
+        $form = $this->createForm(ReservaClasicosFormType::class, $reserva);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

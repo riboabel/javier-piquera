@@ -131,7 +131,7 @@ App.Reservas.Index = function($) {
                         "bSearchable": false
                     },
                     {
-                        "name": "startAt"
+                        "name": "startat"
                     },
                     {
                         "name": "provider"
@@ -168,8 +168,9 @@ App.Reservas.Index = function($) {
                         "sortable": false
                     },
                     {
-                        "bSortable": false,
-                        "bSearchable": false
+                        bSortable: false,
+                        bSearchable: false,
+                        width: '140px'
                     }
                 ],
                 "aaSorting": [[2, "asc"]],

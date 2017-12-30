@@ -1,3 +1,11 @@
+{% block type %}
+    {% if record.type == constant('AppBundle\\Entity\\ThirdProvider::TYPE_CLASICOS') %}
+        CLÁSICOS
+    {% elseif record.type == constant('AppBundle\\Entity\\ThirdProvider::TYPE_MICROBUS') %}
+        MICROBUS
+    {% endif %}
+{% endblock %}
+
 {% block actions %}
     <div class="btn-group" role="group">
         <a href="{{ path("app_admin_providers_view", {id: record.id}) }}" class="btn btn-default btn-xs"

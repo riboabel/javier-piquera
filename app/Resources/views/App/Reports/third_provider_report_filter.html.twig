@@ -1,0 +1,31 @@
+{{ form_start(form, {action: path("app_thirdproviderreports_reservas", {type: app.request.get('type')}), attr: {target: "_blank"}}) }}
+    <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Generar informe</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.fromDate, {attr: {class: 'datepicker'}}) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.toDate, {attr: {class: 'datepicker'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">
+            <span class="fa fa-print"></span>
+            Generar
+        </button>
+        <button data-dismiss="modal" class="btn btn-default" type="button">Cerrar</button>
+    </div>
+{{ form_end(form) }}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#{{ form.fromDate.vars.id }}, #{{ form.toDate.vars.id }}').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true
+        });
+    });
+</script>
