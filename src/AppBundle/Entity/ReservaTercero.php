@@ -182,6 +182,18 @@ class ReservaTercero
         $this->state = self::STATE_CREATED;
     }
 
+    public function __toString()
+    {
+        if ((self::TYPE_CLASICOS === $this->type) && !is_null($this->id) && !is_null($this->startAt)) {
+            return sprintf('CL%s-%04s',
+                substr($this->startAt->format('ymd'), 1, 5),
+                $this->id
+                );
+        } else {
+            return (string) $this->id;
+        }
+    }
+
     /**
      * Get id
      *

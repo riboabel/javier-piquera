@@ -148,6 +148,13 @@
                                     <li><a href="{{ path("app_reports_old_cobros") }}" class="link-report">Cobros realizados</a></li>
                                     <li><a href="{{ path("app_reports_old_pays") }}" class="link-report">Pagos realizados</a></li>
                                 {% endif %}
+                                <li>
+                                    <a href="#">Terceros <span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "microbus"}) }}" class="link-report">Microbus</a></li>
+                                        <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "clasicos"}) }}" class="link-report">Clásicos</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li>

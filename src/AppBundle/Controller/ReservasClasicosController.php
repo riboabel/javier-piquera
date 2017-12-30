@@ -79,7 +79,7 @@ class ReservasClasicosController extends Controller
                 $record->getClient()->getName(),
                 $record->getClientSerial(),
                 $template->renderBlock('provider', array('record' => $record)),
-                $record->getProviderSerial(),
+                (string) $record,
                 $record->getClientNames(),
                 $template->renderBlock('pax', array('record' => $record)),
                 $template->renderBlock('actions', array('record' => $record))

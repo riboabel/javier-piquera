@@ -79,7 +79,7 @@ class ReservasMicrobusController extends Controller
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
         $total = $pagination->getTotalItemCount();
 
-        $template = $this->container->get('twig')->loadTemplate('App/ReservasMicrobus/_row.html.twig');
+        $template = $this->container->get('twig')->load('App/ReservasMicrobus/_row.html.twig');
         $data = array_map(function(ReservaTercero $record) use($template) {
             return array(
                 $template->renderBlock('selector', array('record' => $record)),
