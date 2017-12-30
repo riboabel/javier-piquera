@@ -141,10 +141,25 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
         });
     }
 
+    var initTools = function() {
+        $('#link-select-all').on('click', function(event) {
+            event.preventDefault();
+
+            $table.find('input:checkbox').iCheck('check');
+        });
+
+        $('#link-select-none').on('click', function(event) {
+            event.preventDefault();
+
+            $table.find('input:checkbox').iCheck('uncheck');
+        });
+    }
+
     return {
         init: function() {
             initTable();
             initActions();
+            initTools();
         }
     }
 }(jQuery));
