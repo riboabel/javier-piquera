@@ -111,6 +111,23 @@ class ServicesForThirdProviderReport extends Report
             $this->pdf->SetFont('', '', 10);
         }
 
+        $h = $this->getRowHeight(array(
+            array(16, 'Desde'),
+            array(30, $record->getStartIn()->getName()),
+            array(80, $record->getStartIn()->getPostalAddress()),
+            array(16, 'Hasta'),
+            array(30, $record->getEndIn()->getName()),
+            array(0, $record->getEndIn()->getPostalAddress())
+        ));
+
+        $border = 1;
+        $this->pdf->MultiCell(24, $h, 'Desde', $border, 'L', false, 0);
+        $this->pdf->MultiCell(30, $h, $record->getStartIn()->getName(), $border, 'L', false, 0);
+        $this->pdf->MultiCell(80, $h, $record->getStartIn()->getPostalAddress(), $border, 'L', false, 0);
+        $this->pdf->MultiCell(24, $h, 'Hasta', $border, 'L', false, 0);
+        $this->pdf->MultiCell(30, $h, $record->getEndIn()->getName(), $border, 'L', false, 0);
+        $this->pdf->MultiCell(0, $h, $record->getEndIn()->getPostalAddress(), $border, 'L', false, 1);
+
         $this->pdf->setDrawColorArray(array(255, 1, 80));
         $this->pdf->SetFillColorArray(array(255, 1, 80));
         $this->pdf->Cell(0, 0.5, '', 'LRB', 1, 'C', true, '', 0, true);
