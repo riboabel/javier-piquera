@@ -163,9 +163,9 @@ App.Reservas.Index = function($) {
                         sortable: false
                     },
                     {
-                        "name": "issues",
-                        "searchable": false,
-                        "sortable": false
+                        name: "issues",
+                        searchable: false,
+                        sortable: false
                     },
                     {
                         bSortable: false,
@@ -175,35 +175,9 @@ App.Reservas.Index = function($) {
                 ],
                 "aaSorting": [[2, "asc"]],
                 "aLengthMenu": [200, 400, 800, 1000],
-                "language": {
-                    "sProcessing":     "Procesando...",
-                    "sLengthMenu":     "Mostrar _MENU_ registros",
-                    "sZeroRecords":    "No se encontraron resultados",
-                    "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                    "sInfo":           "Mostrando del _START_ al _END_ (de _TOTAL_)",
-                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix":    "",
-                    "sSearch":         "Buscar:",
-                    "sUrl":            "",
-                    "sInfoThousands":  ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst":    "Primero",
-                        "sLast":     "Último",
-                        "sNext":     "Siguiente",
-                        "sPrevious": "Anterior"
-                    },
-                    "oAria": {
-                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                    }
-                },
-                "bServerSide": true,
-                "bProcessing": false,
+                serverSide: true,
+                processing: false,
                 ajax: {
-                    method: 'POST',
-                    url: $table.data('ajax-url'),
                     data: function(baseData) {
                         var filter = [];
                         $.each($('form#filter').serializeArray(), function(i, e) {
@@ -220,7 +194,9 @@ App.Reservas.Index = function($) {
                         });
 
                         return $.extend(true, baseData, filter);
-                    }
+                    },
+                    method: 'POST',
+                    url: Routing.generate('app_reservas_getdata')
                 }
             }
 

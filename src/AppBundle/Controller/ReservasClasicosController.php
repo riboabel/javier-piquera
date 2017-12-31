@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\Type\ReservaClasicoFilterFormType;
 use AppBundle\Form\Type\ReservaClasicosFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -26,7 +27,15 @@ class ReservasClasicosController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('App/ReservasClasicos/index.html.twig');
+        $form = $this->createForm(ReservaClasicoFilterFormType::class, array(
+            'startAt' => array(
+                'left_date' => new \DateTime('now')
+            )
+        ));
+
+        return $this->render('App/ReservasClasicos/index.html.twig', array(
+            'filter' => $form->createView()
+        ));
     }
 
     /**
@@ -49,6 +58,10 @@ class ReservasClasicosController extends Controller
         $columns = $request->get('columns');
         $orders = $request->get('order', array());
         $filter['q'] = $search['value'];
+
+        $form = $this->createForm(ReservaClasicoFilterFormType::class);
+        $form->submit($request->query->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
 
         if ($orders) {
             $column = call_user_func(function($name) {

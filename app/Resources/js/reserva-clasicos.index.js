@@ -19,6 +19,14 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
 
         $table.dataTable({
             ajax: {
+                data: function(baseData) {
+                    var filter = [];
+                    $.each($('form#formFilter').serializeArray(), function(i, e) {
+                        filter[e['name']] = e['value'];
+                    });
+
+                    return $.extend(true, baseData, filter);
+                },
                 url: Routing.generate('app_reservasclasicos_getdata'),
                 method: 'GET',
                 error: function() {
@@ -155,11 +163,23 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
         });
     }
 
+    var initFilter = function() {
+        $('#formFilter input:text').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true
+        });
+
+        $('#formFilter input:text').on('change', function() {
+            $table.DataTable().draw();
+        });
+    }
+
     return {
         init: function() {
             initTable();
             initActions();
             initTools();
+            initFilter();
         }
     }
 }(jQuery));
