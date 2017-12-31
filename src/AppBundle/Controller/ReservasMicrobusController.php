@@ -54,19 +54,8 @@ class ReservasMicrobusController extends Controller
             $column = call_user_func(function($name) {
                 if ($name == 'startat') {
                     return 'r.startAt';
-                } elseif ($name == 'provider') {
-                    return 'p.name';
-                } elseif ($name == 'serviceType') {
-                    return 'st.name';
-                } elseif ($name == 'driver') {
-                    return 'd.name';
-                } elseif ($name == 'clientNames') {
-                    return 'r.clientNames';
-                } elseif ($name == 'pax') {
-                    return 'r.pax';
-                } elseif ($name == 'providerReference') {
-                    return 'r.providerReference';
                 }
+                
                 return null;
             }, $columns[$orders[0]['column']]['name']);
             if (null !== $column) {

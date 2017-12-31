@@ -131,7 +131,7 @@ App.Reservas.Index = function($) {
                         "bSearchable": false
                     },
                     {
-                        "name": "startat"
+                        "name": "startAt"
                     },
                     {
                         "name": "provider"
