@@ -125,6 +125,8 @@ class ReservasClasicosController extends Controller
             $manager->persist($reserva);
             $manager->flush();
 
+            $this->addFlash('notice', 'Registro creado');
+
             return $this->redirectToRoute('app_reservasclasicos_index');
         }
 
@@ -149,6 +151,8 @@ class ReservasClasicosController extends Controller
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($reserva);
             $manager->flush();
+
+            $this->addFlash('notice', 'Registro modificado');
 
             return $this->redirectToRoute('app_reservasclasicos_index');
         }

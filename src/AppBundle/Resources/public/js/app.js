@@ -213,8 +213,11 @@ App = typeof App !== 'undefined' ? App : {};
         });
     }
 
+
     return {
-        init: function() {
+        init: function(options) {
+            options = $.extend(true, {notices: []}, options);
+
             initMetisMenu();
             initResizeWindowHandler();
             initNavigator();
@@ -224,6 +227,15 @@ App = typeof App !== 'undefined' ? App : {};
             initializeMessageSystem();
             initWeekPdfsControls();
             initDatatable();
+
+            if (options.notices.length > 0) {
+                $.each(options.notices, function(index, message) {
+                    toastr.success(message, 'Éxito', {
+                        timeOut: 5000,
+                        progressBar: true
+                    });
+                });
+            }
         },
         validate: initValidator
     }

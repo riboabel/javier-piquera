@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table(name="reserva",
  *  indexes={
- *      @ORM\Index(columns={"start_at"}),
+ *      @ORM\Index(name="idx_reserva_start_at", columns={"start_at"}),
  *      @ORM\Index(columns={"client_names"}),
  *      @ORM\Index(columns={"provider_reference"}),
  *      @ORM\Index(columns={"invoice_number"})

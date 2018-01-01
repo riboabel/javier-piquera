@@ -32,6 +32,7 @@
         'plugins/bootstrap-fileupload/bootstrap-fileupload.css'
         'plugins/jquery.intlTelInput/css/intlTelInput.css'
         "plugins/datepicker/datepicker3.css"
+        "plugins/toastr/build/toastr.css"
         %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
@@ -127,12 +128,14 @@
                                     <li><a href="{{ path("app_cobros_index") }}">Cobros a agencias</a></li>
                                     <li><a href="{{ path("app_invoices_index") }}">Facturación de servicios</a></li>
                                     <li><a href="{{ path("app_pays_index") }}">Pagos a conductores</a></li>
+                                    <li><a href="{{ path("app_thirdpays_index") }}">Pagos a terceros</a></li>
+                                    <li><a href="#">Cobros de terceros</a></li>
                                 {% endif %}
                                 <li>
                                     <a href="#">Reservas de terceros <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                        <li><a href="{{ path("app_reservasmicrobus_index") }}">Microbus</a></li>
                                         <li><a href="{{ path("app_reservasclasicos_index") }}">Clásicos</a></li>
+                                        <li><a href="{{ path("app_reservasmicrobus_index") }}">Microbus</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -151,8 +154,8 @@
                                 <li>
                                     <a href="#">Terceros <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                        <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "microbus"}) }}" class="link-report">Microbus</a></li>
                                         <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "clasicos"}) }}" class="link-report">Clásicos</a></li>
+                                        <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "microbus"}) }}" class="link-report">Microbus</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -240,6 +243,7 @@
         "plugins/datepicker/bootstrap-datepicker.js"
         "plugins/datepicker/locales/bootstrap-datepicker.es.js"
         "plugins/moment.min.js"
+        "plugins/toastr/toastr.js"
         %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -270,7 +274,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            App.Main.init();
+            App.Main.init({notices: {{ app.session.flashBag.get('notice')|json_encode|raw }}});
         });
     </script>
     <!-- END GLOBAL JAVASCRIPTS -->

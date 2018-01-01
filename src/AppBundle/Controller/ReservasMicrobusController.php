@@ -55,7 +55,7 @@ class ReservasMicrobusController extends Controller
                 if ($name == 'startat') {
                     return 'r.startAt';
                 }
-                
+
                 return null;
             }, $columns[$orders[0]['column']]['name']);
             if (null !== $column) {
@@ -112,6 +112,8 @@ class ReservasMicrobusController extends Controller
             $manager->persist($reserva);
             $manager->flush();
 
+            $this->addFlash('notice', 'Registro creado');
+
             return $this->redirectToRoute('app_reservasmicrobus_index');
         }
 
@@ -136,6 +138,8 @@ class ReservasMicrobusController extends Controller
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($reserva);
             $manager->flush();
+
+            $this->addFlash('notice', 'Registro modificado');
 
             return $this->redirectToRoute('app_reservasmicrobus_index');
         }

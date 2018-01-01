@@ -177,11 +177,41 @@ class ReservaTercero
      */
     private $updatedAt;
 
+    /**
+     * @var ThirdPayAct
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ThirdPayAct", inversedBy="services")
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $payAct;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="paid_charge", type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\NotBlank(groups={"Pay"})
+     */
+    private $paidCharge;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $payNotes;
+
+    /**
+     * ReservaTercero constructor.
+     */
     public function __construct()
     {
         $this->state = self::STATE_CREATED;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         if ((self::TYPE_CLASICOS === $this->type) && !is_null($this->id) && !is_null($this->startAt)) {
@@ -634,5 +664,77 @@ class ReservaTercero
     public function getCancellationIssues()
     {
         return $this->cancellationIssues;
+    }
+
+    /**
+     * Set payAct
+     *
+     * @param \AppBundle\Entity\ThirdPayAct $payAct
+     *
+     * @return ReservaTercero
+     */
+    public function setPayAct(\AppBundle\Entity\ThirdPayAct $payAct = null)
+    {
+        $this->payAct = $payAct;
+
+        return $this;
+    }
+
+    /**
+     * Get payAct
+     *
+     * @return \AppBundle\Entity\ThirdPayAct
+     */
+    public function getPayAct()
+    {
+        return $this->payAct;
+    }
+
+    /**
+     * Set payNotes
+     *
+     * @param string $payNotes
+     *
+     * @return ReservaTercero
+     */
+    public function setPayNotes($payNotes)
+    {
+        $this->payNotes = $payNotes;
+
+        return $this;
+    }
+
+    /**
+     * Get payNotes
+     *
+     * @return string
+     */
+    public function getPayNotes()
+    {
+        return $this->payNotes;
+    }
+
+    /**
+     * Set paidCharge
+     *
+     * @param string $paidCharge
+     *
+     * @return ReservaTercero
+     */
+    public function setPaidCharge($paidCharge)
+    {
+        $this->paidCharge = $paidCharge;
+
+        return $this;
+    }
+
+    /**
+     * Get paidCharge
+     *
+     * @return string
+     */
+    public function getPaidCharge()
+    {
+        return $this->paidCharge;
     }
 }

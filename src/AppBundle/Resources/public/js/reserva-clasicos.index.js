@@ -166,7 +166,9 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
     var initFilter = function() {
         $('#formFilter input:text').datepicker({
             format: 'dd/mm/yyyy',
-            autoclose: true
+            autoclose: true,
+            closeBtn: true,
+            language: 'es'
         });
 
         $('#formFilter input:text').on('change', function() {
