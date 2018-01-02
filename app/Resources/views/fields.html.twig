@@ -19,3 +19,12 @@
         </div>
     </div>
 {% endblock %}
+
+{% block icheck_row %}
+    <div class="form-group">
+        <label>
+            {{ form_widget(form, {type: 'checkbox'}) }}
+            {{ form_label(form)|striptags }}
+        </label>
+    </div>
+{% endblock %}

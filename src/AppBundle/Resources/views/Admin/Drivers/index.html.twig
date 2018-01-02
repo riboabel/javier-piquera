@@ -12,13 +12,29 @@
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-lg-12">
             <div class="pull-right">
-                <a href="{{ path("app_drivers_new") }}" class="btn btn-success">
+                <a href="{{ path("app_admin_drivers_new") }}" class="btn btn-success">
                     <i class="fa fa-plus-circle"></i>
                     Crear conductor
                 </a>
+                <button type="button" data-target="#collapseFilter" data-toggle="collapse" class="btn btn-default"><span
+                            class="fa fa-filter"></span></button>
             </div>
         </div>
     </div>
+    <form id="formFilter">
+        <div class="panel panel-default collapse" id="collapseFilter">
+            <div class="panel-heading">
+                <h4 class="panel-title">Opciones del filtro</h4>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-2">
+                        {{ form_row(filter.isDriverGuide, {label: "Es driver guide"}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     <div class="row">
         <div class="col-lg-12">
             <div class="dataTable_wrapper">

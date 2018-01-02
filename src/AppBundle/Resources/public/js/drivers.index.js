@@ -5,8 +5,29 @@ App.Drivers = typeof App.Drivers !== 'undefined' ? App.Drivers : {};
     var $table = $('table#dataTables-drivers');
 
     var initDatatable = function() {
+        $table.on('preDraw.dt', function() {
+            $(this).block({
+                message: 'Cargando datos...'
+            });
+        }).on('draw.dt', function() {
+            $(this).unblock();
+        });
+
         $table.DataTable({
-            aoColumns: [
+            ajax: {
+                data: function(baseData) {
+                    var fields = [];
+                    $.each($('#formFilter').serializeArray(), function(i, e) {
+                        fields[e['name']] = e['value'];
+                    });
+
+                    return $.extend(true, baseData, fields);
+                },
+                url: Routing.generate('app_admin_drivers_getdata'),
+                method: 'GET'
+            },
+            aLengthMenu: [ 50, 100, 200 ],
+            columns: [
                 {
                     name: 'name',
                     title: 'Nombre'
@@ -40,36 +61,7 @@ App.Drivers = typeof App.Drivers !== 'undefined' ? App.Drivers : {};
                 }
             ],
             bProcessing: true,
-            bServerSide: true,
-            ajax: {
-                url: Routing.generate('app_drivers_getdata'),
-                method: 'POST'
-            },
-            aLengthMenu: [ 50, 100, 200 ],
-            language: {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                "sInfo":           "Mostrando del _START_ al _END_ (de _TOTAL_)",
-                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix":    "",
-                "sSearch":         "Buscar:",
-                "sUrl":            "",
-                "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                    "sFirst":    "Primero",
-                    "sLast":     "Último",
-                    "sNext":     "Siguiente",
-                    "sPrevious": "Anterior"
-                },
-                "oAria": {
-                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
-            },
+            bServerSide: true
         });
 
         $table.on('click', '.btn-delete', function(event) {
@@ -82,9 +74,16 @@ App.Drivers = typeof App.Drivers !== 'undefined' ? App.Drivers : {};
         });
     }
 
+    var initFilter = function() {
+        $('#collapseFilter select').on('change', function() {
+            $table.DataTable().draw();
+        });
+    }
+
     return {
         init: function() {
             initDatatable();
+            initFilter();
         }
     }
 }(jQuery));

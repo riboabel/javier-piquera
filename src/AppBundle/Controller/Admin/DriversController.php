@@ -1,7 +1,9 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
+use AppBundle\Form\Type\DriverFilterFormType;
+use AppBundle\Form\Type\DriverFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -11,13 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use AppBundle\Entity\Driver;
-use AppBundle\Form\Type\DriverType;
 
 /**
  * Description of DriversController
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
- * @Route("/conductores")
+ * @Route("/admin/conductores")
  */
 class DriversController extends Controller
 {
@@ -28,12 +29,16 @@ class DriversController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('App/Drivers/index.html.twig');
+        $form = $this->createForm(DriverFilterFormType::class);
+
+        return $this->render('@App/Admin/Drivers/index.html.twig', array(
+            'filter' => $form->createView()
+        ));
     }
 
     /**
      * @Route("/obtener-datos", options={"expose": true})
-     * @Method({"post"})
+     * @Method({"GET"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -56,10 +61,14 @@ class DriversController extends Controller
             $orX->add($qb->expr()->like('d.contactInfo', ':q'));
 
             $qb
-                    ->where($orX)
-                    ->setParameter('q', sprintf('%%%s%%', $search['value']))
-                    ;
+                ->where($orX)
+                ->setParameter('q', sprintf('%%%s%%', $search['value']))
+                ;
         }
+
+        $form = $this->createForm(DriverFilterFormType::class);
+        $form->submit($request->query->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
 
         if ($orders) {
             $column = call_user_func(function($name) {
@@ -81,7 +90,7 @@ class DriversController extends Controller
 
         $total = $pagination->getTotalItemCount();
 
-        $template = $this->container->get('twig')->loadTemplate('App/Drivers/_row.html.twig');
+        $template = $this->container->get('twig')->load('@App/Admin/Drivers/_row.html.twig');
         $data = array_map(function(Driver $record) use($template) {
             return array(
                 $record->getName(),
@@ -103,27 +112,27 @@ class DriversController extends Controller
 
     /**
      * @Route("/{id}/ver", requirements={"id": "\d+"})
-     * @Method({"get"})
+     * @Method({"GET"})
      * @ParamConverter("driver", class="AppBundle\Entity\Driver")
      */
     public function viewAction(Driver $driver)
     {
-        return $this->render('App/Drivers/view.html.twig', array(
+        return $this->render('@App/Admin/Drivers/view.html.twig', array(
             'record' => $driver
         ));
     }
 
     /**
      * @Route("/nuevo")
-     * @Method({"get"})
+     * @Method({"GET"})
      * @return Response
      */
     public function newAction()
     {
         $driver = new Driver();
-        $form = $this->createForm(DriverType::class, $driver);
+        $form = $this->createForm(DriverFormType::class, $driver);
 
-        return $this->render('App/Drivers/new.html.twig', array(
+        return $this->render('@App/Admin/Drivers/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -138,7 +147,7 @@ class DriversController extends Controller
     {
         $driver = new Driver();
         $driver->setEnterprise($this->getUser()->getEnterprises()[0]);
-        $form = $this->createForm(DriverType::class, $driver);
+        $form = $this->createForm(DriverFormType::class, $driver);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -146,10 +155,12 @@ class DriversController extends Controller
             $em->persist($driver);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('app_drivers_index'));
+            $this->addFlash('notice', 'Registro creado');
+
+            return $this->redirect($this->generateUrl('app_admin_drivers_index'));
         }
 
-        return $this->render('App/Drivers/new.html.twig', array(
+        return $this->render('@App/Admin/Drivers/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -158,14 +169,14 @@ class DriversController extends Controller
      * @Route("/{id}/editar", requirements={"id": "\d+"})
      * @Method({"get"})
      * @ParamConverter("driver", class="AppBundle\Entity\Driver")
-     * @param AppBundle\Entity\Driver $driver
+     * @param Driver $driver
      * @return Response
      */
     public function editAction(Driver $driver)
     {
-        $form = $this->createForm(DriverType::class, $driver);
+        $form = $this->createForm(DriverFormType::class, $driver);
 
-        return $this->render('App/Drivers/edit.html.twig', array(
+        return $this->render('@App/Admin/Drivers/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -174,22 +185,24 @@ class DriversController extends Controller
      * @Route("/{id}/editar", requirements={"id": "\d+"})
      * @Method({"post"})
      * @ParamConverter("driver", class="AppBundle\Entity\Driver")
-     * @param AppBundle\Entity\Driver $driver
-     * @return array|RedirectResponse
+     * @param AppBundle\Entity\Driver
+     * @return Response
      */
     public function updateAction(Driver $driver, Request $request)
     {
-        $form = $this->createForm(DriverType::class, $driver);
+        $form = $this->createForm(DriverFormType::class, $driver);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->flush();
 
-            return $this->redirect($this->generateUrl('app_drivers_index'));
+            $this->addFlash('notice', 'Registro modificado');
+
+            return $this->redirect($this->generateUrl('app_admin_drivers_index'));
         }
 
-        return $this->render('App/Drivers/edit.html.twig', array(
+        return $this->render('!App/Admin/Drivers/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }

@@ -1,5 +1,5 @@
 App = typeof App !== 'undefined' ? App : {};
-App.Drivers = App.Drivers !== 'undefined' ? App.Drivers : {};
+App.Drivers = typeof App.Drivers !== 'undefined' ? App.Drivers : {};
 
 +(App.Drivers.Form = function($) {
     var initValidator = function() {

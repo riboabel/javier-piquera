@@ -80,24 +80,15 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ path("app_drivers_edit", {"id": record.id}) }}" class="btn btn-success">
+            <a href="{{ path("app_admin_drivers_edit", {"id": record.id}) }}" class="btn btn-success">
                 <i class="glyphicon glyphicon-edit"></i>
                 Editar
             </a>
-            <a href="{{ path("app_drivers_index") }}" class="btn btn-default">
+            <a href="{{ path("app_admin_drivers_index") }}" class="btn btn-default">
                 <i class="fa fa-tables"></i>
                 Ir al listado
             </a>
         </div>
     </div>
     <!-- /.row -->
-{% endblock %}
-
-{% block page_javascripts %}
-    <script src="{{ asset("js/form-driver.js") }}"></script>
-    <script>
-        $(document).ready(function() {
-            App.Driver.init();
-        });
-    </script>
 {% endblock %}

@@ -77,6 +77,8 @@ class ServiceTypesController extends Controller
             $em->persist($form->getData());
             $em->flush();
 
+            $this->addFlash('notice', 'Registro creado');
+
             return $this->redirectToRoute('app_servicetypes_index');
         }
 
@@ -116,6 +118,8 @@ class ServiceTypesController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->flush();
+
+            $this->addFlash('notice', 'Registro modificado');
 
             return $this->redirect($this->generateUrl('app_servicetypes_index'));
         }

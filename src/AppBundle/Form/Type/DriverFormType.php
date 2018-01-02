@@ -9,11 +9,11 @@ use AppBundle\Entity\Driver;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 
 /**
- * Description of DriverType
+ * Description of DriverFormType
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
  */
-class DriverType extends AbstractType
+class DriverFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -22,7 +22,7 @@ class DriverType extends AbstractType
                 ->add('contactInfo', null, array(
                     'required' => false
                 ))
-                ->add('isDriverGuide', null, array(
+                ->add('isDriverGuide', ICheckType::class, array(
                     'label' => 'Es conductor guía (driver guide)'
                 ))
                 ->add('carIndicator', null, array(

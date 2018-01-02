@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -49,14 +50,14 @@ class Driver
      *
      * @ORM\Column(name="is_dreiver_guide", type="boolean", options={"default": false})
      */
-    private $isDriverGuide = false;
+    private $isDriverGuide;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="enabled", type="boolean", options={"default": true})
      */
-    private $enabled = true;
+    private $enabled;
 
     /**
      * @var Enterprise
@@ -89,18 +90,24 @@ class Driver
     private $nit;
 
     /**
-     * @var Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
+     * @var PhoneNumberType
      *
      * @ORM\Column(name="mobile_phone_number", type="phone_number", nullable=true)
      */
     private $mobilePhone;
 
     /**
-     * @var Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
+     * @var PhoneNumberType
      *
      * @ORM\Column(name="fixede_phone_number", type="phone_number", nullable=true)
      */
     private $fixedPhone;
+
+    public function __construct()
+    {
+        $this->isDriverGuide = false;
+        $this->enabled = true;
+    }
 
     public function __toString()
     {
