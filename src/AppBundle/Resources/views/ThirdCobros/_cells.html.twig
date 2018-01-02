@@ -1,0 +1,50 @@
+{% block selector %}
+    {% if record.cobro is empty %}
+        <input type="checkbox" checked="checked" value="{{ record.id }}">
+    {% endif %}
+{% endblock %}
+
+{% block service %}
+    {{ record.serviceType }}
+{% endblock %}
+
+{% block startAt %}
+    {{ record.startAt|date("d/m/Y H:i") }}
+{% endblock %}
+
+{% block provider %}
+    {{ record.provider }}
+{% endblock %}
+
+{% block provider_reference %}
+    {% if record.type == constant("AppBundle\\Entity\\ReservaTercero::TYPE_CLASICOS") %}
+        {{ record }}
+    {% else %}
+        {{ record.providerSerial }}
+    {% endif %}
+{% endblock %}
+
+{% block customer %}
+    {{ record.client }}
+{% endblock %}
+
+{% block customer_reference %}
+    {{ record.clientSerial }}
+{% endblock %}
+
+{% block state %}
+    {% if record.state == constant("AppBundle\\Entity\\ReservaTercero::STATE_EXECUTED") %}
+        <div class="text-center" title="Ejecutada"><span class="fa fa-check"></span></div>
+    {% endif %}
+{% endblock %}
+
+{% block charge %}
+    <div class="text-right">
+        {% if record.cobroCharge is empty %}
+            <span class="fa fa-fire"></span>
+            {{ "%0.2f"|format(render(controller("AppBundle:ThirdCobros:getPossibleChargeForService", {service: record}))) }}
+        {% else %}
+            {{ "%0.2f"|format(record.cobroCharge) }}
+        {% endif %}
+    </div>
+{% endblock %}

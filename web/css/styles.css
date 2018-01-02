@@ -78,3 +78,10 @@ body {
     font-size: 11px;
     font-style: italic;
 }
+
+button[data-toggle="collapse"][aria-expanded="true"] {
+    color: #337ab7;
+}
+button[data-toggle="collapse"][aria-expanded="true"]:hover {
+    color: #23527c;
+}

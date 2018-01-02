@@ -202,6 +202,30 @@ class ReservaTercero
     private $payNotes;
 
     /**
+     * @var ThirdCobro
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ThirdCobro", inversedBy="services")
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $cobro;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="cobro_charge", type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\NotBlank(groups={"Cobro"})
+     */
+    private $cobroCharge;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(nullable=true)
+     * @Assert\Length(max=255)
+     */
+    private $cobroNotes;
+
+    /**
      * ReservaTercero constructor.
      */
     public function __construct()
@@ -736,5 +760,77 @@ class ReservaTercero
     public function getPaidCharge()
     {
         return $this->paidCharge;
+    }
+
+    /**
+     * Set cobroNotes
+     *
+     * @param string $cobroNotes
+     *
+     * @return ReservaTercero
+     */
+    public function setCobroNotes($cobroNotes)
+    {
+        $this->cobroNotes = $cobroNotes;
+
+        return $this;
+    }
+
+    /**
+     * Get cobroNotes
+     *
+     * @return string
+     */
+    public function getCobroNotes()
+    {
+        return $this->cobroNotes;
+    }
+
+    /**
+     * Set cobro
+     *
+     * @param \AppBundle\Entity\ThirdCobro $cobro
+     *
+     * @return ReservaTercero
+     */
+    public function setCobro(\AppBundle\Entity\ThirdCobro $cobro = null)
+    {
+        $this->cobro = $cobro;
+
+        return $this;
+    }
+
+    /**
+     * Get cobro
+     *
+     * @return \AppBundle\Entity\ThirdCobro
+     */
+    public function getCobro()
+    {
+        return $this->cobro;
+    }
+
+    /**
+     * Set cobroCharge
+     *
+     * @param string $cobroCharge
+     *
+     * @return ReservaTercero
+     */
+    public function setCobroCharge($cobroCharge)
+    {
+        $this->cobroCharge = $cobroCharge;
+
+        return $this;
+    }
+
+    /**
+     * Get cobroCharge
+     *
+     * @return string
+     */
+    public function getCobroCharge()
+    {
+        return $this->cobroCharge;
     }
 }

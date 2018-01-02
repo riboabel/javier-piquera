@@ -1,8 +1,8 @@
 App = typeof App !== 'undefined' ? App : {};
-App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {};
+App.ThirdCobros = typeof App.ThirdCobros !== 'undefined' ? App.ThirdCobros : {};
 
-+(App.ThirdPays.Index = function($) {
-    var $table = $('table#pays');
++(App.ThirdCobros.Index = function($) {
+    var $table = $('table#services');
 
     var initTable = function() {
         $table.on('preDraw.dt', function() {
@@ -27,11 +27,11 @@ App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {}
 
                     return $.extend(true, baseData, fields);
                 },
-                error: function(error) {
-                    alert('Error cargando datos' + "\n\n" + error.statusText);
+                error: function(xhr) {
+                    alert('Error cargando datos' + "\n\n" + xhr.statusText);
                 },
                 method: 'GET',
-                url: Routing.generate('app_thirdpays_getdata')
+                url : Routing.generate('app_thirdcobros_getdata')
             },
             columns: [
                 {
@@ -83,19 +83,6 @@ App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {}
         });
     }
 
-    var initFilter = function() {
-        $('form#formFilter').find('input:text, select').on('change', function() {
-            $table.DataTable().draw();
-        });
-
-        $('form#formFilter').find('input[name$="[startAt][left_date]"], input[name$="[startAt][right_date]"]').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            clearBtn: true,
-            language: 'es'
-        });
-    }
-
     var initTools = function() {
         $('a#link-select-all').on('click', function(event) {
             event.preventDefault();
@@ -108,7 +95,7 @@ App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {}
             $table.find('input:checkbox').iCheck('uncheck');
         });
 
-        $('button#btnPreparePay').on('click', function() {
+        $('#btnPrepareCobro').on('click', function() {
             var ids = $.map($table.find('input:checkbox:checked'), function(element) {
                 return $(element).val();
             });
@@ -121,21 +108,18 @@ App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {}
                 return true;
             }
 
-            $.blockUI({
-                message: 'Cargando datos...'
-            });
-
             $.ajax({
                 error: function(xhr) {
-                    alert('Error cargando datos' + "\n]n" + xhr.statusText);
-                    $.unblockUI();
+                    toastr.error('Error cargando datos', 'Error', {
+                        timeout: 5000
+                    });
                 },
                 method: 'GET',
                 success: function(response) {
                     $.unblockUI();
-                    $('div.modal').remove();
+                    $('div.modal#_dV').remove();
 
-                    var modal = $(response).appendTo($('body'));
+                    var modal = $(response).appendTo($('body')).attr('id', '_dV');
                     modal.on('hide.bs.modal', function() {
                         modal.find('form').remove();
                     });
@@ -152,16 +136,29 @@ App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {}
                     });
                     modal.modal();
                 },
-                url: Routing.generate('app_thirdpays_pay', {id: ids})
-            });
+                url: Routing.generate('app_thirdcobros_cobrar', {id: ids})
+            })
+        });
+    }
+
+    var initFilter = function() {
+        $('form#formFilter').find('input:text[name$="[startAt][left_date]"], input:text[name$="[startAt][right_date]"]').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            clearBtn: true,
+            language: 'es'
+        });
+
+        $('#collapseFilter').find('input, select').on('change', function() {
+            $table.DataTable().draw();
         });
     }
 
     return {
-        init: function () {
+        init: function() {
             initTable();
-            initFilter();
             initTools();
+            initFilter();
         }
     }
 }(jQuery));

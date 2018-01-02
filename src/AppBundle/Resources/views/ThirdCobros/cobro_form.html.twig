@@ -1,0 +1,32 @@
+{{ form_start(form, {action: path("app_thirdcobros_cobrar", {id: app.request.get('id')})}) }}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Importes a cobrar</h4>
+    </div>
+    <div class="modal-body">
+        {% for service in form.services %}
+            <div class="row">
+                <div class="col-xs-2">
+                    <div class="form-control-static input-sm">{{ service.vars.data.startAt|date('d/m/Y H:i') }}</div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="form-control-static input-sm">{{ service.vars.data.client }}</div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="form-control-static input-sm">{{ service.vars.data.serviceType }}</div>
+                </div>
+                <div class="col-xs-2">
+                    {{ form_row(service.cobroCharge, {label: false, attr: {placeholder: "Importe", class: "input-sm", style: 'text-align: right;'}}) }}
+                </div>
+                <div class="col-xs-3">
+                    {{ form_row(service.cobroNotes, {label: false, attr: {placeholder: "Notas de cobro", class: "input-sm"}}) }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Realizar cobro</button>
+        <button type="button" data-dismiss="modal" class="btn btn-default">Cancelar</button>
+    </div>
+    {{ form_rest(form) }}
+{{ form_end(form) }}
