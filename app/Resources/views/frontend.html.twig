@@ -128,8 +128,6 @@
                                     <li><a href="{{ path("app_cobros_index") }}">Cobros a agencias</a></li>
                                     <li><a href="{{ path("app_invoices_index") }}">Facturación de servicios</a></li>
                                     <li><a href="{{ path("app_pays_index") }}">Pagos a conductores</a></li>
-                                    <li><a href="{{ path("app_thirdpays_index") }}">Pagos a terceros</a></li>
-                                    <li><a href="{{ path("app_thirdcobros_index") }}">Cobros de terceros</a></li>
                                 {% endif %}
                                 <li>
                                     <a href="#">Reservas de terceros <span class="fa arrow"></span></a>
@@ -138,6 +136,10 @@
                                         <li><a href="{{ path("app_reservasmicrobus_index") }}">Microbus</a></li>
                                     </ul>
                                 </li>
+                                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
+                                    <li><a href="{{ path("app_thirdpays_index") }}">Pagos a terceros</a></li>
+                                    <li><a href="{{ path("app_thirdcobros_index") }}">Cobros de terceros</a></li>
+                                {% endif %}
                             </ul>
                         </li>
                         <li>
