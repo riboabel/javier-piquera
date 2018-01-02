@@ -159,12 +159,12 @@ class ThirdPaysController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $price = $manager->getRepository('AppBundle:Price')
             ->findOneBy(array(
-                'provider' => $service->getProvider()->getId(),
+                'provider' => $service->getClient()->getId(),
                 'serviceType' => $service->getServiceType()->getId()
             ))
             ;
 
-        if ($price) {
+        if ($price && $price->getPayableCharge()) {
             return new Response($price->getPayableCharge());
         }
 
