@@ -174,7 +174,6 @@ App.Reservas.Index = function($) {
                     }
                 ],
                 "aaSorting": [[2, "asc"]],
-                "aLengthMenu": [200, 400, 800, 1000],
                 serverSide: true,
                 processing: false,
                 ajax: {

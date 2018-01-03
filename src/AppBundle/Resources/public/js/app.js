@@ -185,7 +185,9 @@ App = typeof App !== 'undefined' ? App : {};
     }
 
     var initDatatable = function() {
-        $.extend($.fn.dataTable.defaults, {
+        $.extend(true, $.fn.dataTable.defaults, {
+            iDisplayLength: 200,
+            aLengthMenu: [200, 400, 800, 1000],
             oLanguage: {
                 "sProcessing": "Procesando...",
                 "sLengthMenu": "Mostrar _MENU_ registros",
