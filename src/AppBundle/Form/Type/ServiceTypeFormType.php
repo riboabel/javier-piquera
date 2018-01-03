@@ -8,17 +8,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use AppBundle\Entity\ServiceType;
 
 /**
- * Description of ServiceTypeType
+ * Description of ServiceTypeFormType
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
  */
-class ServiceTypeType extends AbstractType
+class ServiceTypeFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
                 ->add('name')
-                ->add('isMultiple', null, array(
+                ->add('isMultiple', ICheckType::class, array(
                     'required' => false
                 ))
                 ->add('defaultPrice')

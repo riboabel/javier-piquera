@@ -1,0 +1,34 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Datos del tipo de servicio
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                {{ form_row(form.name, {labeL: 'Nombre'}) }}
+            </div>
+            <div class="col-lg-12">
+                {{ form_row(form.isMultiple, {label: "El servicio es de varios recorridos"}) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Importes
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6 col-xs-12">
+                <div class="form-group">
+                    {{ form_label(form.defaultPrice, 'Cobro predefinido para agencias') }}
+                    {{ form_widget(form.defaultPrice, {'attr': {'class': 'text-right', 'validdecimal': 'validdecimal'}}) }}
+                    <div class="help-block">Separador decimal: . (punto)</div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xs-12">
+                {{ form_row(form.defaultPayAmount, {label: 'Pago para conductores', attr: {'validdecimal': 'validdecimal', class: "text-right"}}) }}
+            </div>
+        </div>
+    </div>
+</div>

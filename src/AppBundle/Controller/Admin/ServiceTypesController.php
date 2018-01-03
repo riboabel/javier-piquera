@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -9,59 +9,60 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use AppBundle\Entity\ServiceType;
-use AppBundle\Form\Type\ServiceTypeType;
+use AppBundle\Form\Type\ServiceTypeFormType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of ServiceTypesController
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
- * @Route("/servicios")
+ * @Route("/admin/servicios")
  */
 class ServiceTypesController extends Controller
 {
     /**
      * @Route("/")
-     * @Method({"get"})
+     * @Method({"GET"})
+     * @return Response
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $manager = $this->getDoctrine()->getManager();
 
-        return $this->render('App/ServiceTypes/index.html.twig', array(
-            'records' => $em->getRepository('AppBundle:ServiceType')->findAll()
+        return $this->render('@App/Admin/ServiceTypes/index.html.twig', array(
+            'records' => $manager->getRepository('AppBundle:ServiceType')->findAll()
         ));
     }
 
     /**
      * @Route("/{id}/ver", requirements={"id": "\d+"})
-     * @Method({"get"})
-     * @ParamConverter("record", class="AppBundle\Entity\ServiceType")
+     * @Method({"GET"})
      * @param ServiceType $record
      * @return Response
      */
     public function viewAction(ServiceType $record)
     {
-        return $this->render('App/ServiceTypes/view.html.twig', array('record' => $record));
+        return $this->render('@App/Admin/ServiceTypes/view.html.twig', array('record' => $record));
     }
 
     /**
      * @Route("/nuevo")
-     * @Method({"get"})
+     * @Method({"GET"})
      * @return Response
      */
     public function newAction()
     {
         $serviceType = new ServiceType();
-        $form = $this->createForm(ServiceTypeType::class, $serviceType);
+        $form = $this->createForm(ServiceTypeFormType::class, $serviceType);
 
-        return $this->render('App/ServiceTypes/new.html.twig', array(
+        return $this->render('@App/Admin/ServiceTypes/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
 
     /**
      * @Route("/nuevo")
-     * @Method({"post"})
+     * @Method({"POST"})
      * @param Request $request
      * @return Response
      */
@@ -69,7 +70,7 @@ class ServiceTypesController extends Controller
     {
         $serviceType = new ServiceType();
         $serviceType->setEnterprise($this->getUser()->getEnterprises()[0]);
-        $form = $this->createForm(ServiceTypeType::class, $serviceType);
+        $form = $this->createForm(ServiceTypeFormType::class, $serviceType);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -79,40 +80,39 @@ class ServiceTypesController extends Controller
 
             $this->addFlash('notice', 'Registro creado');
 
-            return $this->redirectToRoute('app_servicetypes_index');
+            return $this->redirectToRoute('app_admin_servicetypes_index');
         }
 
-        return $this->render('App/ServiceTypes/new.html.twig', array(
+        return $this->render('@App/Admin/ServiceTypes/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
 
     /**
      * @Route("/{id}/editar", requirements={"id": "\d+"})
-     * @Method({"get"})
-     * @ParamConverter("record", class="AppBundle\Entity\ServiceType")
+     * @Method({"GET"})
      * @param ServiceType $record
-     * @return array
+     * @return
      */
     public function editAction(ServiceType $record)
     {
-        $form = $this->createForm(ServiceTypeType::class, $record);
+        $form = $this->createForm(ServiceTypeFormType::class, $record);
 
-        return $this->render('App/ServiceTypes/edit.html.twig', array(
+        return $this->render('@App/Admin/ServiceTypes/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }
 
     /**
      * @Route("/{id}/editar", requirements={"id": "\d+"})
-     * @Method({"post"})
-     * @ParamConverter("record", class="AppBundle\Entity\ServiceType")
+     * @Method({"POST"})
      * @param ServiceType $record
+     * @param Request $request
      * @return Response
      */
     public function updateAction(ServiceType $record, Request $request)
     {
-        $form = $this->createForm(ServiceTypeType::class, $record);
+        $form = $this->createForm(ServiceTypeFormType::class, $record);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -121,18 +121,17 @@ class ServiceTypesController extends Controller
 
             $this->addFlash('notice', 'Registro modificado');
 
-            return $this->redirect($this->generateUrl('app_servicetypes_index'));
+            return $this->redirect($this->generateUrl('app_admin_servicetypes_index'));
         }
 
-        return $this->render('App/ServiceTypes/edit.html.twig', array(
+        return $this->render('@App/Admin/ServiceTypes/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }
 
     /**
      * @Route("/{id}/eliminar", requirements={"id": "\d+"})
-     * @Method({"get", "post"})
-     * @ParamConverter("record", class="AppBundle\Entity\ServiceType")
+     * @Method({"GET", "POST"})
      * @param ServiceType $record
      * @return RedirectResponse
      */
@@ -142,6 +141,6 @@ class ServiceTypesController extends Controller
         $em->remove($record);
         $em->flush();
 
-        return $this->redirectToRoute('app_servicetypes_index');
+        return $this->redirectToRoute('app_admin_servicetypes_index');
     }
 }
