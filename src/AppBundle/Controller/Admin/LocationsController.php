@@ -1,99 +1,97 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Location;
-use AppBundle\Form\Type\LocationType;
+use AppBundle\Form\Type\LocationFormType;
 
 /**
  * Description of LocationsController
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
- * @Route("/localidades")
+ * @Route("/admin/localidades")
  */
 class LocationsController extends Controller
 {
     /**
      * @Route("/")
-     * @Method({"get"})
+     * @Method({"GET"})
+     * @return Ressponse
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQuery('SELECT l FROM AppBundle:Location l');
 
-        return $this->render('App/Locations/index.html.twig', array(
+        return $this->render('@App/Admin/Locations/index.html.twig', array(
             'query' => $query
         ));
     }
 
     /**
      * @Route("/{id}/ver", requirements={"id": "\d+"})
-     * @Method({"get"})
-     * @ParamConverter("record", class="AppBundle\Entity\Location")
-     * @param Place $record
+     * @Method({"GET"})
+     * @param Location $record
      * @return Response
      */
     public function viewAction(Location $record)
     {
-        return $this->render('App/Locations/view.html.twig', array(
+        return $this->render('@App/Admin/Locations/view.html.twig', array(
             'record' => $record
         ));
     }
 
     /**
      * @Route("/nuevo")
-     * @Method({"get", "post"})
+     * @Method({"GET", "POST"})
      * @param Request $request
      * @return Response
      */
     public function newAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $record = new Location();
-        //$place->setEnterprise($this->getUser()->getEnterprises()[0]);
-        $form = $this->createForm(LocationType::class, $record);
+        $form = $this->createForm(LocationFormType::class, $record);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($record);
-            $em->flush();
+            $manager = $this->getDoctrine()->getManager();
 
-            return $this->redirectToRoute('app_locations_index');
+            $manager->persist($record);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_admin_locations_index');
         }
 
-        return $this->render('App/Locations/new.html.twig', array(
+        return $this->render('@App/Admin/Locations/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
 
     /**
      * @Route("/{id}/editar", requirements={"id": "\d+"})
-     * @Method({"get", "post"})
-     * @ParamConverter("record", class="AppBundle\Entity\Location")
+     * @Method({"GET", "POST"})
      * @param Location $record
+     * @param Request $request
      * @return Response
      */
     public function editAction(Location $record, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(LocationType::class, $record);
+        $form = $this->createForm(LocationFormType::class, $record);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
+            $manager = $this->getDoctrine()->getManager();
+            $manager->flush();
 
-            return $this->redirectToRoute('app_locations_index');
+            return $this->redirectToRoute('app_admin_locations_index');
         }
 
-        return $this->render('App/Locations/edit.html.twig', array(
+        return $this->render('@App/Admin/Locations/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -101,7 +99,6 @@ class LocationsController extends Controller
     /**
      * @Route("/{id}/eliminar", requirements={"id": "\d+"})
      * @Method({"get", "post"})
-     * @ParamConverter("record", class="AppBundle\Entity\Location")
      * @param Location $record
      * @return JsonResponse
      */

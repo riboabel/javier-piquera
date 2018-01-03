@@ -1,6 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
+App.Locations = typeof App.Locations !== 'undefined' ? App.Locations : {};
 
-App.Location = function() {
++(App.Locations.Form = function($) {
     var initValidator = function() {
         App.Main.validate($('form#location'));
     }
@@ -10,4 +11,4 @@ App.Location = function() {
             initValidator();
         }
     }
-}();
+}(jQuery));

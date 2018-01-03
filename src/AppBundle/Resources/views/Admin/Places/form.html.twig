@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Datos del lugar
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                {{ form_row(form.name, {label: 'Nombre'}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                {{ form_row(form.postalAddress, {label: 'Dirección postal'}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-lg-6">
+                {{ form_row(form.mobilePhone, {label: "Teléfono móvil"}) }}
+            </div>
+            <div class="col-xs-12 col-lg-6">
+                {{ form_row(form.fixedPhone, {label: "Teléfono fijo"}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                {{ form_row(form.location) }}
+            </div>
+        </div>
+    </div>
+</div>

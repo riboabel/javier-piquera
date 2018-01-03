@@ -1,38 +1,37 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Place;
-use AppBundle\Form\Type\PlaceType;
+use AppBundle\Form\Type\PlaceFormType;
 
 /**
  * Description of PlacesController
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
- * @Route("/lugares")
+ * @Route("/admin/lugares")
  */
 class PlacesController extends Controller
 {
     /**
      * @Route("/")
-     * @Method({"get"})
+     * @Method({"GET"})
      * @return Response
      */
     public function indexAction()
     {
-        return $this->render('App/Places/index.html.twig');
+        return $this->render('@App/Admin/Places/index.html.twig');
     }
 
     /**
      * @Route("/get-data")
-     * @Method({"post"})
+     * @Method({"POST"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -84,7 +83,7 @@ class PlacesController extends Controller
         $total = $pagination->getTotalItemCount();
 
         $phoneService = $this->container->get('libphonenumber.phone_number_util');
-        $template = $this->container->get('twig')->loadTemplate('App/Places/_cells.html.twig');
+        $template = $this->container->get('twig')->load('@App/Admin/Places/_cells.html.twig');
         $data = array_map(function(Place $place) use($phoneService, $template) {
             return array(
                 $place->getName(),
@@ -106,14 +105,15 @@ class PlacesController extends Controller
 
     /**
      * @Route("/{id}/ver", requirements={"id": "\d+"})
-     * @Method({"get"})
-     * @ParamConverter("record", class="AppBundle\Entity\Place")
+     * @Method({"GET"})
      * @param Place $record
      * @return Response
      */
     public function viewAction(Place $record)
     {
-        return $this->render('App/Places/view.html.twig', array('record' => $record));
+        return $this->render('@App/Admin/Places/view.html.twig', array(
+            'record' => $record
+        ));
     }
 
     /**
@@ -124,48 +124,52 @@ class PlacesController extends Controller
      */
     public function newAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $manager = $this->getDoctrine()->getManager();
+
         $place = new Place();
-        $place->setEnterprise($em->getRepository('AppBundle:Enterprise')->findOneBy(array()));
-        $form = $this->createForm(PlaceType::class, $place);
+        $place->setEnterprise($manager->getRepository('AppBundle:Enterprise')->findOneBy(array()));
+        $form = $this->createForm(PlaceFormType::class, $place);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($form->getData());
-            $em->flush();
+            $manager->persist($form->getData());
+            $manager->flush();
 
-            return $this->redirect($this->generateUrl('app_places_index'));
+            $this->addFlash('notice', 'Registro creado');
+
+            return $this->redirect($this->generateUrl('app_admin_places_index'));
         }
 
-        return $this->render('App/Places/new.html.twig', array('form' => $form->createView()));
+        return $this->render('@App/Admin/Places/new.html.twig', array('form' => $form->createView()));
     }
 
     /**
      * @Route("/{id}/editar", requirements={"id": "\d+"})
-     * @Method({"get", "post"})
-     * @ParamConverter("record", class="AppBundle\Entity\Place")
-     * @param AppBundle\Entity\Place $record
+     * @Method({"GET", "POST"})
+     * @param Place $record
+     * @param Request $request
      * @return Response
      */
     public function editAction(Place $record, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(PlaceType::class, $record);
+        $form = $this->createForm(PlaceFormType::class, $record);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
+            $manager = $this->getDoctrine()->getManager();
+            $manager->flush();
 
-            return $this->redirect($this->generateUrl('app_places_index'));
+            return $this->redirect($this->generateUrl('app_admin_places_index'));
         }
 
-        return $this->render('App/Places/edit.html.twig', array('form' => $form->createView()));
+        return $this->render('@App/Admin/Places/edit.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 
     /**
      * @Route("/{id}/eliminar", requirements={"id": "\d+"})
-     * @Method({"get", "post"})
-     * @ParamConverter("record", class="AppBundle\Entity\Place")
+     * @Method({"GET", "POST"})
      * @return JsonResponse
      */
     public function deleteAction(Place $record)

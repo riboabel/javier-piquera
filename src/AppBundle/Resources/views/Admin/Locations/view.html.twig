@@ -22,14 +22,14 @@
                             {{ record.name }}
                             <div class="help-block"></div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
-            <a href="{{ path("app_locations_edit", {"id": record.id}) }}" class="btn btn-success">
+            <a href="{{ path("app_admin_locations_edit", {"id": record.id}) }}" class="btn btn-success">
                 <i class="glyphicon glyphicon-edit"></i>
                 Editar
             </a>
-            <a href="{{ path("app_locations_index") }}" class="btn btn-default">
+            <a href="{{ path("app_admin_locations_index") }}" class="btn btn-default">
                 <i class="fa fa-tables"></i>
                 Ir al listado
             </a>

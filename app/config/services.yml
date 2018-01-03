@@ -1,8 +1,3 @@
-# Learn more about services, parameters and containers at
-# https://symfony.com/doc/current/service_container.html
-parameters:
-    #parameter_name: value
-
 services:
     app.form.passing_place:
         class: AppBundle\Form\Type\ReservaPassingPlaceType
@@ -14,8 +9,8 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
-    app.form.type.place_type:
-        class: AppBundle\Form\Type\PlaceType
+    app.form.type.place_form_type:
+        class: AppBundle\Form\Type\PlaceFormType
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }

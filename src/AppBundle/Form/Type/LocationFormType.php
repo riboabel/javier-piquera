@@ -8,11 +8,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use AppBundle\Entity\Location;
 
 /**
- * Description of LocationType
+ * Description of LocationFormType
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
  */
-class LocationType extends AbstractType
+class LocationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -21,8 +21,6 @@ class LocationType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => Location::class
-        ));
+        $resolver->setDefault('data_class', Location::class);
     }
 }

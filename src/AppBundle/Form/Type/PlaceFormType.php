@@ -10,11 +10,11 @@ use AppBundle\Entity\Place;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 
 /**
- * Description of PlaceType
+ * Description of PlaceFormType
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
  */
-class PlaceType extends AbstractType
+class PlaceFormType extends AbstractType
 {
     /**
      * @var EntityManager
@@ -44,8 +44,6 @@ class PlaceType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => Place::class
-        ));
+        $resolver->setDefault('data_class', Place::class);
     }
 }

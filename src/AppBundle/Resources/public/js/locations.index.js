@@ -1,4 +1,7 @@
-App.Locations = function() {
+App = typeof App !== 'undefined' ? App : {};
+App.Locations = typeof App.Locations !== 'undefined' ? App.Locations : {};
+
++(App.Locations.Index = function($) {
     var datatable;
 
     var clickDeleteHandler = function(event) {
@@ -12,7 +15,7 @@ App.Locations = function() {
         event.preventDefault();
 
         var url = $(this).data('url');
-        
+
         $('#dataTables-locations').find('a[href="' + url + '"]').parents('td:first').empty().text('Eliminando...');
         $(this).parents('.modal:first').modal('hide');
         $.ajax(url, {
@@ -51,7 +54,7 @@ App.Locations = function() {
         datatable = App.Tables.initDatatable($('#dataTables-locations'), {
             bProcessing: false
         });
-        
+
     }
 
     return {
@@ -60,4 +63,4 @@ App.Locations = function() {
             initDeleteModal();
         }
     }
-}();
+}(jQuery));
