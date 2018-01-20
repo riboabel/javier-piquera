@@ -84,6 +84,7 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
                 }
             ],
             serverSide: true,
+            searching: false,
             sorting: [[2, 'asc']]
         });
     }
@@ -164,14 +165,33 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
     }
 
     var initFilter = function() {
-        $('#formFilter input:text').datepicker({
+        $('#formFilter').find('input:text[name="reserva_clasico_filter_form[startAt][left_date]"], input:text[name="reserva_clasico_filter_form[startAt][right_date]"]').datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true,
             closeBtn: true,
             language: 'es'
         });
 
-        $('#formFilter input:text').on('change', function() {
+        $('#formFilter').find('input:text[name="reserva_clasico_filter_form[startAt][left_date]"], input:text[name="reserva_clasico_filter_form[startAt][right_date]"]').on('change', function() {
+            $table.DataTable().draw();
+        });
+
+        $('#formFilter input:text[name="reserva_clasico_filter_form[serviceType]"]').on('keyup', function() {
+            $table.DataTable().draw();
+        });
+        $('#formFilter input:text[name="reserva_clasico_filter_form[client]"]').on('keyup', function() {
+            $table.DataTable().draw();
+        });
+        $('#formFilter input:text[name="reserva_clasico_filter_form[clientSerial]"]').on('keyup', function() {
+            $table.DataTable().draw();
+        });
+        $('#formFilter input:text[name="reserva_clasico_filter_form[provider]"]').on('keyup', function() {
+            $table.DataTable().draw();
+        });
+        $('#formFilter input:text[name="reserva_clasico_filter_form[providerSerial]"]').on('keyup', function() {
+            $table.DataTable().draw();
+        });
+        $('#formFilter input:text[name="reserva_clasico_filter_form[clientNames]"]').on('keyup', function() {
             $table.DataTable().draw();
         });
     }

@@ -23,13 +23,13 @@
                     </button>
                     <ul class="dropdown-menu pull-right" role="menu">
                         <li>
-                            <a href="javascript:;" role="button" id="link-select-all">
+                            <a href="javascript:" role="button" id="link-select-all">
                                 <i class="glyphicon glyphicon-check"></i>
                                 Seleccionar todos
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:;" role="button" id="link-select-none">
+                            <a href="javascript:" role="button" id="link-select-none">
                                 <i class="glyphicon glyphicon-unchecked"></i>
                                 Borrar selección
                             </a>
@@ -50,13 +50,36 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-sm-3">
-                            {{ form_row(filter.startAt.left_date, {label: "Desde"}) }}
+                        <div class="col-sm-3 col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    {{ form_row(filter.startAt.left_date, {label: "Desde"}) }}
+                                </div>
+                                <div class="col-xs-6">
+                                    {{ form_row(filter.startAt.right_date, {label: "Hasta"}) }}
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-3">
-                            {{ form_row(filter.startAt.right_date, {label: "Hasta"}) }}
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.serviceType, {label: "Servicio"}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.client, {label: 'Agencia'}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.clientSerial, {label: "Referencia de la agencia"}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.provider, {label: "Proveedor"}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.providerSerial, {label: "Referencia del proveedor"}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.clientNames, {label: "Nombre de los clientes"}) }}
                         </div>
                     </div>
+                    {{ form_rest(filter) }}
                 </div>
             </div>
         </form>
