@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Reserva;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -128,7 +129,7 @@ class CobrosController extends Controller
         };
 
         $template = $this->container->get('twig')->loadTemplate('App/Cobros/_row.html.twig');
-        $data = array_map(function($record) use($getPrice, $template) {
+        $data = array_map(function(Reserva $record) use($getPrice, $template) {
             return array(
                 $template->renderBlock('select', array('record' => $record)),
                 $record->getSerialNumber(),
@@ -225,7 +226,7 @@ class CobrosController extends Controller
     public function printAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $ids = $em->createQuery('SELECT r.id FROM AppBundle:Reserva r WHERE r.chargeAct = :act ORDER BY r.cobradoAt')
+        $ids = $em->createQuery('SELECT r.id FROM AppBundle:Reserva AS r WHERE r.chargeAct = :act ORDER BY r.cobradoAt')
             ->setParameter('act', $request->get('id'))
             ->getResult();
 
