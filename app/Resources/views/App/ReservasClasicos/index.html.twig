@@ -1,5 +1,16 @@
 {% extends "frontend.html.twig" %}
 
+{% form_theme filter _self %}
+
+{% block filter_date_widget %}
+    <div class="input-group">
+        <input type="text" name="{{ form.vars.full_name }}" id="{{ form.vars.id }}" class="form-control">
+        <span class="input-group-addon">
+            <span class="fa fa-calendar"></span>
+        </span>
+    </div>
+{% endblock %}
+
 {% block page_content %}
     <div class="row">
         <div class="col-lg-12">
