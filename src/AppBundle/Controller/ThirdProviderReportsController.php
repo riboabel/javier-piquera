@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\ReservaTercero;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -45,7 +46,7 @@ class ThirdProviderReportsController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $manager = $this->getDoctrine()->getManager();
-                $report = new Reports\ServicesForThirdProviderReport($form->getData(), $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
+                $report = new Reports\ServicesForThirdProviderReport($form->getData(), $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination'], $type == 'clasicos' ? ReservaTercero::TYPE_CLASICOS : ReservaTercero::TYPE_MICROBUS);
 
                 return new StreamedResponse(function() use($report) {
                     file_put_contents('php://output', $report->getContent());

@@ -32,7 +32,12 @@ class ServicesForThirdProviderReport extends Report
      */
     private $logoPath;
 
-    public function __construct($parameters, EntityManager $manager, $logoPath)
+    /**
+     * @var string
+     */
+    private $type;
+
+    public function __construct($parameters, EntityManager $manager, $logoPath, $type)
     {
         parent::__construct('L', 'LETTER');
 
@@ -42,6 +47,7 @@ class ServicesForThirdProviderReport extends Report
         $this->manager = $manager;
 
         $this->logoPath = $logoPath;
+        $this->type = $type;
     }
 
     public function getContent()
@@ -154,7 +160,8 @@ class ServicesForThirdProviderReport extends Report
             ->orderBy('r.startAt');
 
         $andX = $qb->expr()->andX(
-            $qb->expr()->neq('r.state', ':state')
+            $qb->expr()->neq('r.state', ':state'),
+            $qb->expr()->eq('r.type', ':type')
         );
 
         if ($this->start) {
@@ -165,8 +172,11 @@ class ServicesForThirdProviderReport extends Report
         }
 
         $qb
-            ->setParameter('state', ReservaTercero::STATE_CANCELLED)
-            ->where($andX);
+            ->where($andX)
+            ->setParameters(array(
+                'state' => ReservaTercero::STATE_CANCELLED,
+                'type' => $this->type
+            ));
 
         return $qb->getQuery();
     }
