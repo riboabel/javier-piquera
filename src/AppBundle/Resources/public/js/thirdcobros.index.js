@@ -78,7 +78,9 @@ App.ThirdCobros = typeof App.ThirdCobros !== 'undefined' ? App.ThirdCobros : {};
                     sortable: false
                 }
             ],
+            lengthMenu: [10, 50],
             processing: false,
+            searching: false,
             serverSide: true
         });
     }
