@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\Type\ReservaClasicoFilterFormType;
+use AppBundle\Form\Type\ReservaTerceroFilterFormType;
 use AppBundle\Form\Type\ReservaClasicosFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -27,7 +27,7 @@ class ReservasClasicosController extends Controller
      */
     public function indexAction()
     {
-        $form = $this->createForm(ReservaClasicoFilterFormType::class, array(
+        $form = $this->createForm(ReservaTerceroFilterFormType::class, array(
             'startAt' => array(
                 'left_date' => new \DateTime('now')
             )
@@ -54,12 +54,10 @@ class ReservasClasicosController extends Controller
                 ->setParameter('microbus', ReservaTercero::TYPE_CLASICOS)
                 ;
 
-        $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order', array());
-        $filter['q'] = $search['value'];
 
-        $form = $this->createForm(ReservaClasicoFilterFormType::class);
+        $form = $this->createForm(ReservaTerceroFilterFormType::class);
         $form->submit($request->query->get($form->getName()));
         $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
 

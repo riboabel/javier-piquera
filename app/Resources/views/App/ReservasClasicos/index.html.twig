@@ -4,7 +4,7 @@
 
 {% block filter_date_widget %}
     <div class="input-group">
-        <input type="text" name="{{ form.vars.full_name }}" id="{{ form.vars.id }}" class="form-control">
+        <input type="text" name="{{ form.vars.full_name }}" id="{{ form.vars.id }}" class="form-control datepicker"{{ form.vars.value is defined ? " value=" ~ form.vars.value : "" }}>
         <span class="input-group-addon">
             <span class="fa fa-calendar"></span>
         </span>

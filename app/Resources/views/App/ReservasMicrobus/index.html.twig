@@ -1,5 +1,16 @@
 {% extends "frontend.html.twig" %}
 
+{% form_theme filter _self %}
+
+{% block filter_date_widget %}
+    <div class="input-group">
+        <input type="text" name="{{ form.vars.full_name }}" id="{{ form.vars.id }}" class="form-control datepicker"{{ form.vars.value is defined ? " value=" ~ form.vars.value : "" }}>
+        <span class="input-group-addon">
+            <span class="fa fa-calendar"></span>
+        </span>
+    </div>
+{% endblock %}
+
 {% block page_content %}
     <div class="row">
         <div class="col-lg-12">
@@ -36,8 +47,52 @@
                         </li>
                     </ul>
                 </div>
+                <button type="button" data-toggle="collapse" data-target="#collapseFilter" class="btn btn-default">
+                    <i class="fa fa-filter"></i></button>
             </div>
         </div>
+    </div>
+    <div id="collapseFilter" class="collapse">
+        <form action="#" id="formFilter">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Opciones de filtro</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    {{ form_row(filter.startAt.left_date, {label: "Desde"}) }}
+                                </div>
+                                <div class="col-xs-6">
+                                    {{ form_row(filter.startAt.right_date, {label: "Hasta"}) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.serviceType, {label: "Servicio"}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.client, {label: 'Agencia'}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.clientSerial, {label: "Referencia de la agencia"}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.provider, {label: "Proveedor"}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.providerSerial, {label: "Referencia del proveedor"}) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(filter.clientNames, {label: "Nombre de los clientes"}) }}
+                        </div>
+                    </div>
+                    {{ form_rest(filter) }}
+                </div>
+            </div>
+        </form>
     </div>
     <div class="dataTable_wrapper">
         <table class="table table-striped table-bordered table-hover" id="dataTables-reservas" width="100%"></table>

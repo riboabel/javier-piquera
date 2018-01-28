@@ -19,11 +19,19 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
 
         $table.dataTable({
             ajax: {
-                url: Routing.generate('app_reservasmicrobus_getdata'),
-                method: 'GET',
+                data: function(baseData) {
+                    var filter = [];
+                    $.each($('form#formFilter').serializeArray(), function(i, e) {
+                        filter[e['name']] = e['value'];
+                    });
+
+                    return $.extend(true, baseData, filter);
+                },
                 error: function() {
                     alert('Error obteniendo datos de listado')
-                }
+                },
+                method: 'GET',
+                url: Routing.generate('app_reservasmicrobus_getdata')
             },
             columns: [
                 {
@@ -155,11 +163,27 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
         });
     }
 
+    var initFilter = function() {
+        $('#formFilter input:text.datepicker').on('change', function() {
+            $table.DataTable().draw();
+        }).datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            closeBtn: true,
+            language: 'es'
+        });
+
+        $('#formFilter input:text:not(.datepicker)').on('keyup', function() {
+            $table.DataTable().draw();
+        });
+    }
+
     return {
         init: function() {
             initTable();
             initActions();
             initTools();
+            initFilter();
         }
     }
 }(jQuery));

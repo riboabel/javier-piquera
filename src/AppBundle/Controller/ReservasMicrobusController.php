@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Form\Type\ReservaMicrobusFormType;
+use AppBundle\Form\Type\ReservaTerceroFilterFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,7 +27,15 @@ class ReservasMicrobusController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('App/ReservasMicrobus/index.html.twig');
+        $filter = $this->createForm(ReservaTerceroFilterFormType::class, array(
+            'startAt' => array(
+                'left_date' => new \DateTime('now')
+            )
+        ));
+
+        return $this->render('App/ReservasMicrobus/index.html.twig', array(
+            'filter' => $filter->createView()
+        ));
     }
 
     /**
@@ -45,10 +54,12 @@ class ReservasMicrobusController extends Controller
                 ->setParameter('microbus', ReservaTercero::TYPE_MICROBUS)
                 ;
 
-        $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order', array());
-        $filter['q'] = $search['value'];
+
+        $form = $this->createForm(ReservaTerceroFilterFormType::class);
+        $form->submit($request->query->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
 
         if ($orders) {
             $column = call_user_func(function($name) {
