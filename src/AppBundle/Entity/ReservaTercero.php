@@ -238,13 +238,14 @@ class ReservaTercero
      */
     public function __toString()
     {
-        if ((self::TYPE_CLASICOS === $this->type) && !is_null($this->id) && !is_null($this->startAt)) {
-            return sprintf('CL%s-%04s',
+        if (!is_null($this->getProvider()) && $this->getProvider()->getIsSerialGenerator() && !is_null($this->id) && !is_null($this->startAt)) {
+            return sprintf('%s%s-%04s',
+                $this->getProvider()->getSerialPrefix(),
                 substr($this->startAt->format('ymd'), 1, 5),
                 $this->id
                 );
         } else {
-            return (string) $this->id;
+            return (string) $this->getProviderSerial();
         }
     }
 

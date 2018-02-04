@@ -1,0 +1,71 @@
+{% block vich_image_widget %}
+    <div class="fileupload fileupload-{{ download_uri is defined and download_uri ? 'exists' : 'new' }} text-center" data-provides="fileupload">
+        <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+            <img src="{{ no_image_url|default(asset("images/anonimo.png")) }}" alt="" />
+        </div>
+        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;">
+            <img src="{{ download_uri is defined and download_uri ? download_uri : asset("images/anonimo.png") }}" alt="" />
+        </div>
+        <div>
+            <span class="btn btn-file">
+                <span class="fileupload-new">Seleccionar imagen</span>
+                <span class="fileupload-exists">Cambiar</span>
+                {{ form_widget(form.file, {'class': 'default'}) }}
+                {% if form.delete is defined %}
+                    <span class="hidden">{{ form_widget(form.delete) }}</span>
+                {% endif %}
+            </span>
+            <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Eliminar</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block icheck_row %}
+    <div class="form-group">
+        <label>
+            {{ form_widget(form, {type: 'checkbox', attr: {class: "icheck"}}) }}
+            {{ form_label(form)|striptags }}
+        </label>
+    </div>
+{% endblock %}
+
+{% block reserva_tercero_form_row %}
+    <div class="row">
+        <div class="col-sm-6">
+            {{ form_row(form.client, {label: "Agencia"}) }}
+        </div>
+        <div class="col-sm-6">
+            {{ form_row(form.clientSerial, {label: "Referencia del cliente"}) }}
+        </div>
+    </div>
+    {{ form_row(form.serviceType, {label: "Tipo de servicio"}) }}
+    <div class="row">
+        <div class="col-sm-6 form-group">
+            {{ form_label(form.startAt, "Inicio") }}
+            {{ form_widget(form.startAt, {attr: {class: "form-control datetimepicker"}}) }}
+        </div>
+        <div class="col-sm-6 form-group">
+            {{ form_label(form.endAt, "Terminación") }}
+            {{ form_widget(form.endAt, {attr: {class: "form-control datetimepicker"}}) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            {{ form_row(form.startIn, {label: "Desde"}) }}
+        </div>
+        <div class="col-sm-6">
+            {{ form_row(form.endIn, {label: "Hasta"}) }}
+        </div>
+    </div>
+    {{ form_row(form.serviceDescription, {label: "Descripción del servicio"}) }}
+    {{ form_row(form.pax, {label: "Pax", attr: {class: 'text-right'}}) }}
+    {{ form_row(form.clientNames, {label: "Nombres de los clientes"}) }}
+    <div class="row">
+        <div class="col-sm-6">
+            {{ form_row(form.provider, {label: "Proveedor"}) }}
+        </div>
+        <div class="col-sm-6">
+            {{ form_row(form.providerSerial, {label: "Referencia del proveedor"}) }}
+        </div>
+    </div>
+{% endblock %}

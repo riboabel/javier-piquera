@@ -165,33 +165,18 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
     }
 
     var initFilter = function() {
-        $('#formFilter').find('input:text[name="reserva_clasico_filter_form[startAt][left_date]"], input:text[name="reserva_clasico_filter_form[startAt][right_date]"]').datepicker({
+        $('#formFilter').find('input:text.datepicker').datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true,
             closeBtn: true,
             language: 'es'
         });
 
-        $('#formFilter').find('input:text[name="reserva_clasico_filter_form[startAt][left_date]"], input:text[name="reserva_clasico_filter_form[startAt][right_date]"]').on('change', function() {
+        $('#formFilter').find('input:text.datepicker').on('changeDate', function() {
             $table.DataTable().draw();
         });
 
-        $('#formFilter input:text[name="reserva_clasico_filter_form[serviceType]"]').on('keyup', function() {
-            $table.DataTable().draw();
-        });
-        $('#formFilter input:text[name="reserva_clasico_filter_form[client]"]').on('keyup', function() {
-            $table.DataTable().draw();
-        });
-        $('#formFilter input:text[name="reserva_clasico_filter_form[clientSerial]"]').on('keyup', function() {
-            $table.DataTable().draw();
-        });
-        $('#formFilter input:text[name="reserva_clasico_filter_form[provider]"]').on('keyup', function() {
-            $table.DataTable().draw();
-        });
-        $('#formFilter input:text[name="reserva_clasico_filter_form[providerSerial]"]').on('keyup', function() {
-            $table.DataTable().draw();
-        });
-        $('#formFilter input:text[name="reserva_clasico_filter_form[clientNames]"]').on('keyup', function() {
+        $('#formFilter input:text:not(.datepicker)').on('keyup', function() {
             $table.DataTable().draw();
         });
     }

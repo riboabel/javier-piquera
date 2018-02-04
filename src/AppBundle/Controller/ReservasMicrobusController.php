@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\Type\ReservaMicrobusFormType;
 use AppBundle\Form\Type\ReservaTerceroFilterFormType;
+use AppBundle\Form\Type\ReservaTerceroFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -115,7 +115,7 @@ class ReservasMicrobusController extends Controller
         $reserva = new ReservaTercero();
         $reserva->setType(ReservaTercero::TYPE_MICROBUS);
 
-        $form = $this->createForm(ReservaMicrobusFormType::class, $reserva);
+        $form = $this->createForm(ReservaTerceroFormType::class, $reserva);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -142,7 +142,7 @@ class ReservasMicrobusController extends Controller
      */
     public function editAction(ReservaTercero $reserva, Request $request)
     {
-        $form = $this->createForm(ReservaMicrobusFormType::class, $reserva);
+        $form = $this->createForm(ReservaTerceroFormType::class, $reserva);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

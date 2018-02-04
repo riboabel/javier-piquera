@@ -83,6 +83,7 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
                     width: '130px'
                 }
             ],
+            searching: false,
             serverSide: true,
             sorting: [[2, 'asc']]
         });

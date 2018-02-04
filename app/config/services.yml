@@ -59,16 +59,11 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
-    app.form.type.reserva_microbus_form_type:
-        class: AppBundle\Form\Type\ReservaMicrobusFormType
+    app.form.type.reserva_tercero_form_type:
+        class: AppBundle\Form\Type\ReservaTerceroFormType
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
-    app.form.type.reserva_clasicos_form_type:
-            class: AppBundle\Form\Type\ReservaClasicosFormType
-            arguments: [ '@doctrine.orm.entity_manager' ]
-            tags:
-                - { name: form.type }
 
     app.morris_graph.area:
         class: AppBundle\Services\MorrisGraphGenerator
@@ -92,3 +87,9 @@ services:
         class: Twig_Extensions_Extension_Text
         tags:
             - name: twig.extension
+
+    app.validator.constraints.unique_third_serial_prefix_validator:
+        class: AppBundle\Validator\Constraints\UniqueThirdProviderSerialPrefixValidator
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: validator.constraint_validator, alias: unique_third_provider_serial_prefix }

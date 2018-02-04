@@ -91,16 +91,14 @@ class ReservaTerceroFilterFormType extends AbstractType
 
                     $rootAlias = $filterQuery->getRootAlias();
 
+                    $filterQuery->getQueryBuilder()->join($rootAlias . '.provider', 'ps_provider');
                     $parameters = array();
+
                     $expression = $filterQuery->getExpr()->orX(
                         $filterQuery->getExpr()->andX(
-                            $filterQuery->getExpr()->eq($rootAlias . '.type', ':p_ps_type_microbus'),
+                            $filterQuery->getExpr()->eq('ps_provider.isSerialGenerator', $filterQuery->getExpr()->literal(false)),
                             $filterQuery->getExpr()->like($field, ':p_ps_' . str_replace('.', '_', $field))
                         )
-                    );
-                    $parameters['p_ps_type_microbus'] = array(
-                        ReservaTercero::TYPE_MICROBUS,
-                        \PDO::PARAM_STR
                     );
                     $parameters['p_ps_' . str_replace('.', '_', $field)] = array(
                         sprintf('%%%s%%', $values['value']),
@@ -108,13 +106,14 @@ class ReservaTerceroFilterFormType extends AbstractType
                     );
 
 
-                    if (preg_match('/^CL(?P<year>\d)(?<month>\d{2})(?P<day>\d{2})-(?P<id>\d{4})$/', $values['value'], $parts)) {
+                    if (preg_match('/^(?P<prefix>[A-Z]{2})(?P<year>\d)(?<month>\d{2})(?P<day>\d{2})-(?P<id>\d{4})$/', $values['value'], $parts)) {
                         $startAt = new \DateTime(sprintf('201%s-%s-%s', $parts['year'], $parts['month'], $parts['day']));
                         $id = ltrim($parts['id'], '0');
 
                         $expression->add(
                             $filterQuery->getExpr()->andX(
-                                $filterQuery->getExpr()->eq($rootAlias . '.type', ':p_ps_type_classics'),
+                                $filterQuery->getExpr()->eq('ps_provider.isSerialGenerator', $filterQuery->getExpr()->literal(true)),
+                                $filterQuery->getExpr()->eq('ps_provider.serialPrefix', ':p_ps_provider_prefix'),
                                 $filterQuery->getExpr()->andX(
                                     $filterQuery->getExpr()->andX(
                                         $filterQuery->getExpr()->gte($rootAlias . '.startAt', ':p_ps_startAt_left'),
@@ -125,8 +124,8 @@ class ReservaTerceroFilterFormType extends AbstractType
                             )
                         );
 
-                        $parameters['p_ps_type_classics'] = array(
-                            ReservaTercero::TYPE_CLASICOS,
+                        $parameters['p_ps_provider_prefix'] = array(
+                            $parts['prefix'],
                             \PDO::PARAM_STR
                         );
                         $parameters['p_ps_startAt_left'] = array(

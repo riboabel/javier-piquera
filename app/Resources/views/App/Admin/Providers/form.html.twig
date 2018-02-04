@@ -5,5 +5,13 @@
     <div class="panel-body">
         {{ form_row(form.name, {label: "Nombre"}) }}
         {{ form_row(form.type, {label: "Tipo"}) }}
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.isSerialGenerator, {label: "El sistema genera los números de confirmación de este proveedor"}) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.serialPrefix, {label: "Prefijo del número de confirmación"}) }}
+            </div>
+        </div>
     </div>
 </div>

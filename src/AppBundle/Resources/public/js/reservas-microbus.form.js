@@ -19,13 +19,13 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
             return startAt.isBefore(now);
         }, 'Terminación no puede estar antes de o ser igual a inicio');
 
-        App.Main.validate($('form#reserva-microbus'), {
+        App.Main.validate($('form#reserva-tercero'), {
             'rules': {
-                'reserva_microbus_form[startAt]': 'validdatetime',
-                'reserva_microbus_form[endAt]': {
+                'reserva_tercero_form[startAt]': 'validdatetime',
+                'reserva_tercero_form[endAt]': {
                     'validdatetime': true,
                     'endafterstart': {
-                        'startElement': '#reserva_microbus_form_startAt'
+                        'startElement': '#reserva_tercero_form_startAt'
                     }
                 }
             }
@@ -33,7 +33,7 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
     }
 
     var initControls = function() {
-        $('#reserva_microbus_form_startIn, #reserva_microbus_form_endIn').select2({
+        $('#reserva_tercero_form_startIn, #reserva_tercero_form_endIn').select2({
             ajax: {
                 url: Routing.generate('app_reservasmicrobus_getplaces'),
                 dataType: 'json',
@@ -50,6 +50,19 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
             placeholder: 'Seleccione un lugar',
             width: 'resolve'
         });
+
+        $('select[name="reserva_tercero_form[provider]"]').on('change', function() {
+            var option = this.options[this.selectedIndex];
+
+            if ($(option).data('show-provider-serial')) {
+                $('input:text[name="reserva_tercero_form[providerSerial]"]').closest('.form-group').fadeIn();
+            } else {
+                $('input:text[name="reserva_tercero_form[providerSerial]"]').closest('.form-group').fadeOut(function() {
+                    $(this).find('input:text').val('');
+                });
+            }
+
+        }).trigger('change');
     }
 
     return {

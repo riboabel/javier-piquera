@@ -59,6 +59,10 @@ class ProvidersController extends Controller
             $column = call_user_func(function($name) {
                 if ($name == 'name') {
                     return 'p.name';
+                } elseif ($name == 'type') {
+                    return 'p.type';
+                } elseif ($name == 'serialPrefix') {
+                    return 'p.serialPrefix';
                 }
 
                 return null;
@@ -78,6 +82,9 @@ class ProvidersController extends Controller
             return array(
                 $provider->getName(),
                 $template->renderBlock('type', array(
+                    'record' => $provider
+                )),
+                $template->renderBlock('serial_prefix', array(
                     'record' => $provider
                 )),
                 $template->renderBlock('actions', array('record' => $provider))

@@ -215,6 +215,11 @@ App = typeof App !== 'undefined' ? App : {};
         });
     }
 
+    var initIcheckControls = function() {
+        $('input:checkbox.icheck').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+    }
 
     return {
         init: function(options) {
@@ -229,6 +234,7 @@ App = typeof App !== 'undefined' ? App : {};
             initializeMessageSystem();
             initWeekPdfsControls();
             initDatatable();
+            initIcheckControls();
 
             if (options.notices.length > 0) {
                 $.each(options.notices, function(index, message) {

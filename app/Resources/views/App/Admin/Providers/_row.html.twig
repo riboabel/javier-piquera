@@ -6,6 +6,16 @@
     {% endif %}
 {% endblock %}
 
+{% block serial_prefix %}
+    <div class="text-center">
+        {% if record.isSerialGenerator %}
+        {{ record.serialPrefix }}
+        {% else %}
+        --
+        {% endif %}
+    </div>
+{% endblock %}
+
 {% block actions %}
     <div class="btn-group" role="group">
         <a href="{{ path("app_admin_providers_view", {id: record.id}) }}" class="btn btn-default btn-xs"

@@ -3,13 +3,13 @@
 {% block page_content %}
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Lugares <small>editar</small></h1>
+            <h1 class="page-header">Provedores para terceros <small>editar</small></h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
 
-    {{ form_start(form, {attr: {role: 'form', id: 'place'}}) }}
+    {{ form_start(form, {attr: {role: 'form', id: 'provider'}}) }}
         <div class="row">
             <div class="col-lg-12">
                 {{ include("App/Admin/Providers/form.html.twig") }}
@@ -30,7 +30,7 @@
 {% block page_javascripts %}
     <script>
         $(document).ready(function() {
-            App.Places.Form.init();
+            App.ThirdProviders.Index.init();
         });
     </script>
 {% endblock %}
