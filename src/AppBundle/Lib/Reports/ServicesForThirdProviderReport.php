@@ -3,6 +3,7 @@
 namespace AppBundle\Lib\Reports;
 
 use AppBundle\Entity\ReservaTercero;
+use AppBundle\Entity\ThirdProvider;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -21,6 +22,11 @@ class ServicesForThirdProviderReport extends Report
      * @var \DateTime
      */
     private $end;
+
+    /**
+     * @var ThirdProvider
+     */
+    private $provider;
 
     /**
      * @var EntityManager
@@ -43,6 +49,7 @@ class ServicesForThirdProviderReport extends Report
 
         $this->start = $parameters['fromDate'];
         $this->end = $parameters['toDate'];
+        $this->provider = $parameters['provider'];
 
         $this->manager = $manager;
 
@@ -157,9 +164,11 @@ class ServicesForThirdProviderReport extends Report
     {
         $qb = $this->manager->getRepository('AppBundle:ReservaTercero')
             ->createQueryBuilder('r')
+            ->join('r.provider', 'p')
             ->orderBy('r.startAt');
 
         $andX = $qb->expr()->andX(
+            $qb->expr()->eq('p.id', ':provider'),
             $qb->expr()->neq('r.state', ':state'),
             $qb->expr()->eq('r.type', ':type')
         );
@@ -171,11 +180,13 @@ class ServicesForThirdProviderReport extends Report
             $andX->add($qb->expr()->lte('r.startAt', $qb->expr()->literal($this->end->format('Y-m-d 23:59:59'))));
         }
 
+
         $qb
             ->where($andX)
             ->setParameters(array(
                 'state' => ReservaTercero::STATE_CANCELLED,
-                'type' => $this->type
+                'type' => $this->type,
+                'provider' => $this->provider->getId()
             ));
 
         return $qb->getQuery();

@@ -12,6 +12,8 @@
                 {{ form_row(form.toDate, {attr: {class: 'datepicker'}}) }}
             </div>
         </div>
+        {{ form_row(form.provider) }}
+        {{ form_rest(form) }}
     </div>
     <div class="modal-footer">
         <button type="submit" class="btn btn-success">

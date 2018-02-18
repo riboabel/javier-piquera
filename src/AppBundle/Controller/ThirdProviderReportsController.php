@@ -3,8 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ReservaTercero;
+use AppBundle\Entity\ThirdProvider;
+use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Lib\Reports;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +42,17 @@ class ThirdProviderReportsController extends Controller
                 'required'  => false,
                 'widget'    => 'single_text',
                 'format'    => 'd/M/y'
+            ))
+            ->add('provider', EntityType::class, array(
+                'class' => ThirdProvider::class,
+                'label' => 'Proveedor',
+                'query_builder' => function(EntityRepository $repository) use($type) {
+                    return $repository->createQueryBuilder('p')
+                        ->where('p.type = :type')
+                        ->orderBy('p.name')
+                        ->setParameter('type', $type == 'clasicos' ? ThirdProvider::TYPE_CLASICOS : ThirdProvider::TYPE_MICROBUS);
+                },
+                'required' => true
             ))
             ->getForm();
 
