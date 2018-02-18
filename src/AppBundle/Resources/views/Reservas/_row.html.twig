@@ -1,0 +1,93 @@
+{% block selector %}
+    <input type="checkbox" name="selection[]" value="{{ record.id }}" checked="checked"/>
+{% endblock %}
+
+{% block state %}
+    {% if record.isCancelled %}
+        <i class="glyphicon glyphicon-ban-circle" title="Cancelada"></i>
+    {% elseif record.isExecuted %}
+        <i class="fa fa-check" title="Ejecutada"></i>
+    {% endif %}
+{% endblock %}
+
+{% block inicio %}
+    <div title="{{ "%s: %s a %s: %s"|format(record.startPlace.name, record.startPlace.postalAddress, record.endPlace.name, record.endPlace.postalAddress) }}">{{ record.startAt|date("d/m/Y H:i") }}</div>
+{% endblock %}
+
+{% block provider %}
+    <div title="{{ record.provider.contactInfo }}">{{ record.provider.name }}</div>
+{% endblock %}
+
+{% block pax %}
+    <div class="center">{{ record.pax }}</div>
+{% endblock %}
+
+{% block service %}
+    <span title="{{ record.serviceDescription }}">{{ record.serviceType }}</span>
+{% endblock %}
+
+{% block driver %}
+    {% if record.driver is not empty %}
+        {% set info = [] %}
+        {%- if record.driver.mobilePhone is not empty -%}
+            {% set info = info|merge(["Móvil: %s"|format(record.driver.mobilePhone|phone_number_format("NATIONAL"))]) %}
+        {%- endif -%}
+        {%- if record.driver.fixedPhone is not empty -%}
+            {% set info = info|merge(["Fijo: %s"|format(record.driver.fixedPhone|phone_number_format("NATIONAL"))]) %}
+        {%- endif -%}
+        {%- if record.driver.contactInfo is not empty -%}
+            {% set info = info|merge(["Contacto: %s"|format(record.driver.contactInfo)]) %}
+        {%- endif -%}
+        <span title="{{ info|join(" | ") }}" class="text-{{ record.isDriverConfirmed ? "success" : "danger" }}">{{ record.driver.name }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block guide %}
+    {% if record.guide is not empty %}
+        <div title="{{ record.guide.contactInfo }}">
+            {{ record.guide }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block actions %}
+    <div class="btn-group">
+        <a href="{{ path("app_reservas_view", {"id": record.id}) }}" class="btn btn-default btn-xs"
+        title="Ver detalle">
+            <i class="glyphicon glyphicon-file"></i>
+        </a>
+        {% if not record.isCancelled and not record.isExecuted %}
+            <a href="{{ path("app_reservas_edit", {"id": record.id}) }}" class="btn btn-info btn-xs"
+                title="Editar">
+                <i class="glyphicon glyphicon-edit"></i>
+            </a>
+            {% if record.driver is not empty and record.isDriverConfirmed %}
+                <a href="{{ path("app_reservas_execute", {"id": record.id}) }}" class="btn btn-success btn-xs btn-execute" title="Ejecutar">
+                    <i class="glyphicon glyphicon-road"></i>
+                </a>
+            {% elseif record.driver is not empty and not record.isDriverConfirmed %}
+                <a href="{{ path("app_reservas_confirmdriver", {"id": record.id}) }}" role="button" class="btn btn-default btn-xs btn-driver-confirm" title="Confirmar conductor"><i class="glyphicon glyphicon-user"></i></a>
+            {% endif %}
+            <a href="{{ path("app_reservas_cancel", {"id": record.id}) }}" class="btn btn-warning btn-xs btn-cancel" title="Cancelar">
+                <i class="glyphicon glyphicon-ban-circle"></i>
+            </a>
+        {% endif %}
+        {% if not record.isCancelled and is_granted('ROLE_OWNER') and record.provider.receiveInvoice %}
+            <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                <i class="glyphicon glyphicon-print"></i>
+                <i class="caret"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                    <a href="{{ path('app_reports_printemptyjoborder', {'id': record.id}) }}" target="_blank">Imprimir orden de trabajo en blanco</a>
+                </li>
+            </ul>
+        {% endif %}
+        {% if is_granted("ROLE_OWNER") %}
+            <a href="{{ path("app_reservas_delete", {"id": record.id}) }}" class="btn btn-danger btn-delete btn-xs"
+                title="Eliminar">
+                <i class="glyphicon glyphicon-remove"></i>
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\Type\ExecutionIssuesFormType;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -13,6 +15,7 @@ use AppBundle\Form\Type\ReservaType;
 use AppBundle\Entity\Reserva;
 use AppBundle\Entity\ReservaLog;
 use AppBundle\Form\Type\ReservaFilterFormType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of ReservasController
@@ -47,7 +50,7 @@ class ReservasController extends Controller
 
         $form = $this->createForm(ReservaFilterFormType::class, $filter);
 
-        return $this->render('App/Reservas/index.html.twig', array(
+        return $this->render('@App/Reservas/index.html.twig', array(
             'form' => $form->createView(),
             'q' => $filter['q']
         ));
@@ -148,7 +151,7 @@ class ReservasController extends Controller
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
         $total = $pagination->getTotalItemCount();
 
-        $template = $this->container->get('twig')->loadTemplate('App/Reservas/_row.html.twig');
+        $template = $this->container->get('twig')->load('@App/Reservas/_row.html.twig');
         $data = array_map(function(Reserva $record) use($template) {
             return array(
                 $template->renderBlock('selector', array('record' => $record)),
@@ -178,7 +181,6 @@ class ReservasController extends Controller
     /**
      * @Route("/{id}/ver", requirements={"id": "\d+"})
      * @Method({"get"})
-     * @ParamConverter("record", class="AppBundle\Entity\Reserva")
      * @param Reserva $record
      * @return Response
      */
@@ -187,7 +189,7 @@ class ReservasController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $logs = $manager->getRepository('AppBundle:ReservaLog')->findByReservaOrderedByCreatedAt($record);
 
-        return $this->render('App/Reservas/view.html.twig', array(
+        return $this->render('@App/Reservas/view.html.twig', array(
             'record' => $record,
             'logs' => $logs
         ));
@@ -203,7 +205,7 @@ class ReservasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(ReservaType::class, new Reserva());
 
-        return $this->render('App/Reservas/new.html.twig', array(
+        return $this->render('@App/Reservas/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -234,7 +236,7 @@ class ReservasController extends Controller
             return $this->redirect($this->generateUrl('app_reservas_index'));
         }
 
-        return $this->render('App/Reservas/new.html.twig', array(
+        return $this->render('@App/Reservas/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -242,7 +244,6 @@ class ReservasController extends Controller
     /**
      * @Route("/{id}/editar", requirements={"id": "\d+"})
      * @Method({"get"})
-     * @ParamConverter("record", class="AppBundle\Entity\Reserva")
      * @param Reserva $reserva
      * @return Response
      */
@@ -251,7 +252,7 @@ class ReservasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(ReservaType::class, $record);
 
-        return $this->render('App/Reservas/edit.html.twig', array(
+        return $this->render('@App/Reservas/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -259,7 +260,6 @@ class ReservasController extends Controller
     /**
      * @Route("/{id}/editar", requirements={"id": "\d+"})
      * @Method({"post"})
-     * @ParamConverter("record", class="AppBundle\Entity\Reserva")
      * @param Reserva $reserva
      * @return Response
      */
@@ -268,7 +268,7 @@ class ReservasController extends Controller
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(ReservaType::class, $record);
 
-        $originalPlaces = new \Doctrine\Common\Collections\ArrayCollection();
+        $originalPlaces = new ArrayCollection();
         foreach ($record->getPassingPlaces() as $p) {
             $originalPlaces->add($p);
         }
@@ -288,7 +288,7 @@ class ReservasController extends Controller
             return $this->redirect($this->generateUrl('app_reservas_index'));
         }
 
-        return $this->render('App/Reservas/edit.html.twig', array(
+        return $this->render('@App/Reservas/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -299,7 +299,7 @@ class ReservasController extends Controller
      * @ParamConverter("record", class="AppBundle\Entity\Reserva")
      * @Security("is_granted('ROLE_OWNER')")
      * @param Reserva $record
-     * @return RedirectResponse
+     * @return Response
      */
     public function deleteAction(Reserva $record)
     {
@@ -346,11 +346,11 @@ class ReservasController extends Controller
      * @ParamConverter("record", class="AppBundle\Entity\Reserva")
      * @param Reserva $record
      * @param Request $request
-     * @return RedirectResponse
+     * @return Response
      */
     public function executeAction(Reserva $record, Request $request)
     {
-        $form = $this->createForm(new \AppBundle\Form\Type\ExecutionIssuesFormType(), $record);
+        $form = $this->createForm(ExecutionIssuesFormType::class, $record);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -369,7 +369,7 @@ class ReservasController extends Controller
             }
         }
 
-        return $this->render('App/Reservas/execute.html.twig', array(
+        return $this->render('@App/Reservas/execute.html.twig', array(
             'form' => $form->createView()
         ));
     }
