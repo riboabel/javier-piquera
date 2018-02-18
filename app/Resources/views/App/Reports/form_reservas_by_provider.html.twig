@@ -26,6 +26,8 @@
                 <div class="help-block"></div>
             </div>
         </div>
+        {{ form_row(form.showProviderLogoIfPossible) }}
+        {{ form_rest(form) }}
     </div>
     <div class="modal-footer">
         <button class="btn btn-success" type="submit">
@@ -45,5 +47,8 @@
             format: 'dd/mm/yyyy',
             autoclose: true
         });
+        $('#{{ form.showProviderLogoIfPossible.vars.id }}').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        })
     });
 </script>

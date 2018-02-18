@@ -28,6 +28,11 @@ class ServicesBetweenDatesReport extends Report
     private $services;
 
     /**
+     * @var boolean
+     */
+    private $showLogo;
+
+    /**
      * @var EntityManager
      */
     private $em;
@@ -37,14 +42,16 @@ class ServicesBetweenDatesReport extends Report
      */
     private $logoPath;
 
-    public function __construct($start, $end, $includePlacesAddress, array $services, EntityManager $em, $logoPath)
+    public function __construct($parameters, EntityManager $em, $logoPath)
     {
         parent::__construct('L', 'A4');
 
-        $this->start = $start;
-        $this->end = $end;
-        $this->includePlacesAddress = $includePlacesAddress;
-        $this->services = $services;
+        $this->start = $parameters['fromDate'];
+        $this->end = $parameters['toDate'];
+        $this->includePlacesAddress = $parameters['includePlacesAddress'];
+        $this->services = $parameters['services']->toArray();
+        $this->showLogo = $parameters['showProviderLogoIfPossible'];
+
         $this->em = $em;
         $this->logoPath = $logoPath;
     }
@@ -87,17 +94,17 @@ class ServicesBetweenDatesReport extends Report
                 array(30, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : ''),
                 array(25, $record->getProviderReference()),
                 array(46, $record->getServiceType()->getName()),
-                array(25, null !== $record->getProvider()->getLogoName() ? '' : $record->getProvider()->getName()),
+                array(25, (null !== $record->getProvider()->getLogoName()) && $this->showLogo ? '' : $record->getProvider()->getName()),
                 array(40, $record->getClientNames()),
                 array(10, $record->getPax()),
                 array(20, $record->getGuide() ? $record->getGuide()->getName() : ''),
                 array(0, $record->getDriver() ? $record->getDriver()->getName() : '')
             ));
 
-            if ($h < 15 && null !== $record->getProvider()->getLogoName()) {
+            if ($h < 15 && (null !== $record->getProvider()->getLogoName()) && $this->showLogo) {
                 $h = 15;
             }
-            
+
             if ($this->pdf->GetY() + $h > $this->pdf->getPageHeight() - $this->pdf->getMargins()['bottom']) {
                 $this->pdf->AddPage();
             }
@@ -107,7 +114,7 @@ class ServicesBetweenDatesReport extends Report
             $this->pdf->MultiCell(30, $h, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : '', 1, 'L', false, 0);
             $this->pdf->MultiCell(25, $h, $record->getProviderReference(), 1, 'L', false, 0);
             $this->pdf->MultiCell(46, $h, $record->getServiceType()->getName(), 1, 'L', false, 0);
-            if (null !== $record->getProvider()->getLogoName()) {
+            if ((null !== $record->getProvider()->getLogoName()) && $this->showLogo) {
                 $imagePath = sprintf('%s/%s', $this->logoPath, $record->getProvider()->getLogoName());
                 $x = $this->pdf->GetX();
                 $y = $this->pdf->GetY();

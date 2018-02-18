@@ -29,9 +29,14 @@ class ServicesByProviderReport extends Report
     private $services;
 
     /**
+     * @var boolean
+     */
+    private $showLogo;
+
+    /**
      * @var EntityManager
      */
-    private $em;
+    private $manager;
 
     /**
      * @var string
@@ -39,23 +44,21 @@ class ServicesByProviderReport extends Report
     private $logoPath;
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
-     * @param Provider $provider
-     * @param array $services
-     * @param EntityManager $em
+     * @param array $parameeters
+     * @param EntityManager $manager
      * @param string $logoPath
      */
-    public function __construct($start, $end, Provider $provider, array $services, EntityManager $em, $logoPath)
+    public function __construct($parameeters, EntityManager $manager, $logoPath)
     {
         parent::__construct('L', 'A4');
 
-        $this->start = $start;
-        $this->end = $end;
-        $this->provider = $provider;
-        $this->services = $services;
+        $this->start = $parameeters['fromDate'];
+        $this->end = $parameeters['toDate'];
+        $this->provider = $parameeters['provider'];
+        $this->services = $parameeters['services']->toArray();
+        $this->showLogo = $parameeters['showProviderLogoIfPossible'];
 
-        $this->em = $em;
+        $this->manager = $manager;
 
         $this->logoPath = $logoPath;
     }
@@ -97,27 +100,27 @@ class ServicesByProviderReport extends Report
                 array(30, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : ''),
                 array(25, $record->getProviderReference()),
                 array(61, $record->getServiceType()->getName()),
-                array(20, null !== $record->getProvider()->getLogoName() ? '' : $record->getProvider()->getName()),
+                array(20, (null !== $record->getProvider()->getLogoName()) && $this->showLogo ? '' : $record->getProvider()->getName()),
                 array(30, $record->getClientNames()),
                 array(10, $record->getPax()),
                 array(20, $record->getGuide() ? $record->getGuide()->getName() : ''),
                 array(0, $record->getDriver() ? $record->getDriver()->getName() : '')
             ));
 
-            if ($h < 15 && null !== $record->getProvider()->getLogoName()) {
+            if ($h < 15 && null !== $record->getProvider()->getLogoName() && $this->showLogo) {
                 $h = 15;
             }
 
             if ($this->pdf->GetY() + $h > $this->pdf->getPageHeight() - $this->pdf->getMargins()['bottom']) {
                 $this->pdf->AddPage();
             }
-            
+
             $this->pdf->MultiCell(24, $h, $record->getSerialNumber(), 1, 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $record->getStartAt()->format('d/m/Y H:i'), 1, 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : '', 1, 'L', false, 0);
             $this->pdf->MultiCell(25, $h, $record->getProviderReference(), 1, 'L', false, 0);
             $this->pdf->MultiCell(61, $h, $record->getServiceType()->getName(), 1, 'L', false, 0);
-            if (null !== $record->getProvider()->getLogoName()) {
+            if (null !== $record->getProvider()->getLogoName() && $this->showLogo) {
                 $imagePath = sprintf('%s/%s', $this->logoPath, $record->getProvider()->getLogoName());
                 $x = $this->pdf->GetX();
                 $y = $this->pdf->GetY();
@@ -151,7 +154,7 @@ class ServicesByProviderReport extends Report
 
     private function getQuery()
     {
-        $qb = $this->em->getRepository('AppBundle:Reserva')
+        $qb = $this->manager->getRepository('AppBundle:Reserva')
             ->createQueryBuilder('r')
             ->join('r.provider', 'p')
             ->join('r.serviceType', 'st')

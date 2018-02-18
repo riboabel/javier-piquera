@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Driver;
+use AppBundle\Entity\ServiceType;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -50,9 +53,10 @@ class ReportsController extends Controller
                 ->add('services', EntityType::class, array(
                     'multiple' => true,
                     'class' => \AppBundle\Entity\ServiceType::class,
-                    'query_builder' => $manager->getRepository('AppBundle:ServiceType')
-                            ->createQueryBuilder('st')
-                            ->orderBy('st.name'),
+                    'query_builder' => function(EntityRepository $repository) {
+                        return $repository->createQueryBuilder('st')
+                            ->orderBy('st.name');
+                    },
                     'required' => false,
                     'label' => 'Servicios'
                 ))
@@ -60,14 +64,18 @@ class ReportsController extends Controller
                     'label' => 'Incluir direcciones',
                     'required' => false
                 ))
+                ->add('showProviderLogoIfPossible', CheckboxType::class, array(
+                    'label' => 'Mostrar logotipo de agencia',
+                    'required' => false,
+                    'data' => true
+                ))
                 ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $data = $form->getData();
-                $report = new Reports\ServicesBetweenDatesReport($data['fromDate'], $data['toDate'],
-                        $data['includePlacesAddress'], $data['services']->toArray(),
+                $report = new Reports\ServicesBetweenDatesReport($form->getData(),
                         $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
 
                 return new StreamedResponse(function() use($report) {
@@ -92,43 +100,49 @@ class ReportsController extends Controller
      */
     public function reservasByProviderAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $qb = $em->getRepository('AppBundle:Provider')->createQueryBuilder('p')
-                ->orderBy('p.name');
+        $manager = $this->getDoctrine()->getManager();
+
         $form = $this->createFormBuilder()
-                ->add('fromDate', DateType::class, array(
-                    'label'     => 'Desde',
-                    'required'  => false,
-                    'widget'    => 'single_text',
-                    'format'    => 'd/M/y'
-                ))
-                ->add('toDate', DateType::class, array(
-                    'label'     => 'Hasta',
-                    'required'  => false,
-                    'widget'    => 'single_text',
-                    'format'    => 'd/M/y'
-                ))
-                ->add('provider', EntityType::class, array(
-                    'class' => \AppBundle\Entity\Provider::class,
-                    'label' => 'Agencia',
-                    'query_builder' => $qb
-                ))
-                ->add('services', EntityType::class, array(
-                    'multiple' => true,
-                    'class' => \AppBundle\Entity\ServiceType::class,
-                    'query_builder' => $em->getRepository('AppBundle:ServiceType')
-                            ->createQueryBuilder('st')
-                            ->orderBy('st.name'),
-                    'required' => false
-                ))
-                ->getForm();
+            ->add('fromDate', DateType::class, array(
+                'label'     => 'Desde',
+                'required'  => false,
+                'widget'    => 'single_text',
+                'format'    => 'd/M/y'
+            ))
+            ->add('toDate', DateType::class, array(
+                'label'     => 'Hasta',
+                'required'  => false,
+                'widget'    => 'single_text',
+                'format'    => 'd/M/y'
+            ))
+            ->add('provider', EntityType::class, array(
+                'class' => \AppBundle\Entity\Provider::class,
+                'label' => 'Agencia',
+                'query_builder' => function(EntityRepository $repository) {
+                    return $repository->createQueryBuilder('p')
+                        ->orderBy('p.name');
+                }
+            ))
+            ->add('services', EntityType::class, array(
+                'multiple' => true,
+                'class' => \AppBundle\Entity\ServiceType::class,
+                'query_builder' => function(EntityRepository $repository) {
+                    return $repository->createQueryBuilder('st')
+                        ->orderBy('st.name');
+                },
+                'required' => false
+            ))
+            ->add('showProviderLogoIfPossible', CheckboxType::class, array(
+                'label' => 'Mostrar logotipo de agencia',
+                'required' => false,
+                'data' => true
+            ))
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $data = $form->getData();
-                $report = new Reports\ServicesByProviderReport($data['fromDate'], $data['toDate'],
-                    $data['provider'], $data['services']->toArray(), $em, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
+                $report = new Reports\ServicesByProviderReport($form->getData(), $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
 
                 return new StreamedResponse(function() use($report) {
                     file_put_contents('php://output', $report->getContent());
@@ -153,49 +167,56 @@ class ReportsController extends Controller
     public function reservasByDriverAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->getRepository('AppBundle:Driver')
-                ->createQueryBuilder('d')
-                ->orderBy('d.name');
-        $qb->where($qb->expr()->eq('d.enabled', $qb->expr()->literal(true)));
 
         $form = $this->createFormBuilder()
-                ->add('fromDate', DateType::class, array(
-                    'label'     => 'Desde',
-                    'required'  => false,
-                    'widget'    => 'single_text',
-                    'format'    => 'd/M/y'
-                ))
-                ->add('toDate', DateType::class, array(
-                    'label'     => 'Hasta',
-                    'required'  => false,
-                    'widget'    => 'single_text',
-                    'format'    => 'd/M/y'
-                ))
-                ->add('drivers', EntityType::class, array(
-                    'class' => \AppBundle\Entity\Driver::class,
-                    'label' => 'Conductor',
-                    'query_builder' => $qb,
-                    'multiple' => true
-                ))
-                ->add('includePlacesAddress', CheckboxTYpe::class, array(
-                    'label' => 'Incluir direcciones',
-                    'required' => false
-                ))
-                ->add('serviceType', EntityType::class, array(
-                    'class' => \AppBundle\Entity\ServiceType::class,
-                    'label' => 'Servicio',
-                    'query_builder' => $em->getRepository('AppBundle:ServiceType')
-                            ->createQueryBuilder('s')
-                            ->orderBy('s.name'),
-                    'required' => false,
-                    'multiple' => true
-                ))
-                ->getForm();
+            ->add('fromDate', DateType::class, array(
+                'label'     => 'Desde',
+                'required'  => false,
+                'widget'    => 'single_text',
+                'format'    => 'd/M/y'
+            ))
+            ->add('toDate', DateType::class, array(
+                'label'     => 'Hasta',
+                'required'  => false,
+                'widget'    => 'single_text',
+                'format'    => 'd/M/y'
+            ))
+            ->add('drivers', EntityType::class, array(
+                'class' => Driver::class,
+                'label' => 'Conductor',
+                'query_builder' => function(EntityRepository $repository) {
+                    return $repository
+                        ->createQueryBuilder('d')
+                        ->where('d.enabled = true')
+                        ->orderBy('d.name');
+                },
+                'multiple' => true
+            ))
+            ->add('includePlacesAddress', CheckboxTYpe::class, array(
+                'label' => 'Incluir direcciones',
+                'required' => false
+            ))
+            ->add('serviceType', EntityType::class, array(
+                'class' => ServiceType::class,
+                'label' => 'Servicio',
+                'query_builder' => function(EntityRepository $repository) {
+                    return $repository
+                        ->createQueryBuilder('s')
+                        ->orderBy('s.name');
+                },
+                'required' => false,
+                'multiple' => true
+            ))
+            ->add('showProviderLogoIfPossible', CheckboxType::class, array(
+                'label' => 'Mostrar logotipo de agencia',
+                'required' => false,
+                'data' => true
+            ))
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $data = $form->getData();
                 $report = new Reports\ServicesByDriverReport($form->getData(), $em, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
 
                 return new StreamedResponse(function() use($report) {
@@ -267,12 +288,12 @@ class ReportsController extends Controller
      */
     public function printChargeReportAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $manager = $this->getDoctrine()->getManager();
 
         $report = new Reports\ChargeForm(array(
             'ids' => $request->get('ids', array()),
             'prices' => $request->get('prices', array())
-        ), $em, $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos');
+        ), $manager, $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos');
 
         return new StreamedResponse(function() use($report) {
             file_put_contents('php://output', $report->getContent());
