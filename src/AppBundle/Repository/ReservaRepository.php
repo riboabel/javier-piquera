@@ -18,11 +18,14 @@ class ReservaRepository extends EntityRepository
      */
     public function countAll()
     {
-        $query = $this->getEntityManager()->createQuery('SELECT COUNT(r) FROM AppBundle:Reserva r WHERE r.isCancelled = false');
+        $query = $this->createQueryBuilder('r')
+            ->select('COUNT(r) AS cantidad')
+            ->where('r.isCancelled = false')
+            ->getQuery();
 
         $result = $query->getResult();
 
-        return $result[0][1];
+        return $result[0]['cantidad'];
     }
 
     /**

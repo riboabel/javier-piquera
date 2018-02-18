@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\ReservaTercero;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -31,7 +32,9 @@ class DashboardController extends Controller
             'notExecutedReservas' => $em->getRepository('AppBundle:Reserva')
                 ->countReadyBetweenDates(null, date_create('now')->sub(new \DateInterval('P1D'))),
             'totalReservas' => $em->getRepository('AppBundle:Reserva')->countAll(),
-            'morrisAreaData' => $this->container->get('app.morris_graph.area')->getData()
+            'morrisAreaData' => $this->container->get('app.morris_graph.area')->getData(),
+            'total_clasicos' => $em->getRepository('AppBundle:ReservaTercero')->countByType(ReservaTercero::TYPE_CLASICOS),
+            'total_microbus' => $em->getRepository('AppBundle:ReservaTercero')->countByType(ReservaTercero::TYPE_MICROBUS)
         ));
     }
 }

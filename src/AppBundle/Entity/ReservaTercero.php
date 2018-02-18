@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * ReservaTercero
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ReservaTerceroRepository")
  * @ORM\Table(name="reserva_tercero",
  *     indexes={
  *          @ORM\Index(name="idx_reserva_tercero_type", columns={"type"}),
