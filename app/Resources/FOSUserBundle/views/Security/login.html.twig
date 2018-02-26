@@ -45,7 +45,7 @@
                             <button role="submit" class="btn btn-block btn-success">Ingresar</button>
                         </div>
                     </div>
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                    <input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.refreshToken('authenticate') }}" />
                 </form>
             </div>
         </div>

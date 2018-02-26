@@ -38,6 +38,8 @@ twig:
     form_themes:
         - bootstrap_3_layout.html.twig
         - forms.html.twig
+    globals:
+        fos_csrf_provider: '@security.csrf.token_manager'
 
 # Doctrine Configuration
 doctrine:
