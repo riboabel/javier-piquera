@@ -44,6 +44,17 @@ class ServicesByDriverReport extends Report
      */
     private $logoPath;
 
+    /**
+     * @var boolean
+     */
+    private $showLogo;
+
+    /**
+     * ServicesByDriverReport constructor.
+     * @param string $parameters
+     * @param EntityManager $em
+     * @param $logoPath
+     */
     public function __construct($parameters, EntityManager $em, $logoPath)
     {
         parent::__construct('L', 'A4');
@@ -53,6 +64,7 @@ class ServicesByDriverReport extends Report
         $this->drivers = $parameters['drivers'];
         $this->includePlacesAddress = $parameters['includePlacesAddress'];
         $this->serviceType = $parameters['serviceType'];
+        $this->showLogo = $parameters['showProviderLogoIfPossible'];
 
         $this->em = $em;
 
@@ -97,27 +109,27 @@ class ServicesByDriverReport extends Report
                 array(30, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : ''),
                 array(25, $record->getProviderReference()),
                 array(61, $record->getServiceType()->getName()),
-                array(20, null !== $record->getProvider()->getLogoName() ? '' : $record->getProvider()->getName()),
+                array(20, (null !== $record->getProvider()->getLogoName()) && $this->showLogo ? '' : $record->getProvider()->getName()),
                 array(30, $record->getClientNames()),
                 array(10, $record->getPax()),
                 array(20, $record->getGuide() ? $record->getGuide()->getName() : ''),
                 array(0, $record->getDriver() ? $record->getDriver()->getName() : '')
             ));
 
-            if ($h < 15 && null !== $record->getProvider()->getLogoName()) {
+            if ($this->showLogo && ($h < 15) && (null !== $record->getProvider()->getLogoName())) {
                 $h = 15;
             }
 
             if ($this->pdf->GetY() + $h > $this->pdf->getPageHeight() - $this->pdf->getMargins()['bottom']) {
                 $this->pdf->AddPage();
             }
-            
+
             $this->pdf->MultiCell(24, $h, $record->getSerialNumber(), 1, 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $record->getStartAt()->format('d/m/Y H:i'), 1, 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : '', 1, 'L', false, 0);
             $this->pdf->MultiCell(25, $h, $record->getProviderReference(), 1, 'L', false, 0);
             $this->pdf->MultiCell(61, $h, $record->getServiceType()->getName(), 1, 'L', false, 0);
-            if (null !== $record->getProvider()->getLogoName()) {
+            if ($this->showLogo && (null !== $record->getProvider()->getLogoName())) {
                 $imagePath = sprintf('%s/%s', $this->logoPath, $record->getProvider()->getLogoName());
                 $x = $this->pdf->GetX();
                 $y = $this->pdf->GetY();
