@@ -272,7 +272,8 @@ class ReportsController extends Controller
 
         $report = new Reports\Payrole(array(
             'ids' => $request->get('ids', array()),
-            'prices' => $request->get('prices', array())
+            'prices' => $request->get('prices', array()),
+            'showLogosIfPosible' => $request->get('logos') === 'yes'
         ), $em, $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos');
 
         return new StreamedResponse(function() use($report) {

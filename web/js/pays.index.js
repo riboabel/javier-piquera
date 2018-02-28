@@ -100,7 +100,10 @@ App.Pagos = typeof App.Pagos !== 'undefined' ? App.Pagos : {};
         event.preventDefault();
 
         if ($('#dataTables-pays').find('input:checkbox:checked').length == 0) {
-            $('.modal[data-for=pay-error]').modal();
+            toastr.error('Debe seleccionar registros para esta operación', 'Error', {
+                progressBar: true,
+                timeout: 5000
+            });
             return;
         }
 
@@ -123,9 +126,10 @@ App.Pagos = typeof App.Pagos !== 'undefined' ? App.Pagos : {};
         $(this).off('click').text('Guardando información...');
     }
 
-    var handlePrintButtonClick = function() {
-        var url = $(this).data('url');
+    var handlePrintButtonClick = function(event) {
+        event.preventDefault();
 
+        var url = $(this).attr('href');
         var $f = $('.modal[data-for=pay-op] form').clone();
         $f.attr({
             action: url,
@@ -140,7 +144,7 @@ App.Pagos = typeof App.Pagos !== 'undefined' ? App.Pagos : {};
 
     var initModal = function() {
         $('.modal[data-for=pay-op] .btn-success').on('click', clickPayHandler);
-        $('.modal[data-for=pay-op] .btn-print').on('click', handlePrintButtonClick);
+        $('.modal[data-for=pay-op] .link-print').on('click', handlePrintButtonClick);
     }
 
     var clickSelectAllHandler = function(event) {

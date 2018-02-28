@@ -115,41 +115,27 @@
                 </div>
                 <div class="modal-body">Cargando información de servicios seleccionados...</div>
                 <div class="modal-footer">
-                    <button class="btn btn-success btn-sm" type="button">
-                        <i class="glyphicon glyphicon-ok"></i>
-                        Continuar
-                    </button>
-                    <button class="btn btn-default btn-sm btn-print" data-url="{{ path("app_reports_print_pay_form") }}">
-                        <i class="fa fa-print"></i>
-                        Generar modelo de pago
-                    </button>
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" type="button">
-                        <i class="fa fa-undo"></i>
-                        Cancelar operación
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /.modal.fade -->
-
-    <div class="modal fade" data-for="pay-error">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" type="button" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Realizar pagos</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning">
-                        Debe seleccionar registros para esta operación
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-success btn-sm" type="button">
+                            <i class="glyphicon glyphicon-ok"></i>
+                            Continuar
+                        </button>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-print"></i>
+                                Generar modelo de pago
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path("app_reports_print_pay_form", {logos: 'yes'}) }}" class="link-print">Con logotipos de agencia</a></li>
+                                <li><a href="{{ path("app_reports_print_pay_form", {logos: 'no'}) }}" class="link-print">Sin logotipos de agencia</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-default btn-sm" data-dismiss="modal" type="button">
+                            <i class="fa fa-undo"></i>
+                            Cancelar operación
+                        </button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" type="button" data-dismiss="modal">
-                        <i class="glyphicon glyphicon-ok"></i>
-                        Continuar
-                    </button>
                 </div>
             </div>
         </div>

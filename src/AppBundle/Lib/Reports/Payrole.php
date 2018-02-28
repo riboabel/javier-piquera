@@ -81,7 +81,7 @@ class Payrole extends Report
                 array(0, sprintf('%0.2f', $data['price']))
             ));
 
-            if (null !== $data['record']->getProvider()->getLogoName()) {
+            if ($this->params['showLogosIfPosible'] && (null !== $data['record']->getProvider()->getLogoName())) {
                 if ($h < 20) {
                     $h = 20;
                 }
@@ -90,7 +90,7 @@ class Payrole extends Report
             $this->pdf->MultiCell(24, $h, $data['record']->getSerialNumber(), 'LBR', 'C', false, 0);
             $this->pdf->MultiCell(20, $h, $data['record']->getStartAt()->format('d/m/Y'), 'BR', 'L', false, 0);
             $this->pdf->MultiCell(40, $h, $data['record']->getServiceType()->getName(), 'BR', 'L', false, 0);
-            if (null !== $data['record']->getProvider()->getLogoName()) {
+            if ($this->params['showLogosIfPosible'] && (null !== $data['record']->getProvider()->getLogoName())) {
                 $imagePath = sprintf('%s/%s', $this->logoPath, $data['record']->getProvider()->getLogoName());
                 $x = $this->pdf->GetX();
                 $y = $this->pdf->GetY();
