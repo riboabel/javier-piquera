@@ -73,15 +73,7 @@
             </a>
         {% endif %}
         {% if not record.isCancelled and is_granted('ROLE_OWNER') and record.provider.receiveInvoice %}
-            <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                <i class="glyphicon glyphicon-print"></i>
-                <i class="caret"></i>
-            </button>
-            <ul class="dropdown-menu pull-right" role="menu">
-                <li>
-                    <a href="{{ path('app_reports_printemptyjoborder', {'id': record.id}) }}" target="_blank">Imprimir orden de trabajo en blanco</a>
-                </li>
-            </ul>
+            <a href="{{ path('app_reports_printemptyjoborder', {'id': record.id}) }}" target="_blank" class="btn btn-xs btn-default" title="Imprimir orden de trabajo en blanco"><i class="glyphicon glyphicon-print"></i></a>
         {% endif %}
         {% if is_granted("ROLE_OWNER") %}
             <a href="{{ path("app_reservas_delete", {"id": record.id}) }}" class="btn btn-danger btn-delete btn-xs"
