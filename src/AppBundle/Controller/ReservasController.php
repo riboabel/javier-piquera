@@ -202,7 +202,6 @@ class ReservasController extends Controller
      */
     public function newAction()
     {
-        $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(ReservaType::class, new Reserva());
 
         return $this->render('@App/Reservas/new.html.twig', array(
@@ -354,11 +353,11 @@ class ReservasController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $manager = $this->getDoctrine()->getManager();
             $record->setIsExecuted();
             $record->addLog(new ReservaLog());
 
-            $em->flush();
+            $manager->flush();
 
             if ($this->get('request')->isXmlHttpRequest()) {
                 return new JsonResponse(array('result' => 'ok'));
