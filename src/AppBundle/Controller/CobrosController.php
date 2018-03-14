@@ -31,7 +31,7 @@ class CobrosController extends Controller
 
         $form = $this->createForm(CobroFilterFormType::class, array('cobradoAt' => 'no-cobrado'));
 
-        return $this->render('App/Cobros/index.html.twig', array(
+        return $this->render('@App/Cobros/index.html.twig', array(
             'charges' => $acts,
             'form' => $form->createView()
         ));
@@ -110,7 +110,7 @@ class CobrosController extends Controller
             return $value;
         };
 
-        $template = $this->container->get('twig')->loadTemplate('App/Cobros/_row.html.twig');
+        $template = $this->container->get('twig')->loadTemplate('@App/Cobros/_row.html.twig');
         $data = array_map(function(Reserva $record) use($getPrice, $template) {
             return array(
                 $template->renderBlock('select', array('record' => $record)),
@@ -160,7 +160,7 @@ class CobrosController extends Controller
             }
         }
 
-        return $this->render('App/Cobros/prepare.html.twig', array(
+        return $this->render('@App/Cobros/prepare.html.twig', array(
             'records' => $records,
             'prices' => $prices
         ));

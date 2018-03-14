@@ -1,0 +1,26 @@
+<form action="{{ path("app_cobros_execute") }}" method="post" role="form">
+    <table class="table table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Agencia</th>
+                <th>Referencia</th>
+                <th>Número</th>
+                <th width="80">Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr>
+                    <td>{{ record.provider }}</td>
+                    <td>{{ record.providerReference }}</td>
+                    <td>{{ record }}</td>
+                    <td>
+                        <input type="hidden" name="ids[]" value="{{ record.id }}">
+                        <input type="text" name="prices[]" value="{{ "%0.2f"|format(prices[record.id]) }}" class="text-right" style="width: 70px;" validdecimal="validdecimal" required="required">
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <input type="submit" value="submit" class="hidden">
+</form>
