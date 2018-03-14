@@ -24,57 +24,48 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
             options = {
                 "aoColumns": [
                     {
-                        "bSortable": false,
-                        "bSearchable": false
-                    }, {
-                        "name": "serialNumber",
-                        "sortable": false,
-                        "searchable": false
-                    }, {
-                        "name": "startAt"
-                    }, {
-                        "name": "provider"
-                    }, {
-                        "name": "providerReference"
-                    }, {
+                        width: '10px'
+                    },
+                    {
+                        name: "serialNumber",
+                        title: 'Número'
+                    },
+                    {
+                        name: "startAt",
+                        title: 'Fecha'
+                    },
+                    {
+                        name: "provider",
+                        title: 'Agencia'
+                    },
+                    {
+                        name: "providerReference",
+                        title: 'Referencia'
+                    },
+                    {
                         name: 'clientNames',
-                        sortable: false
-                    }, {
-                        'name': "serviceType"
-                    }, {
-                        "name": "price",
-                        "sortable": false,
-                        "searchable": false
+                        title: 'Clientes'
+                    },
+                    {
+                        name: "serviceType",
+                        title: 'Tipo de servicio'
+                    },
+                    {
+                        name: "price",
+                        title: 'Importe'
                     }
                 ],
-                aaSorting: [[2, "asc"]],
-                "language": {
-                    "sProcessing":     "Procesando...",
-                    "sLengthMenu":     "Mostrar _MENU_ registros",
-                    "sZeroRecords":    "No se encontraron resultados",
-                    "sEmptyTable":     "No hay cobros pendientes",
-                    "sInfo":           "Mostrando del _START_ al _END_ (de _TOTAL_)",
-                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix":    '',
-                    "sSearch":         'Buscar:',
-                    "sUrl":            '',
-                    "sInfoThousands":  ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst":    "Primero",
-                        "sLast":     "Último",
-                        "sNext":     "Siguiente",
-                        "sPrevious": "Anterior"
-                    },
-                    "oAria": {
-                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                columnDefs: [
+                    {
+                        targets: [0, 1, 4, 5, 7],
+                        sortable: false
                     }
-                },
-                "bServerSide": true,
-                "bProcessing": false,
-                "ajax": {
+                ],
+                aaSorting: [[2, 'asc']],
+                searching: false,
+                serverSide: true,
+                processing: false,
+                ajax: {
                     data: function(data) {
                         var filter = [];
                         $.each($('#frmFilter').serializeArray(), function(i, e) {
@@ -83,8 +74,8 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
 
                         return $.extend(true, data, filter);
                     },
-                    'method': 'post',
-                    'url': $table.data('ajax-url')
+                    method: 'GET',
+                    url: $table.data('ajax-url')
                 }
             }
 
@@ -198,10 +189,14 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
         $('#frmFilter input.datepicker').on('change', function() {
             datatable.DataTable().draw();
         }).datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true
+            autoclose: true,
+            clearBtn: true,
+            format: 'dd/mm/yyyy'
         });
         $('#frmFilter select').on('change', function() {
+            datatable.DataTable().draw();
+        });
+        $('#frmFilter input:text').on('keyup', function() {
             datatable.DataTable().draw();
         });
     }

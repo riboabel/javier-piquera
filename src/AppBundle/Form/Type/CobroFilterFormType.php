@@ -68,7 +68,59 @@ class CobroFilterFormType extends AbstractType
                         return $filterQuery->createCondition($expression);
                     }
                 ))
-                ;
+                ->add('clientNames', Filters\TextFilterType::class, array(
+                    'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
+                        if (empty($values['value'])) {
+                            return null;
+                        }
+
+                        $expression = $filterQuery->getExpr()->andX();
+                        $params = array();
+
+                        foreach (explode(' ', $values['value']) as $index => $word) {
+                            if ($word) {
+                                $expression->add($filterQuery->getExpr()->like('r.clientNames', sprintf(':r_clientNames_%s', $index)));
+                                $params[sprintf(':r_clientNames_%s', $index)] = sprintf('%%%s%%', $word);
+                            }
+                        }
+
+                        return $filterQuery->createCondition($expression, $params);
+                    }
+                ))
+                ->add('serviceTypeName', Filters\TextFilterType::class, array(
+                    'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
+                        if (empty($values['value'])) {
+                            return null;
+                        }
+
+                        $rootAlias = $filterQuery->getRootAlias();
+                        $joinParts = $filterQuery->getQueryBuilder()->getDQLPart('join');
+                        $alias = '';
+                        foreach ($joinParts as $joins) {
+                            foreach ($joins as $join) {
+                                if ($join->getJoin() === sprintf('%s.serviceType', $rootAlias)) {
+                                    $alias = $join->getAlias();
+                                }
+                            }
+                        }
+                        if (!$alias) {
+                            $alias = 'st';
+                            $filterQuery->getQueryBuilder()->join(sprintf('%s.serviceType', $rootAlias), $alias);
+                        }
+
+                        $expression = $filterQuery->getExpr()->andX();
+                        $params = array();
+
+                        foreach (explode(' ', $values['value']) as $index => $word) {
+                            if ($word) {
+                                $expression->add($filterQuery->getExpr()->like(sprintf('%s.name', $alias), sprintf(':r_serviceType_name_%s', $index)));
+                                $params[sprintf(':r_serviceType_name_%s', $index)] = sprintf('%%%s%%', $word);
+                            }
+                        }
+
+                        return $filterQuery->createCondition($expression, $params);
+                    }
+                ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -22,12 +22,13 @@ class CobrosController extends Controller
 {
     /**
      * @Route("/")
-     * @Method({"get"})
+     * @Method({"GET"})
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $acts = $em->createQuery('SELECT c FROM AppBundle:ChargeAct c ORDER BY c.createdAt');
+        $manager = $this->getDoctrine()->getManager();
+        $acts = $manager->createQuery('SELECT c FROM AppBundle:ChargeAct AS c ORDER BY c.createdAt');
+
         $form = $this->createForm(CobroFilterFormType::class, array('cobradoAt' => 'no-cobrado'));
 
         return $this->render('App/Cobros/index.html.twig', array(
@@ -38,7 +39,7 @@ class CobrosController extends Controller
 
     /**
      * @Route("/get-data")
-     * @Method({"post"})
+     * @Method({"GET"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -56,34 +57,13 @@ class CobrosController extends Controller
                 $qb->expr()->eq('p.receiveInvoice', $qb->expr()->literal(false)),
                 $qb->expr()->eq('r.isCancelled', $qb->expr()->literal(false))
         );
-
-        $search = $request->get('search');
-        $columns = $request->get('columns');
-        $orders = $request->get('order', array());
-        
-        if ($search['value']) {
-            $orX = $qb->expr()->orX();
-
-            if (1 === preg_match('/^\d{4}$/', $search['value'])) {
-                $orX->add($qb->expr()->andX(
-                    $qb->expr()->gte('r.startAt', $qb->expr()->literal(sprintf('%s-01-01 00:00', $search['value']))),
-                    $qb->expr()->lte('r.startAt', $qb->expr()->literal(sprintf('%s-12-31 23:59', $search['value'])))
-                ));
-            } else {
-                $orX->add($qb->expr()->like('st.name', $qb->expr()->literal("%{$search['value']}%")));
-                $orX->add($qb->expr()->like('p.name', $qb->expr()->literal("%{$search['value']}%")));
-                foreach (explode(' ', $search['value']) as $q) {
-                    $orX->add($qb->expr()->like('r.clientNames', $qb->expr()->literal(sprintf('%%%s%%', $q))));
-                }
-            }
-
-            $andX->add($orX);
-        }
-
         $qb->where($andX);
 
+        $columns = $request->get('columns');
+        $orders = $request->get('order', array());
+
         $form = $this->createForm(CobroFilterFormType::class);
-        $form->submit($request->request->get($form->getName()));
+        $form->submit($request->query->get($form->getName()));
         $this->container->get('lexik_form_filter.query_builder_updater')
                 ->addFilterConditions($form, $qb);
 
@@ -93,6 +73,8 @@ class CobrosController extends Controller
                     return 'p.name';
                 } elseif ($name == 'serviceType') {
                     return 'st.name';
+                } elseif ($name == 'startAt') {
+                    return 'r.startAt';
                 }
                 return null;
             }, $columns[$orders[0]['column']]['name']);
@@ -153,7 +135,7 @@ class CobrosController extends Controller
 
     /**
      * @Route("/preparar")
-     * @Method({"post"})
+     * @Method({"POST"})
      * @param Request $request
      * @return array
      */
@@ -186,22 +168,22 @@ class CobrosController extends Controller
 
     /**
      * @Route("/ejecutar")
-     * @Method({"post"})
+     * @Method({"POST"})
      * @param Request $request
      * @return JsonResponse
      */
     public function executeAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $manager = $this->getDoctrine()->getManager();
         $ids = $request->get('ids');
         $prices = $request->get('prices');
 
-        $query = $em->createQuery('SELECT r FROM AppBundle:Reserva r JOIN r.serviceType st WHERE r.id IN (:ids) ORDER BY r.startAt ASC')
+        $query = $manager->createQuery('SELECT r FROM AppBundle:Reserva r JOIN r.serviceType st WHERE r.id IN (:ids) ORDER BY r.startAt ASC')
             ->setParameter('ids', $request->get('ids'));
         $records = $query->getResult();
 
         $act = new \AppBundle\Entity\ChargeAct();
-        $em->persist($act);
+        $manager->persist($act);
 
         foreach ($records as $record) {
             $record
@@ -212,14 +194,14 @@ class CobrosController extends Controller
                 ;
         }
 
-        $em->flush();
+        $manager->flush();
 
         return $this->redirect($this->generateUrl('app_cobros_index'));
     }
 
     /**
      * @Route("/imprimir-cobro")
-     * @Method({"post"})
+     * @Method({"POST"})
      * @param Request $request
      * @return Response
      */

@@ -1,5 +1,31 @@
 {% extends "frontend.html.twig" %}
 
+{% form_theme form _self %}
+
+{% block cobro_filter_form_row %}
+    <div class="row">
+        <div class="col-xs-6 col-sm-2">
+            {{ form_row(form.startAt.left_date, {"label": "Desde", "attr": {"class": "datepicker input-sm"}}) }}
+        </div>
+        <div class="col-xs-6 col-sm-2">
+            {{ form_row(form.startAt.right_date, {"label": "Hasta", "attr": {"class": "datepicker input-sm"}}) }}
+        </div>
+        <div class="col-xs-6 col-sm-2">
+            {{ form_row(form.provider, {"label": "Agencia", "attr": {"class": "input-sm"}}) }}
+        </div>
+        <div class="col-xs-6 col-sm-2">
+            {{ form_row(form.cobradoAt, {"label": "Estado", "attr": {"class": "input-sm"}}) }}
+        </div>
+        <div class="col-xs-6 col-sm-2">
+            {{ form_row(form.clientNames, {"label": "Clientes", "attr": {"class": "input-sm"}}) }}
+        </div>
+        <div class="col-xs-6 col-sm-2">
+            {{ form_row(form.serviceTypeName, {"label": "Tipo de servicio", "attr": {"class": "input-sm"}}) }}
+        </div>
+    </div>
+    {{ form_rest(form) }}
+{% endblock %}
+
 {% block page_content %}
     <div class="row">
         <div class="col-lg-12">
@@ -30,26 +56,8 @@
     <div class="panel panel-default collapse" id="filter">
         <div class="panel-heading">Opciones de filtro</div>
         <div class="panel-body">
-            <form action="" class="form-inline" id="frmFilter">
-                <div class="row">
-                    <div class="col-xs-6 col-sm-3 form-group">
-                        {{ form_label(form.startAt.left_date, "Desde") }}
-                        {{ form_widget(form.startAt.left_date, {attr: {class: "datepicker form-control input-sm"}}) }}
-                    </div>
-                    <div class="col-xs-6 col-sm-3 form-group">
-                        {{ form_label(form.startAt.right_date, "Hasta") }}
-                        {{ form_widget(form.startAt.right_date, {attr: {class: "datepicker form-control input-sm"}}) }}
-                    </div>
-                    <div class="col-xs-6 col-sm-3 form-group">
-                        {{ form_label(form.provider, "Agencia") }}
-                        {{ form_widget(form.provider, {attr: {class: "form-control input-sm"}}) }}
-                    </div>
-                    <div class="col-xs-6 col-sm-3 form-group">
-                        {{ form_label(form.cobradoAt, "Estado") }}
-                        {{ form_widget(form.cobradoAt, {attr: {class: "form-control input-sm"}}) }}
-                    </div>
-                </div>
-                {{ form_rest(form) }}
+            <form action="#" id="frmFilter">
+                {{ form_row(form) }}
             </form>
         </div>
     </div>
@@ -57,23 +65,6 @@
         <div class="col-lg-12">
             <div class="dataTable_wrapper">
                 <table class="table table-striped table-bordered table-hover" id="dataTables-cobros" data-ajax-url="{{ path("app_cobros_getdata") }}" width="100%">
-                    <thead>
-                        <tr>
-                            <th width="10" class="no-sort">&nbsp;</th>
-                            <th>Número</th>
-                            <th>Fecha</th>
-                            <th>Agencia</th>
-                            <th>Referencia</th>
-                            <th>Clientes</th>
-                            <th>Tipo de servicio</th>
-                            <th>Importe</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="6">&nbsp;</td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
             <!-- /.table-responsive -->
