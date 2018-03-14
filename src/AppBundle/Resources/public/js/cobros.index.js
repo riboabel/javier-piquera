@@ -106,7 +106,10 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
         event.preventDefault();
 
         if ($('#dataTables-cobros').find('input:checkbox:checked').length == 0) {
-            $('.modal[data-for=cobrar-error]').modal();
+            toastr.error('Debe seleccionar registros para esta operación', 'Error', {
+                timeOut: 5000,
+                progressBar: true
+            });
             return;
         }
 
@@ -154,15 +157,17 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
     var clickSelectAllHandler = function(event) {
         event.preventDefault();
 
-        $('#dataTables-cobros input:checkbox').prop('checked', true);
-        $('#dataTables-cobros input:checkbox').iCheck('update');
+        $('#dataTables-cobros input:checkbox')
+            .prop('checked', true)
+            .iCheck('update');
     }
 
     var clickSelectNoneHandler = function(event) {
         event.preventDefault();
 
-        $('#dataTables-cobros input:checkbox').prop('checked', false);
-        $('#dataTables-cobros input:checkbox').iCheck('update');
+        $('#dataTables-cobros input:checkbox')
+            .prop('checked', false)
+            .iCheck('update');
     }
 
     var initTools = function() {
