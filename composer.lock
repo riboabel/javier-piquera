@@ -1318,16 +1318,16 @@
         },
         {
             "name": "friendsofsymfony/user-bundle",
-            "version": "v2.1.1",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "32c2eed036dd85620cc5229fa482a7ae9455ded9"
+                "reference": "1049935edd24ec305cc6cfde1875372fa9600446"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/32c2eed036dd85620cc5229fa482a7ae9455ded9",
-                "reference": "32c2eed036dd85620cc5229fa482a7ae9455ded9",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/1049935edd24ec305cc6cfde1875372fa9600446",
+                "reference": "1049935edd24ec305cc6cfde1875372fa9600446",
                 "shasum": ""
             },
             "require": {
@@ -1390,7 +1390,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2018-02-20T09:19:29+00:00"
+            "time": "2018-03-08T08:59:27+00:00"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -1472,16 +1472,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.9.0",
+            "version": "8.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "e6f3cb4d3f141b0e09f680963b4e6d6e19f913fb"
+                "reference": "f50b45cc50d9058797c037fc15e34d0511a4423e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/e6f3cb4d3f141b0e09f680963b4e6d6e19f913fb",
-                "reference": "e6f3cb4d3f141b0e09f680963b4e6d6e19f913fb",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/f50b45cc50d9058797c037fc15e34d0511a4423e",
+                "reference": "f50b45cc50d9058797c037fc15e34d0511a4423e",
                 "shasum": ""
             },
             "require": {
@@ -1536,7 +1536,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2018-02-22T11:04:17+00:00"
+            "time": "2018-03-07T12:33:46+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -2106,27 +2106,27 @@
         },
         {
             "name": "lexik/form-filter-bundle",
-            "version": "v5.0.4",
+            "version": "v5.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikFormFilterBundle.git",
-                "reference": "28c09d6d9f278875ca9648c4b66eeb457c37d3b6"
+                "reference": "e248745c4ceae02998c741d3ecb2a1ed14d2f9e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikFormFilterBundle/zipball/28c09d6d9f278875ca9648c4b66eeb457c37d3b6",
-                "reference": "28c09d6d9f278875ca9648c4b66eeb457c37d3b6",
+                "url": "https://api.github.com/repos/lexik/LexikFormFilterBundle/zipball/e248745c4ceae02998c741d3ecb2a1ed14d2f9e2",
+                "reference": "e248745c4ceae02998c741d3ecb2a1ed14d2f9e2",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "^2.4.8",
                 "php": ">=5.5.9",
-                "symfony/form": "~2.8|~3.0",
-                "symfony/framework-bundle": "~2.8|~3.0"
+                "symfony/form": "~2.8|~3.0|^4.0",
+                "symfony/framework-bundle": "~2.8|~3.0|^4.0"
             },
             "require-dev": {
                 "doctrine/mongodb-odm-bundle": "~3.0",
-                "phpunit/phpunit": "~3.7"
+                "phpunit/phpunit": "^5.7|~6.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -2162,7 +2162,7 @@
                 "form",
                 "symfony"
             ],
-            "time": "2017-03-27T07:28:34+00:00"
+            "time": "2018-03-12T10:13:14+00:00"
         },
         {
             "name": "liip/imagine-bundle",
