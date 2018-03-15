@@ -3,16 +3,20 @@
 {% block title %}Planifiación de conductores{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset("plugins/jquery.ui/css/jquery-ui.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("plugins/bootstrap/css/bootstrap.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("plugins/bootstrap/css/bootstrap-theme.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("plugins/tooltipster-master/css/tooltipster.css") }}">
-    <link rel="stylesheet" href="{{ asset("plugins/tooltipster-master/css/tooltipster-custom.css") }}">
-    <link rel="stylesheet" href="{{ asset("plugins/fontawesome/css/font-awesome.min.css") }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset("plugins/jquery.dataTables/datatables.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("plugins/select2/css/select2.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("css/sb-admin-2.css") }}">
-    <link rel="stylesheet" href="{{ asset("css/styles.css") }}">
+    {% stylesheets filter="cssrewrite,?scssphp" output="compiled/css/driver-planing.min.css"
+        "plugins/jquery.ui/css/jquery-ui.min.css"
+        "plugins/bootstrap/css/bootstrap.min.css"
+        "plugins/bootstrap/css/bootstrap-theme.min.css"
+        "plugins/tooltipster-master/css/tooltipster.css"
+        "plugins/tooltipster-master/css/tooltipster-custom.css"
+        "plugins/fontawesome/css/font-awesome.min.css"
+        "plugins/jquery.dataTables/datatables.min.css"
+        "plugins/select2/css/select2.min.css"
+        "css/sb-admin-2.css"
+        "css/styles.css"
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
 {% endblock %}
 
 {% block body %}
@@ -39,7 +43,7 @@
             </div>
         </div>
         <div class="row">
-            
+
         </div>
         <div class="row">
             <div class="col-xs-12">&nbsp;</div>
@@ -60,7 +64,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -69,18 +73,23 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset("plugins/jquery/js/jquery.min.js") }}"></script>
-    <script src="{{ asset("plugins/jquery-migrate-1.2.1.min.js") }}"></script>
-    <script src="{{ asset("plugins/jquery.ui/js/jquery-ui-1.11.4.min.js") }}"></script>
-    <script src="{{ asset("plugins/bootstrap/js/bootstrap.min.js") }}"></script>
-    <script src="{{ asset("plugins/jquery.validate/jquery.validate.min.js") }}"></script>
-    <script src="{{ asset("plugins/jquery.validate/localization/messages_es.min.js") }}"></script>
-    <script src="{{ asset("plugins/tooltipster-master/js/jquery.tooltipster.min.js") }}"></script>
-    <script src="{{ asset("plugins/jquery.dataTables/datatables.min.js") }}"></script>
-    <script src="{{ asset("plugins/select2/js/select2.min.js") }}"></script>
-    <script src="{{ asset("plugins/select2/js/i18n/es.js") }}"></script>
-    <script src="{{ asset("js/driver-planning.js") }}"></script>
-    <script>
+    {% javascripts filter="?jsqueeze" output="compiled/js/driver-planning.min.js"
+        "../vendor/components/jquery/jquery.min.js"
+        "plugins/jquery-migrate-1.2.1.min.js"
+        "plugins/jquery.ui/js/jquery-ui-1.11.4.min.js"
+        "plugins/bootstrap/js/bootstrap.min.js"
+        "plugins/jquery.validate/jquery.validate.min.js"
+        "plugins/jquery.validate/localization/messages_es.min.js"
+        "plugins/tooltipster-master/js/jquery.tooltipster.min.js"
+        "plugins/jquery.dataTables/datatables.min.js"
+        "plugins/select2/js/select2.min.js"
+        "plugins/select2/js/i18n/es.js"
+        "js/driver-planning.js"
+        %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
         $(document).ready(function() {
             App.init();
         });
