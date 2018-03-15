@@ -26,7 +26,6 @@ App.Drivers = typeof App.Drivers !== 'undefined' ? App.Drivers : {};
                 url: Routing.generate('app_admin_drivers_getdata'),
                 method: 'GET'
             },
-            aLengthMenu: [ 50, 100, 200 ],
             columns: [
                 {
                     name: 'name',

@@ -205,7 +205,10 @@
 {% block page_javascripts %}
     <script>
         $(document).ready(function() {
-            App.Reservas.Index.init({"search": '{{ q }}'});
+            App.Reservas.Index.init({
+                search: '{{ q }}',
+                pageLength: {{ page_length }}
+            });
         });
     </script>
 {% endblock %}

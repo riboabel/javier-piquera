@@ -139,90 +139,90 @@ App.Reservas.Index = function($) {
         $table.on('draw.dt', drawDatatableHandler);
         $table.on('preDraw.dt', handleDatatablePredraw);
 
-        var options = {
-                "aoColumns": [
-                    {
-                        "name": 'selected',
-                        "sortable": false,
-                        "searchable": false
-                    },
-                    {
-                        "name": "state",
-                        "bSortable": false,
-                        "bSearchable": false
-                    },
-                    {
-                        "name": "startAt"
-                    },
-                    {
-                        "name": "provider"
-                    },
-                    {
-                        "name": "serialNumber"
-                    },
-                    {
-                        "name": "providerReference"
-                    },
-                    {
-                        "name": "clientNames"
-                    },
-                    {
-                        "name": 'pax',
-                        "searchable": false
-                    },
-                    {
-                        "name": "serviceType"
-                    },
-                    {
-                        "name": "driver",
-                        title: 'Conductor'
-                    },
-                    {
-                        name: 'guide',
-                        title: 'Guía',
-                        searchable: false,
-                        sortable: false
-                    },
-                    {
-                        name: "issues",
-                        searchable: false,
-                        sortable: false
-                    },
-                    {
-                        bSortable: false,
-                        bSearchable: false,
-                        width: '140px'
-                    }
-                ],
-                "aaSorting": [[2, "asc"]],
-                serverSide: true,
-                processing: false,
-                ajax: {
-                    data: function(baseData) {
-                        var filter = [];
-                        $.each($('form#filter').serializeArray(), function(i, e) {
-                            if (/\[\]$/.test(e['name'])) {
-                                var sName = e['name'].replace(/\[\]$/, '');
-                                if (!filter[sName]) {
-                                    filter[sName] = [];
-                                }
-
-                                filter[sName].push(e['value']);
-                            } else {
-                                filter[e['name']] = e['value'];
-                            }
-                        });
-
-                        return $.extend(true, baseData, filter);
-                    },
-                    method: 'POST',
-                    url: Routing.generate('app_reservas_getdata')
+        datatable = $table.dataTable({
+            aoColumns: [
+                {
+                    name: 'selected',
+                    sortable: false,
+                    searchable: false
+                },
+                {
+                    name: "state",
+                    bSortable: false,
+                    bSearchable: false
+                },
+                {
+                    name: "startAt"
+                },
+                {
+                    name: "provider"
+                },
+                {
+                    name: "serialNumber"
+                },
+                {
+                    name: "providerReference"
+                },
+                {
+                    name: "clientNames"
+                },
+                {
+                    name: 'pax',
+                    searchable: false
+                },
+                {
+                    name: "serviceType"
+                },
+                {
+                    name: "driver",
+                    title: 'Conductor'
+                },
+                {
+                    name: 'guide',
+                    title: 'Guía',
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    name: "issues",
+                    searchable: false,
+                    sortable: false
+                },
+                {
+                    bSortable: false,
+                    bSearchable: false,
+                    width: '170px'
                 }
-            }
+            ],
+            aaSorting: [[2, "asc"]],
+            ajax: {
+                data: function(baseData) {
+                    var filter = [];
+                    $.each($('form#filter').serializeArray(), function(i, e) {
+                        if (/\[\]$/.test(e['name'])) {
+                            var sName = e['name'].replace(/\[\]$/, '');
+                            if (!filter[sName]) {
+                                filter[sName] = [];
+                            }
 
-        $.extend(options, {oSearch: {"sSearch": settings.search}});
+                            filter[sName].push(e['value']);
+                        } else {
+                            filter[e['name']] = e['value'];
+                        }
+                    });
 
-        datatable = $table.dataTable(options);
+                    return $.extend(true, baseData, filter);
+                },
+                method: 'POST',
+                url: Routing.generate('app_reservas_getdata')
+            },
+            iDisplayLength: settings.pageLength,
+            oSearch: {
+                "sSearch": settings.search
+            },
+            serverSide: true,
+            processing: false
+        });
     }
 
     var handleNoticeModal = function() {

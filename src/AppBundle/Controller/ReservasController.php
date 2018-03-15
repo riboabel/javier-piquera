@@ -53,7 +53,8 @@ class ReservasController extends Controller
 
         return $this->render('@App/Reservas/index.html.twig', array(
             'form' => $form->createView(),
-            'q' => $filter['q']
+            'q' => $filter['q'],
+            'page_length' => $session->get('reservas.page_length', 200)
         ));
     }
 
@@ -151,6 +152,8 @@ class ReservasController extends Controller
         $page = $request->get('start', 0) / $request->get('length') + 1;
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
         $total = $pagination->getTotalItemCount();
+
+        $session->set('reservas.page_length', $request->get('length', 200));
 
         $template = $this->container->get('twig')->load('@App/Reservas/_row.html.twig');
         $data = array_map(function(Reserva $record) use($template) {
