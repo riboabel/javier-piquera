@@ -5,7 +5,7 @@ services:
         tags:
             - { name: form.type }
     app.form.type.reserva_type:
-        class: AppBundle\Form\Type\ReservaType
+        class: AppBundle\Form\Type\ReservaFormType
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }

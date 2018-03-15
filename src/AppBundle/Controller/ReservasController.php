@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Form\Type\ReservaType;
+use AppBundle\Form\Type\ReservaFormType;
 use AppBundle\Entity\Reserva;
 use AppBundle\Entity\ReservaLog;
 use AppBundle\Form\Type\ReservaFilterFormType;
@@ -202,7 +202,7 @@ class ReservasController extends Controller
      */
     public function newAction()
     {
-        $form = $this->createForm(ReservaType::class, new Reserva());
+        $form = $this->createForm(ReservaFormType::class, new Reserva());
 
         return $this->render('@App/Reservas/new.html.twig', array(
             'form' => $form->createView()
@@ -221,7 +221,7 @@ class ReservasController extends Controller
 
         $reserva = new Reserva();
         $reserva->setEnterprise($this->getUser()->getEnterprises()->count() > 0 ? $this->getUser()->getEnterprises()[0] : $em->getRepository('AppBundle:Enterprise')->findOneBy(array()));
-        $form = $this->createForm(ReservaType::class, $reserva);
+        $form = $this->createForm(ReservaFormType::class, $reserva);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -249,7 +249,7 @@ class ReservasController extends Controller
     public function editAction(Reserva $record)
     {
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(ReservaType::class, $record);
+        $form = $this->createForm(ReservaFormType::class, $record);
 
         return $this->render('@App/Reservas/edit.html.twig', array(
             'form' => $form->createView()
@@ -265,7 +265,7 @@ class ReservasController extends Controller
     public function updateAction(Reserva $record, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(ReservaType::class, $record);
+        $form = $this->createForm(ReservaFormType::class, $record);
 
         $originalPlaces = new ArrayCollection();
         foreach ($record->getPassingPlaces() as $p) {
