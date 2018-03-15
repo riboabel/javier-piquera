@@ -138,7 +138,11 @@ class ServicesByProviderReport extends Report
                 $this->pdf->SetFont('', 'B', 8);
                 $this->pdf->MultiCell(0, 0, 'Descripción del servicio', 'LR', 'L', false, 1);
                 $this->pdf->SetFont('', '');
-                $this->pdf->MultiCell(0, 0, $record->getServiceDescription(), 'LBR', 'L', false, 1);
+
+                $x = $this->pdf->GetX();
+                $y = $this->pdf->GetY();
+                $this->pdf->writeHTMLCell(0, 0, $x, $y, $record->getServiceDescription(), 'LBR', 1);
+
                 $this->pdf->SetFont('', '', 10);
             }
 

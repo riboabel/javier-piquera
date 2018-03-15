@@ -60,7 +60,7 @@ class PaysController extends Controller
         $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order', array());
-        
+
         if ($search['value']) {
             $orX = $qb->expr()->orX();
 
@@ -75,7 +75,7 @@ class PaysController extends Controller
             $orX->add($qb->expr()->like('p.name', ':q'));
             $orX->add($qb->expr()->like('d.name', ':q'));
             $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
-            
+
             $andX->add($orX);
         }
 
@@ -85,7 +85,7 @@ class PaysController extends Controller
         $form->submit($request->request->get($form->getName()));
         $this->container->get('lexik_form_filter.query_builder_updater')
                 ->addFilterConditions($form, $qb);
-        
+
         if ($orders) {
             $column = call_user_func(function($name) use ($qb) {
                 if ($name == 'provider') {
@@ -132,7 +132,7 @@ class PaysController extends Controller
         $template = $this->container->get('twig')->loadTemplate('App/Pays/_row.html.twig');
 
         $data = array_map(function(\AppBundle\Entity\Reserva $record) use ($getPayableCharge, $template) {
-            $serviceString = sprintf('<span title="%s">%s</span>', $record->getServiceDescription(),
+            $serviceString = sprintf('<span title="%s">%s</span>', $record->getPlainServiceDescription(),
                 $record->getServiceType()->getName());
 
             $row = array(

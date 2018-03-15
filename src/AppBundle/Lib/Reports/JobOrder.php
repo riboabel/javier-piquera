@@ -69,7 +69,7 @@ class JobOrder extends Report
         $invoiceLines = $invoice->getLines();
         $kilometers = $invoiceLines[0]->getQuantity();
         $hours = $invoiceLines[1]->getQuantity();
-        
+
         $this->pdf->SetFontSize(12);
         $this->pdf->Cell(42, 0, 'TAXI ARRENDADO:', 'LBT', 0, 'L');
         $this->pdf->SetFont('', 'B');
@@ -121,7 +121,11 @@ class JobOrder extends Report
 
         $this->pdf->Cell(0, 0, 'Descripción', 'LTR', 1);
         $this->pdf->SetFontSize(9);
-        $this->pdf->Cell(0, 0, $this->record->getServiceDescription(), 'LBR', 1, 1);
+
+        $x = $this->pdf->GetX();
+        $y = $this->pdf->GetY();
+        $this->pdf->writeHTMLCell(0, 0, $x, $y, $this->record->getServiceDescription(), 'LBR', 1);
+
         $this->pdf->SetFontSize(12);
     }
 

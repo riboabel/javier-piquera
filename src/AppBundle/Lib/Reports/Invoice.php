@@ -51,13 +51,13 @@ class Invoice extends Report
     {
         $this->pdf->SetFont('Helvetica', 'B', 15);
         $this->pdf->Cell(0, 15, 'FACTURA COMERCIAL', 1, 1, 'C');
-        
+
         $this->pdf->SetFont('', '', 10);
         $this->pdf->Cell(35, 6, 'Acreedor', 1);
 
         $this->pdf->SetFont('', 'B');
         $this->pdf->Cell(80, 6, $this->record->getDriver(), 1);
-        
+
         $this->pdf->Cell(40, 6, sprintf('NIT: %s', $this->record->getDriver()->getNit()), 1, 1);
 
         if ($this->record->getDriver()->getPostalAddress()) {
@@ -109,7 +109,7 @@ class Invoice extends Report
         $this->pdf->Cell(35, 6, 'Pagar a favor de', 1);
         $this->pdf->SetFont('', 'B');
         $this->pdf->Cell(0, 6, $this->record->getDriver(), 1, 1);
-        
+
         $this->pdf->SetFont('', '');
         $this->pdf->Cell(35, 6, 'Cuenta bancaria', 1);
         $this->pdf->SetFont('', 'B');
@@ -188,22 +188,11 @@ class Invoice extends Report
     {
         $this->pdf->SetY(220, true);
 
-        /**
-        if ($this->record->getServiceDescription()) {
-            $this->pdf->Cell(0, 0, 'Descripción del servicio', 'LTR', 1, 'L');
-            $this->pdf->SetFont('', '');
-            $this->pdf->MultiCell(0, 0, $this->record->getServiceDescription(), 'LBR', 'L');
-            $this->pdf->Ln(15);
-        } else {
-            $this->pdf->Ln(20);
-        }
-        */
-
         $this->pdf->SetFont('', '');
         $this->pdf->Cell(35, 6, '', 1);
         $this->pdf->Cell(80, 6, 'Acreedor', 1, 0, 'C');
         $this->pdf->Cell(0, 6, 'Deudor', 1, 1, 'C');
-        
+
         $this->pdf->Cell(35, 8, 'Nombre', 1);
         $this->pdf->SetFont('', 'B');
         $this->pdf->Cell(80, 8, $this->record->getDriver(), 1, 0, 'C');

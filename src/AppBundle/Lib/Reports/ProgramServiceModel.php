@@ -128,7 +128,9 @@ class ProgramServiceModel extends Report
         }
         $this->pdf->Ln(3);
 
-        $this->pdf->MultiCell(0, 0, $this->reserva->getServiceDescription(), 1, 'L');
+        $x = $this->pdf->GetX();
+        $y = $this->pdf->GetY();
+        $this->pdf->writeHTMLCell(0, 0, $x, $y, $this->reserva->getServiceDescription(), 'LBR', 1);
     }
 
     private function renderPickupLine()

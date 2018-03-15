@@ -294,6 +294,18 @@ class Reserva
         return $diff->format('%d');
     }
 
+    public function getPlainServiceDescription()
+    {
+        $description = $this->getServiceDescription();
+
+        // convert <p></p> in \n
+        $description = preg_replace('/\<p[^>]*\>([^<]+)\<\/p\>/i', "$1\n", $description);
+        // convert <br/> to \n
+        $description = preg_replace('/\<br(\\|)\>/', "\n", $description);
+
+        return strip_tags($description);
+    }
+
     /**
      * Get id
      *

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Reserva;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -128,12 +129,13 @@ class DriverPlanningController extends Controller
         $data = array();
 
         foreach ($list as $record) {
+            /** @var Reserva $record */
             $row = array(
                 $record->getSerialNumber(),
                 $record->getProvider()->getName(),
                 $record->getProviderReference(),
                 $record->getServiceType()->getName(),
-                $record->getServiceDescription(),
+                $record->getPlainServiceDescription(),
                 $record->getStartAt()->format('d/m/Y H:i'),
                 $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : '',
                 sprintf('<select class="form-control input-sm" data-save-url="%s"><option value="%s" selected="selected">%s</option></select>',
