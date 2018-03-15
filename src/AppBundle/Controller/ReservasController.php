@@ -374,6 +374,31 @@ class ReservasController extends Controller
     }
 
     /**
+     * @Route("/{id}/editar-insidencias")
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function editExecutionIssuesAction(Reserva $record, Request $request)
+    {
+        $form = $this->createForm(ExecutionIssuesFormType::class, $record);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager = $this->getDoctrine()->getManager();
+            $record->addLog(new ReservaLog());
+
+            $manager->flush();
+
+            return new JsonResponse(array('result' => 'ok'));
+        }
+
+        return $this->render('@App/Reservas/edit_issues.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
+    /**
      * @Route("/{id}/confirmar-conductor", requirements={"id": "\d+"})
      * @Method({"post"})
      * @ParamConverter("reserva", class="AppBundle\Entity\Reserva")

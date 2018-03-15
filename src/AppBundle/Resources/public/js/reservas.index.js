@@ -7,9 +7,7 @@ App.Reservas.Index = function($) {
     var clickExecuteHandler = function(event) {
         event.preventDefault();
 
-        if ($('#modalExecute').length > 0) {
-            $('#modalExecute').remove();
-        }
+        $('#modalExecute').remove();
 
         var $modal = $('<div class="modal fade" id="modalExecute" data-backdrop="static"><div class="modal-dialog"><div class="modal-content"></div></div></div>'),
             successForm = function(json) {
@@ -25,8 +23,29 @@ App.Reservas.Index = function($) {
                 dataType: 'json',
                 success: successForm
             });
+
+            $modal.modal();
         });
-        $modal.modal();
+    }
+
+    var clickEditIssuesHandler = function(event) {
+        event.preventDefault();
+
+        $('#modalExecute').remove();
+
+        var $modal = $('<div class="modal fade" id="modalExecute" data-backdrop="static"><div class="modal-dialog"><div class="modal-content"/></div></div>'),
+            successForm = function(json) {
+                $modal.modal('hide');
+            }
+
+        $modal.find('.modal-content').load($(this).attr('href'), function() {
+            $modal.find('form').ajaxForm({
+                dataType: 'json',
+                success: successForm
+            });
+
+            $modal.modal();
+        });
     }
 
     var clickDeleteHandler = function(event) {
@@ -92,11 +111,13 @@ App.Reservas.Index = function($) {
         $('.modal[data-for=cancel-op]').find('button.btn-warning').on('click', clickCancelModalHandler);
     }
 
+    var handleDatatablePredraw = function() {
+        $(this).block({
+            message: 'Procesando...'
+        });
+    }
+
     var drawDatatableHandler = function() {
-        $(this).find('.btn-delete').on('click', clickDeleteHandler);
-        $(this).find('.btn-cancel').on('click', clickCancelHandler);
-        $(this).find('.btn-execute').on('click', clickExecuteHandler);
-        $(this).find('.btn-driver-confirm').on('click', handleClickConfirmDriver);
         $(this).find('[title]').tooltip({'trigger': 'hover'});
 
         $(this).find('input:checkbox').iCheck({
@@ -106,14 +127,14 @@ App.Reservas.Index = function($) {
         $(this).unblock();
     }
 
-    var handleDatatablePredraw = function() {
-        $(this).block({
-            message: 'Procesando...'
-        });
-    }
-
     var initDatatable = function(settings) {
         var $table = $('#dataTables-reservas');
+
+        $table.on('click', '.btn-delete', clickDeleteHandler);
+        $table.on('click', '.btn-cancel', clickCancelHandler);
+        $table.on('click', '.btn-execute', clickExecuteHandler);
+        $table.on('click', '.btn-edit-issues', clickEditIssuesHandler);
+        $table.on('click', '.btn-driver-confirm', handleClickConfirmDriver);
 
         $table.on('draw.dt', drawDatatableHandler);
         $table.on('preDraw.dt', handleDatatablePredraw);

@@ -62,7 +62,7 @@
                 <i class="glyphicon glyphicon-edit"></i>
             </a>
             {% if record.driver is not empty and record.isDriverConfirmed %}
-                <a href="{{ path("app_reservas_execute", {"id": record.id}) }}" class="btn btn-success btn-xs btn-execute" title="Ejecutar">
+                <a href="{{ path("app_reservas_execute", {"id": record.id}) }}" class="btn btn-success btn-xs btn-execute" title="Ejecutar" role="button">
                     <i class="glyphicon glyphicon-road"></i>
                 </a>
             {% elseif record.driver is not empty and not record.isDriverConfirmed %}
@@ -70,6 +70,10 @@
             {% endif %}
             <a href="{{ path("app_reservas_cancel", {"id": record.id}) }}" class="btn btn-warning btn-xs btn-cancel" title="Cancelar">
                 <i class="glyphicon glyphicon-ban-circle"></i>
+            </a>
+        {% elseif record.isExecuted %}
+            <a href="{{ path("app_reservas_editexecutionissues", {"id": record.id}) }}" class="btn btn-default btn-xs btn-edit-issues" title="Modificar incidencias de ejecución" role="button">
+                <i class="glyphicon glyphicon-road"></i>
             </a>
         {% endif %}
         {% if not record.isCancelled and is_granted('ROLE_OWNER') and record.provider.receiveInvoice %}
