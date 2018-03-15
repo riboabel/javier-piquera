@@ -99,14 +99,13 @@
         <div class="panel-heading">Conductor</div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-lg-10 col-xs-9">
+                <div class="col-lg-10 col-xs-12">
                     {{ form_label(form.driver, 'Conductor', {'label_attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.driver, {'attr': {'class': 'form-control'}}) }}
                 </div>
-                <div class="col-lg-2 col-xs-3">
-                    <div style="height: 30px;"></div>
-                    {{ form_widget(form.isDriverConfirmed) }}
-                    {{ form_label(form.isDriverConfirmed) }}
+                <div class="col-lg-2 col-xs-12">
+                    <div class="hidden-xs" style="height: 20px;"></div>
+                    {{ form_row(form.isDriverConfirmed) }}
                 </div>
             </div>
         </div>

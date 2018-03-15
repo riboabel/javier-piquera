@@ -69,7 +69,7 @@ class ReservaFormType extends AbstractType
                         ->createQueryBuilder('g')
                         ->orderBy('g.name')
                 ))
-                ->add('isDriverConfirmed', null, array(
+                ->add('isDriverConfirmed', ICheckType::class, array(
                     'required' => false,
                     'label' => 'Confirmado'
                 ))
