@@ -148,13 +148,29 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
 
             $('.select2-container').css('width', '');
         } else {
-            console.log('slect2 plugin not present');
+            console.log('select2 plugin not present');
         }
     }
 
     var initControls = function() {
         $('#reserva_isDriverConfirmed').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
+        });
+
+        $('.btn-test-printed-version').on('click', function() {
+            var fieldId = $(this).data('target').replace(/^\#/, '');
+            var content = CKEDITOR.instances[fieldId].getData();
+
+            var form = $('<form/>').appendTo($('body'))
+                .attr({
+                    action: Routing.generate('app_reservas_testprintedversion'),
+                    method: 'POST',
+                    target: '_blank'
+                })
+                .append($('<input type="hidden" name="content"/>').val(content));
+
+            form.submit();
+            form.remove();
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form\Type;
 
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -54,7 +55,11 @@ class ReservaFormType extends AbstractType
                         ->createQueryBuilder('st')
                         ->orderBy('st.name')
                 ))
-                ->add('serviceDescription')
+                ->add('serviceDescription', CKEditorType::class, array(
+                    'config' => array(
+                        'toolbar' => 'description_toolbar'
+                    )
+                ))
                 ->add('clientNames', TextType::class)
                 ->add('pax')
                 ->add('passingPlaces', CollectionType::class, array(

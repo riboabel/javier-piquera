@@ -16,6 +16,7 @@ use AppBundle\Entity\Reserva;
 use AppBundle\Entity\ReservaLog;
 use AppBundle\Form\Type\ReservaFilterFormType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Description of ReservasController
@@ -290,6 +291,30 @@ class ReservasController extends Controller
         return $this->render('@App/Reservas/edit.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * @Route("/probar-version-impresa", options={"expose": true})
+     * @Method({"POST"})
+     * @param Request $request
+     * @return StreamedResponse
+     */
+    public function testPrintedVersionAction(Request $request)
+    {
+        if (!$request->request->has('content')) {
+            throw $this->createNotFoundException();
+        }
+
+        $pdf = new \TCPDF('P', 'mm', 'LETTER');
+        $pdf->AddPage();
+        $pdf->SetFontSize(8);
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
+        $pdf->writeHTMLCell(0, 0, $x, $y, $request->get('content'), 1, 1);
+
+        return new StreamedResponse(function() use($pdf) {
+            file_put_contents('php://output', $pdf->Output('', 'S'));
+        }, 200, array('Content-Type' => 'application/pdf'));
     }
 
     /**
