@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -57,11 +58,29 @@ class ServiceType
      */
     private $enterprise;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reserva", mappedBy="serviceType", cascade={"remove"})
+     */
+    private $reservas;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reservas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getName();
     }
-    
+
     /**
      * Get id
      *
@@ -157,7 +176,7 @@ class ServiceType
     /**
      * Get defaultPayAmount
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultPayAmount()
     {
@@ -180,10 +199,44 @@ class ServiceType
     /**
      * Get enterprise
      *
-     * @return \AppBundle\Entity\Enterprise 
+     * @return \AppBundle\Entity\Enterprise
      */
     public function getEnterprise()
     {
         return $this->enterprise;
+    }
+
+    /**
+     * Add reserva
+     *
+     * @param \AppBundle\Entity\Reserva $reserva
+     *
+     * @return ServiceType
+     */
+    public function addReserva(\AppBundle\Entity\Reserva $reserva)
+    {
+        $this->reservas[] = $reserva;
+
+        return $this;
+    }
+
+    /**
+     * Remove reserva
+     *
+     * @param \AppBundle\Entity\Reserva $reserva
+     */
+    public function removeReserva(\AppBundle\Entity\Reserva $reserva)
+    {
+        $this->reservas->removeElement($reserva);
+    }
+
+    /**
+     * Get reservas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReservas()
+    {
+        return $this->reservas;
     }
 }

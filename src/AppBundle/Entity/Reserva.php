@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Model\DeleteTraceableInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -18,7 +19,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *  })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ReservaRepository")
  */
-class Reserva
+class Reserva implements DeleteTraceableInterface
 {
     /**
      * @var integer
@@ -78,7 +79,7 @@ class Reserva
     /**
      * @var ServiceType
      *
-     * @ORM\ManyToOne(targetEntity="ServiceType")
+     * @ORM\ManyToOne(targetEntity="ServiceType", inversedBy="reservas")
      * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     private $serviceType;
@@ -272,6 +273,11 @@ class Reserva
     {
         $this->passingPlaces = new \Doctrine\Common\Collections\ArrayCollection();
         $this->logs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getDeleteTraceableData()
+    {
+        return (string) $this;
     }
 
     public function getSerialNumber()

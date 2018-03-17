@@ -93,3 +93,9 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: validator.constraint_validator, alias: unique_third_provider_serial_prefix }
+
+    app.listener.trace_delete_listener:
+        class: AppBundle\Listener\DeleteTraceableListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: doctrine.event_listener, event: preRemove }
