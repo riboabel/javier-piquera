@@ -2,6 +2,7 @@ App = typeof App !== 'undefined' ? App : {};
 App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
 
 +(App.Reservas.Form = function($) {
+    "use strict";
     var validator;
 
     var addValidatorMethods = function() {
@@ -9,7 +10,7 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
             $.validator.addMethod('validdatetime', function(value, element) {
                 return this.optional(element) || /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/\d{4}\s([0-1]\d|2[0-3]):[0-5]\d$/.test(value);
             }, 'Valor no válido. Formato válido: DD/MM/YYYY HH:MM');
-            $.validator.addMethod('endafterstart', function(value, element) {
+            $.validator.addMethod('endafterstart', function(value) {
                 var startAt = $('input[name="reserva[startAt]"]').val();
                 if (!/^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/\d{4}\s([0-1]\d|2[0-3]):[0-5]\d$/.test(value) || !/^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/\d{4}\s([0-1]\d|2[0-3]):[0-5]\d$/.test(startAt)) {
                     return true;
@@ -23,8 +24,8 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
                         year: parts[2],
                         month: parts[1],
                         day: parts[0]
-                    }
-                }
+                    };
+                };
 
                 var parseTime = function(value) {
                     var parts = value.split(':');
@@ -33,8 +34,8 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
                         number: parts[0] + parts[1],
                         hour: parts[0],
                         minute: parts[1]
-                    }
-                }
+                    };
+                };
 
                 var parseDateTime = function(value) {
                     var parts = value.split(' ');
@@ -43,15 +44,15 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
                     return {
                         datetime: parsedDate.date + ' ' + parsedTime.time,
                         number: parsedDate.number + parsedTime.number
-                    }
-                }
+                    };
+                };
 
                 return parseDateTime(startAt).number < parseDateTime(value).number;
             }, 'Terminación no puede ser antes de o igual a inicio');
         } else {
             console.log('Validator plugin not present');
         }
-    }
+    };
 
     var initValidator = function() {
         validator = App.Main.validate($('form#reserva'), {
@@ -64,10 +65,10 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
             }
         });
 
-        $('#reserva_startPlace, #reserva_endPlace').on('change', function() {
+        $('#reserva_form_startPlace, #reserva_form_endPlace').on('change', function() {
             $(this).valid();
         });
-    }
+    };
 
     var clickAddItemToCollectionHandler = function(event) {
         event.preventDefault();
@@ -91,12 +92,11 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
         });
 
         if ($container.find('.item').length > 1) {
-            console.log($newItem.prev().find('.datepicker input').val());
             $newItem.find('.datepicker').datepicker('setDate', $newItem.prev().find('.datepicker input').val());
         }
 
         $newItem.find('button.btn-delete').on('click', clickDeleteItemHandler);
-    }
+    };
 
     var clickDeleteItemHandler = function(event) {
         event.preventDefault();
@@ -104,7 +104,7 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
         $(this).parents('.item:first').removeClass('item').fadeOut(function() {
             $(this).remove();
         });
-    }
+    };
 
     var initializeCollection = function() {
         $('#places-container').data('index', $('#places-container .item').length);
@@ -120,12 +120,12 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
 
         $('#places-container').find('select').select2(placesSelect2Options());
         $('#places-container').find('.select2-selection').css('height', '30px');
-    }
+    };
 
     var placesSelect2Options = function() {
         return {
             ajax: {
-                url: $('#reserva_startPlace').data('ajax'),
+                url: $('#reserva_form_startPlace').data('ajax'),
                 dataType: 'json',
                 delay: 250,
                 data: function(params) {
@@ -139,21 +139,21 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
             minimunInputLength: 1,
             placeholder: 'Seleccione un lugar',
             width: 'resolve'
-        }
-    }
+        };
+    };
 
     var initializePlacesSelectors = function() {
         if ($.fn.select2) {
-            $('#reserva_startPlace, #reserva_endPlace').select2(placesSelect2Options());
+            $('#reserva_form_startPlace, #reserva_form_endPlace').select2(placesSelect2Options());
 
             $('.select2-container').css('width', '');
         } else {
             console.log('select2 plugin not present');
         }
-    }
+    };
 
     var initControls = function() {
-        $('#reserva_isDriverConfirmed').iCheck({
+        $('#reserva_form_isDriverConfirmed').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
         });
 
@@ -172,7 +172,7 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
             form.submit();
             form.remove();
         });
-    }
+    };
 
     return {
         init: function() {
@@ -182,5 +182,5 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
             initializePlacesSelectors();
             initControls();
         }
-    }
+    };
 }(jQuery));
