@@ -124,7 +124,7 @@
 {% block reserva_passing_place_row %}
     <div class="row item">
         <div class="col-lg-3 col-xs-12">
-            {{ form_widget(form.stayAt) }}
+            {{ form_widget(form.stayAt, {"attr": {"class": "datepicker"}}) }}
         </div>
         <div class="col-lg-8 col-xs-9">
             {{ form_widget(form.place, {attr: {class: 'passing-place', 'required': 'required'}}) }}
@@ -137,7 +137,7 @@
     </div>
 {% endblock %}
 
-{% block _reserva_passingPlaces_entry_stayAt_widget %}
+{% block _reserva_form_passingPlaces_entry_stayAt_widget %}
     <div class="form-group">
         <div class="input-group date datepicker" style="padding: 0;">
             {% set attr = form.vars.attr|default({})|merge({class: "form-control input-sm"}) %}
