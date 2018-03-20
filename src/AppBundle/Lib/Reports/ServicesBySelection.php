@@ -77,7 +77,7 @@ class ServicesBySelection extends Report
             $this->pdf->MultiCell(61, $h, $record->getServiceType()->getName(), 1, 'L', false, 0);
             $this->pdf->MultiCell(20, $h, $record->getProvider()->getName(), 1, 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $record->getClientNames(), 1, 'L', false, 0);
-            $this->pdf->MultiCell(30, $h, $record->getPax(), 1, 'L', false, 0);
+            $this->pdf->MultiCell(10, $h, $record->getPax(), 1, 'C', false, 0);
             $this->pdf->MultiCell(20, $h, $record->getGuide() ? $record->getGuide()->getName() : '', 1, 'L', false, 0);
             $record->getIsDriverConfirmed() ? $this->pdf->SetTextColor(60, 118, 61) : $this->pdf->SetTextColor(169, 68, 66);
             $this->pdf->MultiCell(0, $h, $record->getDriver() ? $record->getDriver()->getName() : '', 1, 'L', false, 1);
