@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block service %}
-    <span title="{{ record.serviceDescription }}">{{ record.serviceType }}</span>
+    <span title="{{ record.plainServiceDescription|raw }}">{{ record.serviceType }}</span>
 {% endblock %}
 
 {% block driver %}
