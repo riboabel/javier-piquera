@@ -123,7 +123,7 @@ class ReservasMicrobusController extends Controller
             $manager->persist($reserva);
             $manager->flush();
 
-            $this->addFlash('notice', 'Registro creado');
+            $this->addFlash('fixed-notice', sprintf('Registro creado con número %s', (string) $reserva));
 
             return $this->redirectToRoute('app_reservasmicrobus_index');
         }

@@ -103,7 +103,7 @@
 {% block page_javascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
-            App.ReservasMicrobus.Index.init();
+            App.ReservasMicrobus.Index.init({{ app.session.flashBag.get('fixed-notice')|json_encode|raw }});
         });
     </script>
 {% endblock %}

@@ -104,7 +104,7 @@
 {% block page_javascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
-            App.ReservasClasicos.Index.init();
+            App.ReservasClasicos.Index.init({{ app.session.flashBag.get('fixed-notice')|json_encode|raw }});
         });
     </script>
 {% endblock %}

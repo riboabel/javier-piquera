@@ -57,7 +57,7 @@
             <i class="glyphicon glyphicon-file"></i>
         </a>
         {% if not record.isCancelled and not record.isExecuted %}
-            <a href="{{ path("app_reservas_edit", {"id": record.id}) }}" class="btn btn-info btn-xs"
+            <a href="{{ path("app_reservas_edit", {"id": record.id}) }}" class="btn btn-primary btn-xs"
                 title="Editar">
                 <i class="glyphicon glyphicon-edit"></i>
             </a>

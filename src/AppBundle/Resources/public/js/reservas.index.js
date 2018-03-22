@@ -225,12 +225,6 @@ App.Reservas.Index = function($) {
         });
     }
 
-    var handleNoticeModal = function() {
-        if ($('.modal[data-for=flash]').length) {
-            $('.modal[data-for=flash]').modal();
-        }
-    }
-
     var handleClickConfirmDriver = function(event) {
         event.preventDefault();
 
@@ -319,6 +313,15 @@ App.Reservas.Index = function($) {
         $('a#linkPrintSpecialReport').on('click', handleClickSpecialReport);
     }
 
+    var showNotices = function(notices) {
+        if (notices.length > 0) {
+            swal({
+                'title': 'Notificaciones',
+                'text': notices[0].replace(/\\n/g, "\n")
+            });
+        }
+    }
+
     return {
         init: function(settings) {
             initDatatable(settings);
@@ -326,7 +329,7 @@ App.Reservas.Index = function($) {
             initCancelModal();
             initFilter();
             initSelectionTools();
-            handleNoticeModal();
+            showNotices(settings.notices);
         }
-    }
+    };
 }(jQuery);

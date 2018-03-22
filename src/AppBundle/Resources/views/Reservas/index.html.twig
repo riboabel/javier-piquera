@@ -177,29 +177,6 @@
         </div>
     </div>
     <!-- /.modal.fade -->
-
-    {% if app.session.flashbag.has('notice') %}
-        <div class="modal fade" data-for="flash">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" data-dismiss="modal" type="button">&times;</button>
-                        <h4 class="modal-title"></h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-success">
-                            <ul>
-                                <li>{{ app.session.flashbag.get('notice')[0] }}</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default btn-md" type="button" data-dismiss="modal"><i class="glyphicon glyphicon-ok"></i> Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
 {% endblock %}
 
 {% block page_javascripts %}
@@ -207,7 +184,8 @@
         $(document).ready(function() {
             App.Reservas.Index.init({
                 search: '{{ q }}',
-                pageLength: {{ page_length }}
+                pageLength: {{ page_length }},
+                notices: {{ app.session.flashBag.get('fixed-notice')|json_encode|raw }}
             });
         });
     </script>

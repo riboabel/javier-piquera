@@ -234,7 +234,7 @@ class ReservasController extends Controller
             $em->persist($reserva);
             $em->flush();
 
-            $request->getSession()->getFlashBag()->add('notice', sprintf('Reservado con el número de confirmación %s.', $form->getData()->getSerialNumber()));
+            $this->addFlash('fixed-notice', sprintf('Reservado con el número de confirmación %s.', $form->getData()->getSerialNumber()));
 
             return $this->redirect($this->generateUrl('app_reservas_index'));
         }
@@ -287,6 +287,8 @@ class ReservasController extends Controller
             $record->addLog(new ReservaLog());
 
             $em->flush();
+
+            $this->addFlash('notice', sprintf('La reserva %s fue modificada', (string) $record));
 
             return $this->redirect($this->generateUrl('app_reservas_index'));
         }

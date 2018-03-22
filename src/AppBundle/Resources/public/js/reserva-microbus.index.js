@@ -179,12 +179,22 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
         });
     }
 
+    var showNotices = function(notices) {
+        if (notices.length > 0) {
+            swal({
+                'title': 'Notificaciones',
+                'text': notices[0].replace(/\\n/g, "\n")
+            });
+        }
+    }
+
     return {
-        init: function() {
+        init: function(notices) {
             initTable();
             initActions();
             initTools();
             initFilter();
+            showNotices(notices);
         }
     }
 }(jQuery));
