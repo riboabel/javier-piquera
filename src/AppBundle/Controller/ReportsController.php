@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Entity\Reserva;
+use AppBundle\Form\Type\ICheckType;
 
 /**
  * Description of ReportsController
@@ -60,11 +61,11 @@ class ReportsController extends Controller
                     'required' => false,
                     'label' => 'Servicios'
                 ))
-                ->add('includePlacesAddress', CheckboxType::class, array(
+                ->add('includePlacesAddress', ICheckType::class, array(
                     'label' => 'Incluir direcciones',
                     'required' => false
                 ))
-                ->add('showProviderLogoIfPossible', CheckboxType::class, array(
+                ->add('showProviderLogoIfPossible', ICheckType::class, array(
                     'label' => 'Mostrar logotipo de agencia',
                     'required' => false,
                     'data' => true
@@ -124,6 +125,7 @@ class ReportsController extends Controller
                 }
             ))
             ->add('services', EntityType::class, array(
+                'label' => 'Servicios',
                 'multiple' => true,
                 'class' => \AppBundle\Entity\ServiceType::class,
                 'query_builder' => function(EntityRepository $repository) {
@@ -132,7 +134,7 @@ class ReportsController extends Controller
                 },
                 'required' => false
             ))
-            ->add('showProviderLogoIfPossible', CheckboxType::class, array(
+            ->add('showProviderLogoIfPossible', ICheckType::class, array(
                 'label' => 'Mostrar logotipo de agencia',
                 'required' => false,
                 'data' => true
@@ -192,7 +194,7 @@ class ReportsController extends Controller
                 },
                 'multiple' => true
             ))
-            ->add('includePlacesAddress', CheckboxTYpe::class, array(
+            ->add('includePlacesAddress', ICheckType::class, array(
                 'label' => 'Incluir direcciones',
                 'required' => false
             ))
@@ -207,8 +209,13 @@ class ReportsController extends Controller
                 'required' => false,
                 'multiple' => true
             ))
-            ->add('showProviderLogoIfPossible', CheckboxType::class, array(
+            ->add('showProviderLogoIfPossible', ICheckType::class, array(
                 'label' => 'Mostrar logotipo de agencia',
+                'required' => false,
+                'data' => true
+            ))
+            ->add('includeAllRecords', ICheckType::class, array(
+                'label' => 'Incluir todos los servicios',
                 'required' => false,
                 'data' => true
             ))

@@ -273,7 +273,10 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            App.Main.init({notices: {{ app.session.flashBag.get('notice')|json_encode|raw }}});
+            App.Main.init({
+                loadingImageSrc: '{{ asset('bundles/app/images/grid-loading.gif') }}',
+                notices: {{ app.session.flashBag.get('notice')|json_encode|raw }}
+            });
         });
     </script>
     <!-- END GLOBAL JAVASCRIPTS -->

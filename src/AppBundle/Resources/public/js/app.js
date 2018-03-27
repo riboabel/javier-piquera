@@ -3,6 +3,8 @@ App = typeof App !== 'undefined' ? App : {};
 +(App.Main = function($) {
     "use strict";
 
+    var loadingImageSrc;
+
     var initMetisMenu = function() {
         $('#side-menu').metisMenu();
     }
@@ -137,13 +139,23 @@ App = typeof App !== 'undefined' ? App : {};
         $('a.link-report').on('click', function(event) {
             event.preventDefault();
 
-            var createModal = function(id) {
-                return $('<div class="modal fade" data-backdrop="static" id="'+ id +'"><div class="modal-dialog"><div class="modal-content"/></div></div>').appendTo($('body'));
+            var mR = $('#_mR');
+            if (!mR.length) {
+                mR = $('<div id="_mR"/>').appendTo($('body'));
             }
 
-            $('#_mR').remove();
-            var mR = createModal('_mR');
-            mR.modal().find('.modal-content').load($(this).attr('href'));
+            if (loadingImageSrc) {
+                $(this).append($('<img src="__src__" class="pull-right"/>'.replace(/__src__/, loadingImageSrc)));
+            }
+
+            var self = $(this);
+            mR.empty().load($(this).attr('href'), function() {
+                mR.find('.modal').modal();
+                self.find('img').remove();
+            });
+
+            // var mR = createModal('_mR');
+            // mR.modal().find('.modal-content').load($(this).attr('href'));
         });
     }
 
@@ -223,7 +235,12 @@ App = typeof App !== 'undefined' ? App : {};
 
     return {
         init: function(options) {
-            options = $.extend(true, {notices: []}, options);
+            options = $.extend({
+                loadingImageSrc: false,
+                notices: [],
+            }, options);
+
+            loadingImageSrc = options.loadingImageSrc;
 
             initMetisMenu();
             initResizeWindowHandler();
