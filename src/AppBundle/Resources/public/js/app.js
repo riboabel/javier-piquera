@@ -153,9 +153,6 @@ App = typeof App !== 'undefined' ? App : {};
                 mR.find('.modal').modal();
                 self.find('img').remove();
             });
-
-            // var mR = createModal('_mR');
-            // mR.modal().find('.modal-content').load($(this).attr('href'));
         });
     }
 
