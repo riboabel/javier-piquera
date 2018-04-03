@@ -6,6 +6,8 @@
                 <th>Referencia</th>
                 <th>Número</th>
                 <th>Incidencias</th>
+                <th>Servicio</th>
+                <th>Clientes</th>
                 <th width="80">Importe</th>
             </tr>
         </thead>
@@ -16,6 +18,8 @@
                     <td>{{ record.providerReference }}</td>
                     <td>{{ record }}</td>
                     <td>{{ record.executionIssues }}</td>
+                    <td>{{ record.serviceType }}</td>
+                    <td>{{ record.clientNames }}</td>
                     <td>
                         <input type="hidden" name="ids[]" value="{{ record.id }}">
                         <input type="text" name="prices[]" value="{{ "%0.2f"|format(prices[record.id]) }}" class="text-right" style="width: 70px;" validdecimal="validdecimal" required="required">

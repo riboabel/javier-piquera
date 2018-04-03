@@ -81,31 +81,6 @@
     </div>
     <!-- /.row -->
 
-    {% if app.session.flashbag.has('notice') %}
-        <div class="modal fade" data-for="flash-notice">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" data-dismiss="modal" type="button">&times;</button>
-                        <h4 class="modal-title"></h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-success">
-                            <ul>
-                                {% for notice in app.session.flashbag.get('notice') %}
-                                    <li>{{ notice }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default btn-md" type="button" data-dismiss="modal"><i class="glyphicon glyphicon-ok"></i> Continuar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-
     <div class="modal fade" data-for="pay-op" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
