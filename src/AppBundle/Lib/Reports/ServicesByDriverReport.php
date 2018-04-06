@@ -6,38 +6,19 @@ use AppBundle\Lib\Reports\Report;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\Driver;
 use AppBundle\Entity\ServiceType;
+use Doctrine\ORM\QueryBuilder;
 
 class ServicesByDriverReport extends Report
 {
-    /**
-     * @var \DateTime
-     */
-    private $start;
-
-    /**
-     * @var \DateTime
-     */
-    private $end;
-
-    /**
-     * @var array<Driver>
-     */
-    private $drivers;
-
     /**
      * @var boolean
      */
     private $includePlacesAddress;
 
     /**
-     * @var ServiceType
+     * @var QueryBuilder
      */
-    private $serviceType;
-
-    /**
-     * @var EntityManager
-     */
-    private $em;
+    private $queryBuilder;
 
     /**
      * @var string
@@ -51,22 +32,18 @@ class ServicesByDriverReport extends Report
 
     /**
      * ServicesByDriverReport constructor.
-     * @param string $parameters
-     * @param EntityManager $em
-     * @param $logoPath
+     * @param QueryBuilder  $queryBuilder
+     * @param array         $parameters
+     * @param string        $logoPath
      */
-    public function __construct($parameters, EntityManager $em, $logoPath)
+    public function __construct(QueryBuilder $queryBuilder, array $parameters, $logoPath)
     {
         parent::__construct('L', 'A4');
 
-        $this->start = $parameters['fromDate'];
-        $this->end = $parameters['toDate'];
-        $this->drivers = $parameters['drivers'];
         $this->includePlacesAddress = $parameters['includePlacesAddress'];
-        $this->serviceType = $parameters['serviceType'];
         $this->showLogo = $parameters['showProviderLogoIfPossible'];
 
-        $this->em = $em;
+        $this->queryBuilder = $queryBuilder;
 
         $this->logoPath = $logoPath;
     }
@@ -77,7 +54,6 @@ class ServicesByDriverReport extends Report
 
         $this->renderHeader();
         $this->render();
-        $this->renderFooter();
 
         return $this->getPdfContent();
     }
@@ -208,39 +184,8 @@ class ServicesByDriverReport extends Report
         }
     }
 
-    private function renderFooter()
-    {
-
-    }
-
     private function getQuery()
     {
-        $qb = $this->em->getRepository('AppBundle:Reserva')
-            ->createQueryBuilder('r')
-            ->join('r.driver', 'd')
-            ->orderBy('r.startAt');
-
-        $andX = $qb->expr()->andX(
-            $qb->expr()->eq('r.isCancelled', $qb->expr()->literal(false)),
-            $qb->expr()->in('d.id', array_map(function(Driver $driver) {return $driver->getId();}, $this->drivers->toArray()))
-        );
-
-        if ($this->start) {
-            $andX->add($qb->expr()->gte('r.startAt', $qb->expr()->literal($this->start->format('Y-m-d'))));
-        }
-        if ($this->end) {
-            $andX->add($qb->expr()->lte('r.startAt', $qb->expr()->literal($this->end->format('Y-m-d 23:59:59'))));
-        }
-
-        if ($this->serviceType->count() > 0) {
-            $qb->join('r.serviceType', 's');
-            $andX->add($qb->expr()->in('s.id', array_map(function($service) {
-                return $service->getId();
-            }, $this->serviceType->toArray())));
-        }
-
-        $qb->where($andX);
-
-        return $qb->getQuery();
+        return $this->queryBuilder->getQuery();
     }
 }

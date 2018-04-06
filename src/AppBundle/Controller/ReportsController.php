@@ -2,8 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Driver;
-use AppBundle\Entity\ServiceType;
+use AppBundle\Form\Type\ReservasByDriverReportFilterFormType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -15,7 +14,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Lib\Reports;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Entity\Reserva;
 use AppBundle\Form\Type\ICheckType;
@@ -170,71 +168,77 @@ class ReportsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $form = $this->createFormBuilder()
-            ->add('fromDate', DateType::class, array(
-                'label'     => 'Desde',
-                'required'  => false,
-                'widget'    => 'single_text',
-                'format'    => 'd/M/y'
-            ))
-            ->add('toDate', DateType::class, array(
-                'label'     => 'Hasta',
-                'required'  => false,
-                'widget'    => 'single_text',
-                'format'    => 'd/M/y'
-            ))
-            ->add('drivers', EntityType::class, array(
-                'class' => Driver::class,
-                'label' => 'Conductor',
-                'query_builder' => function(EntityRepository $repository) {
-                    return $repository
-                        ->createQueryBuilder('d')
-                        ->where('d.enabled = true')
-                        ->orderBy('d.name');
-                },
-                'multiple' => true
-            ))
-            ->add('includePlacesAddress', ICheckType::class, array(
-                'label' => 'Incluir direcciones',
-                'required' => false
-            ))
-            ->add('serviceType', EntityType::class, array(
-                'class' => ServiceType::class,
-                'label' => 'Servicio',
-                'query_builder' => function(EntityRepository $repository) {
-                    return $repository
-                        ->createQueryBuilder('s')
-                        ->orderBy('s.name');
-                },
-                'required' => false,
-                'multiple' => true
-            ))
-            ->add('showProviderLogoIfPossible', ICheckType::class, array(
-                'label' => 'Mostrar logotipo de agencia',
-                'required' => false,
-                'data' => true
-            ))
-            ->add('includeAllRecords', ICheckType::class, array(
-                'label' => 'Incluir todos los servicios',
-                'required' => false,
-                'data' => true
-            ))
-            ->getForm();
+        $form = $this->createForm(ReservasByDriverReportFilterFormType::class);
 
         if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $report = new Reports\ServicesByDriverReport($form->getData(), $em, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
+            $manager = $this->getDoctrine()->getManager();
+            $queryBuilder = $manager->getRepository('AppBundle:Reserva')
+                ->createQueryBuilder('r')
+                ->join('r.serviceType', 'st')
+                ->where('r.isCancelled = false');
 
-                return new StreamedResponse(function() use($report) {
-                    file_put_contents('php://output', $report->getContent());
-                }, 200, array('Content-Type' => 'application/pdf'));
+            $form->submit($request->request->get($form->getName()));
+            $this->container->get('lexik_form_filter.query_builder_updater')
+                ->addFilterConditions($form, $queryBuilder);
+
+            if ($ids = $request->request->get('ids')) {
+                $queryBuilder->andWhere('r.id IN (' . implode(', ', $ids) . ')');
             }
+
+            $report = new Reports\ServicesByDriverReport($queryBuilder, array(
+                'includePlacesAddress' => $form->get('includePlacesAddress')->getData(),
+                'showProviderLogoIfPossible' => $form->get('showProviderLogoIfPossible')->getData()
+            ), $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
+
+            return new StreamedResponse(function() use($report) {
+                file_put_contents('php://output', $report->getContent());
+            }, 200, array('Content-Type' => 'application/pdf'));
         }
 
         return $this->render('App/Reports/form_reservas_by_driver.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * @Route("/load-ids-for-report")
+     * @Method("GET")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function loadServiceIdsForReportAction(Request $request)
+    {
+        $form = $this->createForm(ReservasByDriverReportFilterFormType::class);
+
+        $manager = $this->getDoctrine()->getManager();
+        $queryBuilder = $manager->getRepository('AppBundle:Reserva')
+            ->createQueryBuilder('r')
+            ->select('r.id', 'st.name', 'r.startAt')
+            ->join('r.serviceType', 'st')
+            ->where('r.isCancelled = false');
+
+        $form->submit($request->query->get($form->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')
+            ->addFilterConditions($form, $queryBuilder);
+
+        $pager = $this->container->get('knp_paginator');
+        $pageNumber = $request->get('page', 1);
+        $pageLength = $request->get('length', 100);
+        $pagination = $pager->paginate($queryBuilder->getQuery(), $pageNumber, $pageLength);
+        $total = $pagination->getTotalItemCount();
+
+        $response = array(
+            'records' => array_map(function(array $record) {
+                return array(
+                    'id' => $record['id'],
+                    'name' => $record['name'],
+                    'startAt' => $record['startAt']->format('d/m/Y H:i')
+                );
+            }, $pagination->getItems()),
+            'total_records' => $total
+        );
+
+        return new JsonResponse($response);
     }
 
     /**

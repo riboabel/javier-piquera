@@ -1,34 +1,37 @@
-<div class="modal fade">
+<div class="modal fade" id="modalReservasByDriver">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            {{ form_start(form, {'action': path('app_reports_all_reservas_by_driver'), 'attr': {'role': 'form', 'target': '_blank'}}) }}
+            {{ form_start(form, {'action': path('app_reports_all_reservas_by_driver'), 'attr': {'role': 'form', 'target': '_blank', id: 'formReservasByDriverFilter'}}) }}
             <div class="modal-header">
                 <button class="close" type="button" data-dismiss="modal">&times</button>
                 <h4 class="modal-title">Servicios por conductor</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-6">
-                        {{ form_row(form.fromDate) }}
+                    <div class="col-sm-6">
+                        {{ form_row(form.startAt.left_date) }}
                     </div>
-                    <div class="col-lg-6">
-                        {{ form_row(form.toDate) }}
+                    <div class="col-sm-6">
+                        {{ form_row(form.startAt.right_date) }}
                     </div>
                 </div>
                 {{ form_row(form.drivers) }}
                 {{ form_row(form.serviceType) }}
                 <div class="row">
-                    <div class="col-lg-4 col-md-12">
+                    <div class="col-sm-4 col-xs-12">
                         {{ form_row(form.includePlacesAddress) }}
                     </div>
-                    <div class="col-lg-4 col-md-12">
+                    <div class="col-sm-4 col-xs-12">
                         {{ form_row(form.showProviderLogoIfPossible) }}
                     </div>
-                    <div class="col-lg-4 col-md-12">
+                    <div class="col-sm-4 col-xs-12">
                         {{ form_row(form.includeAllRecords) }}
                     </div>
                 </div>
                 {{ form_rest(form) }}
+                <div id="servicesIds" class="row" style="display: none; min-height: 50px; max-height: 150px;">
+
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-success" type="submit">
@@ -46,10 +49,93 @@
 
 <script>
     $(document).ready(function() {
-        $('#{{ form.fromDate.vars.id }}, #{{ form.toDate.vars.id }}').datepicker({format: 'dd/mm/yyyy', autoclose: true});
+        $('#{{ form.startAt.left_date.vars.id }}, #{{ form.startAt.right_date.vars.id }}').datepicker({format: 'dd/mm/yyyy', autoclose: true});
         $('#{{ form.drivers.vars.id }}, #{{ form.serviceType.vars.id }}').select2({width: '100%'});
         $('#{{ form.includePlacesAddress.vars.id }}, #{{ form.showProviderLogoIfPossible.vars.id }}, #{{ form.includeAllRecords.vars.id }}').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
+        });
+
+        var page = 1,
+            xhr = null;
+
+        var keepLoadingRecords = function() {
+            var filter = [];
+            $.each($('form#formReservasByDriverFilter').serializeArray(), function(i, e) {
+                if (!/^ids\[\]$/.test(e['name'])) {
+                    filter[e['name']] = e['value'];
+                }
+            });
+
+            xhr = $.ajax({
+                data: $.extend({}, {
+                    page: page,
+                    length: 100
+                }, filter),
+                dataType: 'json',
+                method: 'GET',
+                success: function(json) {
+                    $.each(json.records, function(index, record) {
+                        var cb = $('<input type="checkbox"/>').attr({
+                            name: 'ids[]',
+                            value: record.id,
+                            checked: 'checked'
+                        });
+                        $('#servicesIds').append($('<div class="col-xs-4"/>').append($('<label/>').text(record.name + ' (' + record.startAt + ')').prepend(cb)));
+                        cb.iCheck({
+                            checkboxClass: 'icheckbox_flat-blue'
+                        });
+                    });
+
+                    if (json.total_records > (100 * page)) {
+                        page++;
+                        keepLoadingRecords();
+                    } else {
+                        xhr = null;
+                        $('#servicesIds').css('overflow-y', 'auto').unblock();
+                        $('#modalReservasByDriver').find('button:submit').removeAttr('disabled');
+                    }
+                },
+                url: '{{ path('app_reports_loadserviceidsforreport') }}'
+            });
+        }
+
+        function loadRecordsIds() {
+            $('#servicesIds').css('overflow-y', 'hidden').slideDown(function() {
+                $(this).block({message: 'Cargando servicios...'});
+            });
+            $('#modalReservasByDriver').find('button:submit').attr('disabled', 'disabled');
+
+            page = 1;
+            keepLoadingRecords();
+        }
+
+        function stopLoadingRecords() {
+            if (xhr) {
+                xhr.abort();
+                $('#servicesIds').unblock();
+
+                $('#modalReservasByDriver').find('button:submit').removeAttr('disabled');
+            }
+        }
+
+        $('#{{ form.includeAllRecords.vars.id }}').on('ifChanged', function() {
+            var checked = $(this).prop('checked');
+
+            stopLoadingRecords();
+
+            if (checked) {
+                $('#servicesIds').css('overflow-y', 'hidden').empty().slideUp();
+            } else {
+                loadRecordsIds();
+            }
+        });
+
+        $('#{{ form.startAt.left_date.vars.id }}, #{{ form.startAt.right_date.vars.id }}, #{{ form.drivers.vars.id }}, #{{ form.serviceType.vars.id }}').on('change', function() {
+            $('#{{ form.includeAllRecords.vars.id }}').iCheck('check');
+        });
+
+        $('#modalReservasByDriver').on('hide.bs.modal', function() {
+            stopLoadingRecords();
         });
     });
 </script>
