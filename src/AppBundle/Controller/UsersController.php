@@ -53,7 +53,9 @@ class UsersController extends Controller
     public function newAction()
     {
         $userManager = $this->container->get('fos_user.user_manager');
-        $form = $this->createForm(UserType::class, $userManager->createUser());
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+        $form = $this->createForm(UserType::class, $user);
 
         return $this->render('App/Users/new.html.twig', array(
             'form' => $form->createView()
@@ -78,7 +80,6 @@ class UsersController extends Controller
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $form->getData()->setEnabled(true);
             $userManager->updateUser($form->getData());
 
             return $this->redirectToRoute('app_users_index');
