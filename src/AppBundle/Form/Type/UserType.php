@@ -40,6 +40,9 @@ class UserType extends AbstractType
             ->add('imageFile', VichImageType::class, array(
                 'required' => false
             ))
+            ->add('enabled', ICheckType::class, array(
+                'required' => false
+            ))
             ->add($builder->create('roles', RolesType::class)->addModelTransformer(new ArrayToRoleTransformer()))
             ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
                 $form = $event->getForm();
