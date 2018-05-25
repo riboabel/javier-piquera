@@ -2,6 +2,8 @@ App = typeof App !== 'undefined' ? App : {};
 App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
 
 App.Reservas.Index = function($) {
+    "use strict";
+
     var datatable;
 
     var clickExecuteHandler = function(event) {
@@ -15,7 +17,7 @@ App.Reservas.Index = function($) {
                 var $row = $modal.data('row');
                 $row.find('td:last').empty().text('Ejecutando...');
                 datatable.DataTable().draw(false);
-            }
+            };
 
         $modal.data('row', $(this).closest('tr'));
         $modal.find('.modal-content').load($(this).attr('href'), function() {
@@ -26,17 +28,24 @@ App.Reservas.Index = function($) {
 
             $modal.modal();
         });
-    }
+    };
 
     var clickEditIssuesHandler = function(event) {
         event.preventDefault();
+
+        var button = $(this);
+        if (button.data('loading')) {
+            return;
+        } else {
+            button.data('loading', true);
+        }
 
         $('#modalExecute').remove();
 
         var $modal = $('<div class="modal fade" id="modalExecute" data-backdrop="static"><div class="modal-dialog"><div class="modal-content"/></div></div>'),
             successForm = function(json) {
                 $modal.modal('hide');
-            }
+            };
 
         $modal.find('.modal-content').load($(this).attr('href'), function() {
             $modal.find('form').ajaxForm({
@@ -45,15 +54,17 @@ App.Reservas.Index = function($) {
             });
 
             $modal.modal();
+
+            button.removeData('loading');
         });
-    }
+    };
 
     var clickDeleteHandler = function(event) {
         event.preventDefault();
 
         $('.modal[data-for=dataTables-reservas] button.btn-danger').data('url', $(event.currentTarget).attr('href'));
         $('.modal[data-for=dataTables-reservas]').modal();
-    }
+    };
 
     var clickDeleteModalHandler = function(event) {
         event.preventDefault();
@@ -69,22 +80,22 @@ App.Reservas.Index = function($) {
                 datatable.DataTable().draw(false);
             },
             error: function() {
-                alert('Error ejecutando operación.');
+                window.alert('Error ejecutando operación.');
                 datatable.DataTable().draw(false);
             }
         });
-    }
+    };
 
     var initDeleteModal = function() {
         $('.modal[data-for=dataTables-reservas]').find('button.btn-danger').on('click', clickDeleteModalHandler);
-    }
+    };
 
     var clickCancelHandler = function(event) {
         event.preventDefault();
 
         $('.modal[data-for=cancel-op]').find('button.btn-warning').data('url', $(this).attr('href'));
         $('.modal[data-for=cancel-op]').modal();
-    }
+    };
 
     var clickCancelModalHandler = function(event) {
         event.preventDefault();
@@ -100,22 +111,22 @@ App.Reservas.Index = function($) {
                 datatable.DataTable().draw(false);
             },
             error: function() {
-                alert('Error ejecutando operación.');
+                window.alert('Error ejecutando operación.');
                 datatable.DataTable().draw(false);
             }
         });
 
-    }
+    };
 
     var initCancelModal = function() {
         $('.modal[data-for=cancel-op]').find('button.btn-warning').on('click', clickCancelModalHandler);
-    }
+    };
 
     var handleDatatablePredraw = function() {
         $(this).block({
             message: 'Procesando...'
         });
-    }
+    };
 
     var drawDatatableHandler = function() {
         $(this).find('[title]').tooltip({'trigger': 'hover'});
@@ -125,7 +136,7 @@ App.Reservas.Index = function($) {
         });
 
         $(this).unblock();
-    }
+    };
 
     var initDatatable = function(settings) {
         var $table = $('#dataTables-reservas');
@@ -199,21 +210,21 @@ App.Reservas.Index = function($) {
                 data: function(baseData) {
                     var filter = [];
                     $.each($('form#filter').serializeArray(), function(i, e) {
-                        if (/\[\]$/.test(e['name'])) {
-                            var sName = e['name'].replace(/\[\]$/, '');
+                        if (/\[\]$/.test(e.name)) {
+                            var sName = e.name.replace(/\[\]$/, '');
                             if (!filter[sName]) {
                                 filter[sName] = [];
                             }
 
-                            filter[sName].push(e['value']);
+                            filter[sName].push(e.value);
                         } else {
-                            filter[e['name']] = e['value'];
+                            filter[e.name] = e.value;
                         }
                     });
 
                     return $.extend(true, baseData, filter);
                 },
-                method: 'POST',
+                method: 'GET',
                 url: Routing.generate('app_reservas_getdata')
             },
             iDisplayLength: settings.pageLength,
@@ -223,7 +234,7 @@ App.Reservas.Index = function($) {
             serverSide: true,
             processing: false
         });
-    }
+    };
 
     var handleClickConfirmDriver = function(event) {
         event.preventDefault();
@@ -236,14 +247,17 @@ App.Reservas.Index = function($) {
                 datatable.DataTable().draw(false);
             }
         });
-    }
+    };
 
     var initFilterDatepickers = function() {
         $('#filter-form .datepicker').datepicker({
+            autoclose: true,
+            clearBtn: true,
             format: 'dd/mm/yyyy',
-            autoclose: true
+            todayBtn: true,
+            todayHighlight: true
         });
-    }
+    };
 
     var initFilter = function() {
         initFilterDatepickers();
@@ -262,13 +276,13 @@ App.Reservas.Index = function($) {
         $('[name="reserva_filter_form[isDriverAssigned][drivers][]"], select[name="reserva_filter_form[serviceType][]"]', '#filter-form').select2({
             width: '100%'
         });
-    }
+    };
 
     var handlePrintSelectionClick = function(event) {
         event.preventDefault();
 
         if (datatable.find('input:checkbox:checked').length == 0) {
-            return alert('Debe seleccionar registros para realizar esta operación');
+            return window.alert('Debe seleccionar registros para realizar esta operación');
         }
 
         var $f = $('<form/>').attr({
@@ -279,13 +293,13 @@ App.Reservas.Index = function($) {
             .appendTo($('body'));
 
         $f.submit().remove();
-    }
+    };
 
     var handleClickSpecialReport = function(event) {
         event.preventDefault();
 
         if (datatable.find('input:checkbox:checked').length == 0) {
-            return alert('Debe seleccionar registros para realizar esta operación');
+            return window.alert('Debe seleccionar registros para realizar esta operación');
         }
 
         var $f = $('<form/>').attr({
@@ -296,7 +310,7 @@ App.Reservas.Index = function($) {
             .appendTo($('body'));
 
         $f.submit().remove();
-    }
+    };
 
     var initSelectionTools = function() {
         $('#link-select-all').on('click', function(event) {
@@ -311,7 +325,7 @@ App.Reservas.Index = function($) {
 
         $('a#linkPrintSelection').on('click', handlePrintSelectionClick);
         $('a#linkPrintSpecialReport').on('click', handleClickSpecialReport);
-    }
+    };
 
     var showNotices = function(notices) {
         if (notices.length > 0) {
@@ -320,7 +334,7 @@ App.Reservas.Index = function($) {
                 'text': notices[0].replace(/\\n/g, "\n")
             });
         }
-    }
+    };
 
     return {
         init: function(settings) {

@@ -60,7 +60,7 @@ class ReservasController extends Controller
 
     /**
      * @Route("/get-data", options={"expose": true})
-     * @Method({"post"})
+     * @Method({"GET"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -117,7 +117,7 @@ class ReservasController extends Controller
             }
 
             $form = $this->createForm(ReservaFilterFormType::class);
-            $form->submit($request->request->get($form->getName()));
+            $form->submit($request->query->get($form->getName()));
             $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
         }
 

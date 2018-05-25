@@ -252,6 +252,13 @@
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
+    <script type="text/javascript" src="{{ asset('plugins/datepicker/locales/bootstrap-datepicker.es.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.fn.datepicker.defaults.language = 'es';
+        });
+    </script>
+
     {% javascripts filter="?jsqueeze" output="compiled/js/app.min.js"
         "@AppBundle/Resources/public/js/*.js"
         "js/form-guide.js"
