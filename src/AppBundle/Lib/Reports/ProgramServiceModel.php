@@ -233,8 +233,10 @@ class ProgramServiceModel extends Report
             $places[$i]['nights'] = $nights;
         }
 
-        $places[count($places) - 1]['last_date'] = $this->reserva->getEndAt();
-        $places[count($places) - 1]['nights'] = date_diff($places[count($places) - 1]['last_date'], $places[count($places) - 1]['first_date'])->days;
+        if (count($places) > 1) {
+            $places[count($places) - 1]['last_date'] = $this->reserva->getEndAt();
+            $places[count($places) - 1]['nights'] = date_diff($places[count($places) - 1]['last_date'], $places[count($places) - 1]['first_date'])->days;
+        }
     }
 
     private function renderDropOffLine()
@@ -274,7 +276,7 @@ class ProgramServiceModel extends Report
         $phones = array();
 
         foreach ($propertyNames as $name) {
-            $phone = call_user_method(sprintf('get%s', ucfirst($name)), $entity);
+            $phone = call_user_func(array($entity, sprintf('get%s', ucfirst($name))));
 
             if ($phone) {
                 $phones[] = $phone;
