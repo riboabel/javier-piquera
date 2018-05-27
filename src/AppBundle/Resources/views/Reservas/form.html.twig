@@ -4,30 +4,21 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-6 col-xs-12">
-                    {{ form_label(form.provider, 'Agencia', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.provider, {'attr': {'class': 'form-control'}}) }}
-                    <div class="help-block"></div>
+                    {{ form_row(form.provider, {label: 'Agencia'}) }}
                 </div>
                 <div class="col-lg-6 col-xs-12">
-                    {{ form_label(form.providerReference, 'Referencia', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.providerReference, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.providerReference, {label: 'Referencia'}) }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4 col-xs-6">
-                    {{ form_label(form.clientNames, 'Nombre(s)', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.clientNames, {'attr': {'class': 'form-control'}}) }}
-                    <div class="help-block"></div>
+                    {{ form_row(form.clientNames, {label: 'Nombre(s)'}) }}
                 </div>
                 <div class="col-lg-2 col-xs-6">
-                    {{ form_label(form.pax, null, {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.pax, {'attr': {'class': 'form-control'}}) }}
-                    <div class="help-block"></div>
+                    {{ form_row(form.pax) }}
                 </div>
                 <div class="col-lg-6 col-xs-12">
-                    {{ form_label(form.guide, 'Guía', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.guide, {'attr': {'class': 'form-control'}}) }}
-                    <div class="help-block"></div>
+                    {{ form_row(form.guide, {label: 'Guía'}) }}
                 </div>
             </div>
         </div>
@@ -37,17 +28,26 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-6 col-xs-12">
-                    {{ form_label(form.startAt, 'Inicio', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.startAt, {'attr': {'class': 'form-control datetimepicker'}}) }}
-                    {% if form.startAt.vars.errors|length > 0 %}
-                        <div class="text-danger">{{ form_errors(form.startAt)|striptags|raw }}</div>
-                    {% endif %}
-                    <div class="help-block"></div>
+                    <div class="form-group">
+                        {{ form_label(form.startAt, 'Inicio') }}
+                        <div class="input-group">
+                            {{ form_widget(form.startAt, {'attr': {'class': 'datetimepicker'}}) }}
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                        {% if form.startAt.vars.errors|length > 0 %}
+                            <div class="text-danger">{{ form_errors(form.startAt)|striptags|raw }}</div>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="col-lg-6 col-xs-12">
-                    {{ form_label(form.endAt, 'Terminación', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.endAt, {'attr': {'class': 'form-control datetimepicker'}}) }}
-                    <div class="help-block"></div>
+                    {{ form_label(form.endAt, 'Terminación') }}
+                    <div class="input-group">
+                        {{ form_widget(form.endAt, {attr: {class: 'datetimepicker'}}) }}
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                    {% if form.endAt.vars.errors|length > 0 %}
+                        <div class="text-danger">{{ form_errors(form.endAt)|striptags|raw }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
                     {{ form_row(form.serviceType, {'label': 'Tipo'}) }}
                 </div>
                 <div class="col-lg-12">
-                    {{ form_row(form.serviceDescription, {'label': 'Descripción'}) }}
+                    {{ form_row(form.serviceDescription, {label: 'Descripción'}) }}
                     <div class="pull-right">
                         <button class="btn btn-default btn-xs btn-test-printed-version" data-target="#{{ form.serviceDescription.vars.id }}" type="button">
                             <span class="fa fa-print"></span>
@@ -77,14 +77,10 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-6 col-xs-12">
-                    {{ form_label(form.startPlace, 'Inicio', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.startPlace, {'attr': {'data-ajax': path('app_reservas_getplaceslist'), 'required': 'required'}}) }}
-                    <div class="help-block"></div>
+                    {{ form_row(form.startPlace, {'attr': {'data-ajax': path('app_reservas_getplaceslist'), label: 'Inicio', required: 'required'}}) }}
                 </div>
                 <div class="col-lg-6 col-xs-12">
-                    {{ form_label(form.endPlace, 'Terminación', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.endPlace, {'attr': {'data-ajax': path('app_reservas_getplaceslist'), 'required': 'required'}}) }}
-                    <div class="help-block"></div>
+                    {{ form_row(form.endPlace, {'attr': {'data-ajax': path('app_reservas_getplaceslist'), label: 'Terminación', required: 'required'}}) }}
                 </div>
             </div>
         </div>
@@ -103,8 +99,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-10 col-xs-12">
-                    {{ form_label(form.driver, 'Conductor', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.driver, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.driver, {label: 'Conductor'}) }}
                 </div>
                 <div class="col-lg-2 col-xs-12">
                     <div class="hidden-xs" style="height: 20px;"></div>
@@ -124,10 +119,10 @@
 {% block reserva_passing_place_row %}
     <div class="row item">
         <div class="col-lg-3 col-xs-12">
-            {{ form_widget(form.stayAt, {"attr": {"class": "datepicker"}}) }}
+            {{ form_widget(form.stayAt, {attr: {class: "datepicker"}}) }}
         </div>
         <div class="col-lg-8 col-xs-9">
-            {{ form_widget(form.place, {attr: {class: 'passing-place', 'required': 'required'}}) }}
+            {{ form_widget(form.place, {attr: {class: 'passing-place', required: 'required'}}) }}
         </div>
         <div class="col-lg-1 col-xs-3">
             <button class="btn btn-danger btn-block btn-sm btn-delete" type="button">
