@@ -163,6 +163,14 @@
                                 </li>
                             </ul>
                         </li>
+                        {% if is_granted('ROLE_OWNER') %}
+                            <li>
+                                <a href="#"><i class="fa fa-wrench fa-fw"></i>Herramientas<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li><a href="{{ path('app_tools_default_index') }}">Exportar registros</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
                         <li>
                             <a href="#"><i class="fa fa-cog fa-fw"></i> Administración<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">

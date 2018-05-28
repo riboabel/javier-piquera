@@ -64,6 +64,15 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: form.type }
+    app.form.type.export_booking_to_excel_form_type:
+        class: AppBundle\Form\Type\ExportBookingsToExcelFormType
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: form.type }
+
+    app.services.excel_exporter:
+        class: AppBundle\Services\ExcelExporter
+        arguments: [ '@phpexcel', '@doctrine.orm.entity_manager' ]
 
     app.morris_graph.area:
         class: AppBundle\Services\MorrisGraphGenerator
