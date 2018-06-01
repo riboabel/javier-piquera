@@ -66,8 +66,8 @@ class Payrole extends Report
         $this->pdf->Cell(24, 0, 'NÚMERO', 1, 0, 'C');
         $this->pdf->Cell(20, 0, 'FECHA', 1, 0, 'C');
         $this->pdf->Cell(40, 0, 'SERVICIO', 1, 0, 'C');
-        $this->pdf->Cell(30, 0, 'AGENCIA', 1, 0, 'C');
-        $this->pdf->Cell(46, 0, 'CLIENTE', 1, 0, 'C');
+        $this->pdf->Cell(30, 0, 'CLIENTE', 1, 0, 'C');
+        $this->pdf->Cell(46, 0, 'NOMBRE(S)', 1, 0, 'C');
         $this->pdf->Cell(0, 0, 'IMPORTE', 1, 1, 'C');
 
         $this->pdf->SetFont('Helvetica', '', 10);

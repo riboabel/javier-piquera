@@ -50,7 +50,7 @@ class ServicesBetweenDatesReport extends Report
         $this->end = $parameters['toDate'];
         $this->includePlacesAddress = $parameters['includePlacesAddress'];
         $this->services = $parameters['services']->toArray();
-        $this->showLogo = $parameters['showProviderLogoIfPossible'];
+        $this->showLogo = false;
 
         $this->em = $em;
         $this->logoPath = $logoPath;
@@ -75,8 +75,8 @@ class ServicesBetweenDatesReport extends Report
         $this->pdf->Cell(30, 0, 'Fin', 1, 0, 'C');
         $this->pdf->Cell(25, 0, 'Referencia', 1, 0, 'C');
         $this->pdf->Cell(46, 0, 'Servicio', 1, 0, 'C');
-        $this->pdf->Cell(25, 0, 'Agencia', 1, 0, 'C');
-        $this->pdf->Cell(40, 0, 'Clientes', 1, 0, 'C');
+        $this->pdf->Cell(25, 0, 'Cliente', 1, 0, 'C');
+        $this->pdf->Cell(40, 0, 'Nombre(s)', 1, 0, 'C');
         $this->pdf->Cell(10, 0, 'Pax', 1, 0, 'C');
         $this->pdf->Cell(20, 0, 'Guía', 1, 0, 'C');
         $this->pdf->Cell(0, 0, 'Conductor', 1, 1, 'C');

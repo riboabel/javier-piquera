@@ -84,8 +84,6 @@ class ReservasByDriverReportFilterFormType extends AbstractType
                     return false;
                 }
 
-//                $rootAlias = $filterQuery->getRootAlias();
-//                $filterQuery->getQueryBuilder()->join(sprintf('%s.serviceType', $rootAlias), 'st');
                 $expression = $filterQuery->getExpr()->in('st.id', array_map(function(ServiceType $serviceType) {
                     return $serviceType->getId();
                 }, $values['value']->toArray()));
@@ -94,18 +92,13 @@ class ReservasByDriverReportFilterFormType extends AbstractType
             }
         ));
 
-        $builder->add('showProviderLogoIfPossible', ICheckType::class, array(
-            'label' => 'Mostrar logotipo de agencia',
-            'required' => false,
-            'data' => true,
-            'apply_filter' => false
-        ))
-        ->add('includeAllRecords', ICheckType::class, array(
-            'label' => 'Incluir todos los servicios',
-            'required' => false,
-            'data' => true,
-            'apply_filter' => false
-        ));
+        $builder
+            ->add('includeAllRecords', ICheckType::class, array(
+                'label' => 'Incluir todos los servicios',
+                'required' => false,
+                'data' => true,
+                'apply_filter' => false
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

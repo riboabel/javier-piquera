@@ -1,61 +1,51 @@
-<div class="row">
-    <div class="col-lg-8">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Datos de la agencia</h3>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Datos del cliente</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-4 col-xs-12">
+                <div class="form-group">
+                    {{ form_label(form.name, 'Nombre', {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block">Aparece en las facturas</div>
+                </div>
             </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-4 col-xs-12">
-                        {{ form_label(form.name, 'Nombre', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-                        <div class="help-block">Aparece en las facturas</div>
-                    </div>
-                    <div class="col-lg-4 col-xs-12">
-                        {{ form_label(form.reeupCode, 'Código REEUP', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.reeupCode, {'attr': {'class': 'form-control'}}) }}
-                        <div class="help-block">Aparece en las facturas</div>
-                    </div>
-                    <div class="col-lg-4 col-xs-12">
-                        {{ form_label(form.contractNumber, 'Contrato', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.contractNumber, {'attr': {'class': 'form-control'}}) }}
-                        <div class="help-block">Aparece en las facturas</div>
-                    </div>
+            <div class="col-lg-4 col-xs-12">
+                <div class="form-group">
+                    {{ form_label(form.reeupCode, 'Código REEUP', {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.reeupCode, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block">Aparece en las facturas</div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-6 col-xs-12">
-                        {{ form_label(form.postalAddress, "Dirección postal", {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control'}}) }}
-                        <div class="help-block">Aparece en las facturas</div>
-                    </div>
-                    <div class="col-lg-6 col-xs-12">
-                        {{ form_label(form.contactInfo, "Información de contacto", {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.contactInfo, {'attr': {'class': 'form-control'}}) }}
-                        <div class="help-block"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 col-xs-12">
-                        {{ form_widget(form.receiveServiceOrder) }}
-                        {{ form_label(form.receiveServiceOrder, "Recibe órdenes de trabajo") }}
-                        <div class="help-block">El sistema generará órdenes de trabajo por servicio para este cliente</div>
-                    </div>
-                    <div class="col-lg-6 col-xs-12">
-                        {{ form_widget(form.receiveInvoice) }}
-                        {{ form_label(form.receiveInvoice, "Recibe facturas") }}
-                        <div class="help-block">El sistema generará facturas por servicio para este cliente</div>
-                    </div>
+            </div>
+            <div class="col-lg-4 col-xs-12">
+                <div class="form-group">
+                    {{ form_label(form.contractNumber, 'Contrato', {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.contractNumber, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block">Aparece en las facturas</div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ form_label(form.logoFile)|striptags }}</h3>
+        <div class="row">
+            <div class="col-lg-6 col-xs-12">
+                <div class="form-group">
+                    {{ form_label(form.postalAddress, "Dirección postal", {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.postalAddress, {'attr': {'class': 'form-control'}}) }}
+                    <div class="help-block">Aparece en las facturas</div>
+                </div>
             </div>
-            <div class="panel-body">
-                {{ form_widget(form.logoFile) }}
+            <div class="col-lg-6 col-xs-12">
+                {{ form_row(form.contactInfo, {label: "Información de contacto"}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-xs-12">
+                {{ form_row(form.receiveServiceOrder) }}
+                <div class="help-block">El sistema generará órdenes de trabajo por servicio para este cliente</div>
+            </div>
+            <div class="col-lg-6 col-xs-12">
+                {{ form_row(form.receiveInvoice) }}
+                <div class="help-block">El sistema generará facturas por servicio para este cliente</div>
             </div>
         </div>
     </div>

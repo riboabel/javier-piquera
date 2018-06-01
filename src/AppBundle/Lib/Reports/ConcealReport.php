@@ -64,11 +64,9 @@ class ConcealReport extends Report
         $this->pdf->Cell(30, 0, 'Fin', 1, 0, 'C');
         $this->pdf->Cell(25, 0, 'Referencia', 1, 0, 'C');
         $this->pdf->Cell(61, 0, 'Servicio', 1, 0, 'C');
-        $this->pdf->Cell(20, 0, 'Agencia', 1, 0, 'C');
-        $this->pdf->Cell(30, 0, 'Clientes', 1, 0, 'C');
-        $this->pdf->Cell(10, 0, 'Pax', 1, 0, 'C');
-        $this->pdf->Cell(20, 0, 'Guía', 1, 0, 'C');
-        $this->pdf->Cell(0, 0, 'Conductor', 1, 1, 'C');
+        $this->pdf->Cell(20, 0, 'Cliente', 1, 0, 'C');
+        $this->pdf->Cell(50, 0, 'Nombres', 1, 0, 'C');
+        $this->pdf->Cell(0, 0, 'Pax', 1, 0, 'C');
     }
 
     private function render()
@@ -83,10 +81,8 @@ class ConcealReport extends Report
                 array(25, $record->getProviderReference()),
                 array(61, $record->getServiceType()->getName()),
                 array(20, $record->getProvider()->getName()),
-                array(30, $record->getClientNames()),
-                array(10, $record->getPax()),
-                array(20, $record->getGuide() ? $record->getGuide()->getName() : ''),
-                array(0, $record->getDriver() ? $record->getDriver()->getName() : '')
+                array(50, $record->getClientNames()),
+                array(0, $record->getPax())
             ));
 
             $this->pdf->MultiCell(24, $h, $record->getSerialNumber(), 1, 'L', false, 0);

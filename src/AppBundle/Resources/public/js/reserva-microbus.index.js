@@ -55,11 +55,11 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
                 },
                 {
                     name: 'client',
-                    title: 'Agencia'
+                    title: 'Cliente'
                 },
                 {
                     name: 'clientSerial',
-                    title: 'Referencia de la agencia'
+                    title: 'Referencia del cliente'
                 },
                 {
                     name: 'provider',
@@ -71,7 +71,7 @@ App.ReservasMicrobus = typeof App.ReservasMicrobus !== 'undefined' ? App.Reserva
                 },
                 {
                     name: 'clientNames',
-                    title: 'Nombres de los clientes'
+                    title: 'Nombres'
                 },
                 {
                     name: 'pax',

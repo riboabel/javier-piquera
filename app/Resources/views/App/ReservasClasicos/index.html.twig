@@ -75,10 +75,10 @@
                             {{ form_row(filter.serviceType, {label: "Servicio"}) }}
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            {{ form_row(filter.client, {label: 'Agencia'}) }}
+                            {{ form_row(filter.client, {label: 'Cliente'}) }}
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            {{ form_row(filter.clientSerial, {label: "Referencia de la agencia"}) }}
+                            {{ form_row(filter.clientSerial, {label: "Referencia del cliente"}) }}
                         </div>
                         <div class="col-sm-3 col-xs-12">
                             {{ form_row(filter.provider, {label: "Proveedor"}) }}
@@ -87,7 +87,7 @@
                             {{ form_row(filter.providerSerial, {label: "Referencia del proveedor"}) }}
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            {{ form_row(filter.clientNames, {label: "Nombre de los clientes"}) }}
+                            {{ form_row(filter.clientNames, {label: "Nombre(s)"}) }}
                         </div>
                     </div>
                     {{ form_rest(filter) }}

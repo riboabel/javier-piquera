@@ -36,7 +36,7 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
                     },
                     {
                         name: "provider",
-                        title: 'Agencia'
+                        title: 'Cliente'
                     },
                     {
                         name: "providerReference",
@@ -44,7 +44,7 @@ App.Cobros = typeof App.Cobros !== 'undefined' ? App.Cobros : {};
                     },
                     {
                         name: 'clientNames',
-                        title: 'Clientes'
+                        title: 'Nombre(s)'
                     },
                     {
                         name: "serviceType",

@@ -60,7 +60,7 @@ class CobrosReport extends Report
             $this->pdf->Cell(30, 0, 'Inicio', 'BR', 0, 'C');
             $this->pdf->Cell(30, 0, 'Fin', 'BR', 0, 'C');
             $this->pdf->Cell(25, 0, 'Referencia', 'BR', 0, 'C');
-            $this->pdf->Cell(50, 0, 'Agencia', 'BR', 0, 'C');
+            $this->pdf->Cell(50, 0, 'Cliente', 'BR', 0, 'C');
             $this->pdf->Cell(50, 0, 'Servicio', 'BR', 0, 'C');
             $this->pdf->Cell(50, 0, 'Conductor', 'BR', 0, 'C');
             $this->pdf->Cell(0, 0, 'Importe', 'BR', 1, 'R');

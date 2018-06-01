@@ -4,7 +4,7 @@
             {{ form_start(form, {'action': path('app_reports_all_reservas_by_provider'), 'attr': {'role': 'form', 'target': '_blank'}}) }}
                 <div class="modal-header">
                     <button class="close" type="button" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Servicios por agencia</h4>
+                    <h4 class="modal-title">Servicios por cliente</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -17,7 +17,6 @@
                     </div>
                     {{ form_row(form.provider) }}
                     {{ form_row(form.services) }}
-                    {{ form_row(form.showProviderLogoIfPossible) }}
                     {{ form_rest(form) }}
                 </div>
                 <div class="modal-footer">
@@ -34,15 +33,12 @@
     </div>
 </div>
 
-<script>
+<script type="text/javascript">
     $(document).ready(function() {
         $('#{{ form.services.vars.id }}, #{{ form.provider.vars.id }}').select2({'width': '100%'});
         $('#{{ form.toDate.vars.id }}, #{{ form.fromDate.vars.id }}').datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true
         });
-        $('#{{ form.showProviderLogoIfPossible.vars.id }}').iCheck({
-            checkboxClass: 'icheckbox_flat-blue'
-        })
     });
 </script>

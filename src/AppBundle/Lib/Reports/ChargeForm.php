@@ -80,7 +80,7 @@ class ChargeForm extends Report
                 array(45, $data['record']->getServiceType()->getName()),
                 array(0, sprintf('%0.2f', $data['price']))
             ));
-            
+
             $this->pdf->MultiCell(24, $h, $data['record']->getSerialNumber(), 'LBR', 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $data['record']->getProviderReference(), 'BR', 'L', false, 0);
             $this->pdf->MultiCell(20, $h, $data['record']->getStartAt()->format('d/m/Y'), 'BR', 'L', false, 0);
@@ -137,8 +137,8 @@ class ChargeForm extends Report
             }
         }
 
-        $this->pdf->MultiCell(25, 0, 'Agencia(s):', 0, 'L', false, 0);
-        
+        $this->pdf->MultiCell(25, 0, 'Cliente(s):', 0, 'L', false, 0);
+
         if ($withLogo) {
             $x = $this->pdf->GetX();
             $y = $this->pdf->GetY();

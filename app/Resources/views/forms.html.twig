@@ -54,7 +54,7 @@
 {% block reserva_tercero_form_row %}
     <div class="row">
         <div class="col-sm-6">
-            {{ form_row(form.client, {label: "Agencia"}) }}
+            {{ form_row(form.client, {label: "Cliente"}) }}
         </div>
         <div class="col-sm-6">
             {{ form_row(form.clientSerial, {label: "Referencia del cliente"}) }}
@@ -62,13 +62,11 @@
     </div>
     {{ form_row(form.serviceType, {label: "Tipo de servicio"}) }}
     <div class="row">
-        <div class="col-sm-6 form-group">
-            {{ form_label(form.startAt, "Inicio") }}
-            {{ form_widget(form.startAt, {attr: {class: "form-control datetimepicker"}}) }}
+        <div class="col-sm-6">
+            {{ form_row(form.startAt, {label: "Inicio", attr: {class: "datetimepicker"}}) }}
         </div>
-        <div class="col-sm-6 form-group">
-            {{ form_label(form.endAt, "Terminación") }}
-            {{ form_widget(form.endAt, {attr: {class: "form-control datetimepicker"}}) }}
+        <div class="col-sm-6">
+            {{ form_row(form.endAt, {label: "Terminación", attr: {class: "datetimepicker"}}) }}
         </div>
     </div>
     <div class="row">

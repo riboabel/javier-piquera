@@ -29,19 +29,16 @@ class ProviderType extends AbstractType
                     'required' => false
                 ))
                 ->add('receiveServiceOrder', null, array(
+                    'label' => "Recibe órdenes de trabajo",
                     'required' => false
                 ))
                 ->add('receiveInvoice', null, array(
+                    'label' => "Recibe facturas",
                     'required' => false
                 ))
                 ->add('contractNumber', null, array(
                     'required' => false
-                ))
-                ->add('logoFile', VichImageType::class, array(
-                    'label' => 'Logotipo',
-                    'required' => false
-                ))
-                ;
+                ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

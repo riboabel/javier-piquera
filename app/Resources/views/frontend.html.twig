@@ -126,18 +126,10 @@
                                 <li><a href="{{ path('app_control_index') }}">Control de reervas</a></li>
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
                                     <li><a href="{{ path("app_prices_index") }}">Catálogo de precios</a></li>
-                                    <li><a href="{{ path("app_cobros_index") }}">Cobros a agencias</a></li>
+                                    <li><a href="{{ path("app_cobros_index") }}">Cobros a clientes</a></li>
                                     <li><a href="{{ path("app_invoices_index") }}">Facturación de servicios</a></li>
                                     <li><a href="{{ path("app_pays_index") }}">Pagos a conductores</a></li>
-                                {% endif %}
-                                <li>
-                                    <a href="#">Reservas de terceros <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li><a href="{{ path("app_reservasclasicos_index") }}">Clásicos</a></li>
-                                        <li><a href="{{ path("app_reservasmicrobus_index") }}">Microbus</a></li>
-                                    </ul>
-                                </li>
-                                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
+                                    <li><a href="{{ path("app_reservasclasicos_index") }}">Reservas de clásicos</a></li>
                                     <li><a href="{{ path("app_thirdpays_index") }}">Pagos a terceros</a></li>
                                     <li><a href="{{ path("app_thirdcobros_index") }}">Cobros de terceros</a></li>
                                 {% endif %}
@@ -147,7 +139,7 @@
                             <a href="#"><i class="fa fa-fw fa-print"></i> Informes<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li><a href="{{ path("app_reports_all_reservas_between_dates") }}" class="link-report">Servicios entre fechas</a></li>
-                                <li><a href="{{ path("app_reports_all_reservas_by_provider") }}" class="link-report">Servicios por agencia</a></li>
+                                <li><a href="{{ path("app_reports_all_reservas_by_provider") }}" class="link-report">Servicios por cliente</a></li>
                                 <li><a href="{{ path("app_reports_all_reservas_by_driver") }}" class="link-report">Servicios por conductor</a></li>
                                 <li><a href="{{ path("app_reports_showprogrammodelform") }}" class="link-report">Modelo de programa</a></li>
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
@@ -177,7 +169,7 @@
                                 <li><a href="{{ path("app_enterprise_view") }}">Datos de empresa</a></li>
                                 <li><a href="{{ path("app_admin_drivers_index") }}">Conductores</a></li>
                                 <li><a href="{{ path("app_admin_servicetypes_index") }}">Tipos de servicio</a></li>
-                                <li><a href="{{ path("app_providers_index") }}">Agencias</a></li>
+                                <li><a href="{{ path("app_providers_index") }}">Clientes</a></li>
                                 <li><a href="{{ path('app_admin_locations_index') }}">Localidades</a></li>
                                 <li><a href="{{ path("app_admin_places_index") }}">Lugares</a></li>
                                 <li><a href="{{ path("app_guides_index") }}">Guías</a></li>

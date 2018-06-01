@@ -16,14 +16,7 @@
                         </div>
                     </div>
                     {{ form_row(form.services) }}
-                    <div class="row">
-                        <div class="col-lg-6">
-                            {{ form_row(form.includePlacesAddress) }}
-                        </div>
-                        <div class="col-lg-6">
-                            {{ form_row(form.showProviderLogoIfPossible) }}
-                        </div>
-                    </div>
+                    {{ form_row(form.includePlacesAddress) }}
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success" type="submit">
@@ -42,7 +35,7 @@
     $(document).ready(function() {
         $('#{{ form.services.vars.id }}').select2({width: '100%'});
         $('#{{ form.fromDate.vars.id }}, #{{ form.toDate.vars.id }}').datepicker({format: 'dd/mm/yyyy', autoclose: true});
-        $('#{{ form.includePlacesAddress.vars.id }}, #{{ form.showProviderLogoIfPossible.vars.id }}').iCheck({
+        $('#{{ form.includePlacesAddress.vars.id }}').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
         });
     });

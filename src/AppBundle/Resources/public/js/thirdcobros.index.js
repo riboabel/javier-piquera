@@ -58,11 +58,11 @@ App.ThirdCobros = typeof App.ThirdCobros !== 'undefined' ? App.ThirdCobros : {};
                 },
                 {
                     name: 'customer',
-                    title: 'Agencia'
+                    title: 'Cliente'
                 },
                 {
                     name: 'customerreference',
-                    title: 'Referencia de la agencia'
+                    title: 'Referencia del cliente'
                 },
                 {
                     name: 'state',

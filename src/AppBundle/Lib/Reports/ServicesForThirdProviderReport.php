@@ -77,8 +77,8 @@ class ServicesForThirdProviderReport extends Report
         $this->pdf->Cell(30, 0, 'Fin', 1, 0, 'C');
         $this->pdf->Cell(25, 0, 'Referencia', 1, 0, 'C');
         $this->pdf->Cell(50, 0, 'Servicio', 1, 0, 'C');
-        $this->pdf->Cell(20, 0, 'Agencia', 1, 0, 'C');
-        $this->pdf->Cell(35, 0, 'Clientes', 1, 0, 'C');
+        $this->pdf->Cell(20, 0, 'Cliente', 1, 0, 'C');
+        $this->pdf->Cell(35, 0, 'Nombre(s)', 1, 0, 'C');
         $this->pdf->Cell(10, 0, 'Pax', 1, 0, 'C');
         $this->pdf->Cell(0, 0, 'Proveedor', 1, 1, 'C');
     }

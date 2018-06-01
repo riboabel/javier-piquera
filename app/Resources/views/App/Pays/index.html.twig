@@ -62,7 +62,7 @@
                             <th width="10" class="no-sort">&nbsp;</th>
                             <th>Fecha</th>
                             <th>Conductor</th>
-                            <th>Agencia</th>
+                            <th>Cliente</th>
                             <th>Referencia</th>
                             <th>Tipo de servicio</th>
                             <th>Importe</th>
@@ -102,8 +102,7 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ path("app_reports_print_pay_form", {logos: 'yes'}) }}" class="link-print">Con logotipos de agencia</a></li>
-                                <li><a href="{{ path("app_reports_print_pay_form", {logos: 'no'}) }}" class="link-print">Sin logotipos de agencia</a></li>
+                                <li><a href="{{ path("app_reports_print_pay_form", {logos: 'no'}) }}" class="link-print">Generar</a></li>
                             </ul>
                         </div>
                         <button class="btn btn-default btn-sm" data-dismiss="modal" type="button">

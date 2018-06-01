@@ -63,11 +63,6 @@ class ReportsController extends Controller
                     'label' => 'Incluir direcciones',
                     'required' => false
                 ))
-                ->add('showProviderLogoIfPossible', ICheckType::class, array(
-                    'label' => 'Mostrar logotipo de agencia',
-                    'required' => false,
-                    'data' => true
-                ))
                 ->getForm();
 
         if ($request->getMethod() == 'POST') {
@@ -116,7 +111,7 @@ class ReportsController extends Controller
             ))
             ->add('provider', EntityType::class, array(
                 'class' => \AppBundle\Entity\Provider::class,
-                'label' => 'Agencia',
+                'label' => 'Cliente',
                 'query_builder' => function(EntityRepository $repository) {
                     return $repository->createQueryBuilder('p')
                         ->orderBy('p.name');
@@ -131,11 +126,6 @@ class ReportsController extends Controller
                         ->orderBy('st.name');
                 },
                 'required' => false
-            ))
-            ->add('showProviderLogoIfPossible', ICheckType::class, array(
-                'label' => 'Mostrar logotipo de agencia',
-                'required' => false,
-                'data' => true
             ))
             ->getForm();
 
@@ -187,7 +177,7 @@ class ReportsController extends Controller
 
             $report = new Reports\ServicesByDriverReport($queryBuilder, array(
                 'includePlacesAddress' => $form->get('includePlacesAddress')->getData(),
-                'showProviderLogoIfPossible' => $form->get('showProviderLogoIfPossible')->getData()
+                'showProviderLogoIfPossible' => false
             ), $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
 
             return new StreamedResponse(function() use($report) {

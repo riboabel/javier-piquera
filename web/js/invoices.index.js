@@ -30,7 +30,7 @@ App.Invoices = typeof App.Invoices !== 'undefined' ? App.Invoices : {};
                         name: 'invoiceNumber'
                     },
                     {
-                        title: 'Agencia',
+                        title: 'Cliente',
                         name: "provider"
                     },
                     {

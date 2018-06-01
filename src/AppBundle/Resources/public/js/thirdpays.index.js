@@ -58,11 +58,11 @@ App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {}
                 },
                 {
                     name: 'customer',
-                    title: 'Agencia'
+                    title: 'Cliente'
                 },
                 {
                     name: 'customerreference',
-                    title: 'Referencia de la agencia'
+                    title: 'Referencia del cliente'
                 },
                 {
                     name: 'state',

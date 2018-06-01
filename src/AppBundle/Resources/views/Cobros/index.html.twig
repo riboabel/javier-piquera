@@ -5,22 +5,22 @@
 {% block cobro_filter_form_row %}
     <div class="row">
         <div class="col-xs-6 col-sm-2">
-            {{ form_row(form.startAt.left_date, {"label": "Desde", "attr": {"class": "datepicker input-sm"}}) }}
+            {{ form_row(form.startAt.left_date, {label: "Desde", "attr": {"class": "datepicker input-sm"}}) }}
         </div>
         <div class="col-xs-6 col-sm-2">
-            {{ form_row(form.startAt.right_date, {"label": "Hasta", "attr": {"class": "datepicker input-sm"}}) }}
+            {{ form_row(form.startAt.right_date, {label: "Hasta", "attr": {"class": "datepicker input-sm"}}) }}
         </div>
         <div class="col-xs-6 col-sm-2">
-            {{ form_row(form.provider, {"label": "Agencia", "attr": {"class": "input-sm"}}) }}
+            {{ form_row(form.provider, {label: "Cliente", "attr": {"class": "input-sm"}}) }}
         </div>
         <div class="col-xs-6 col-sm-2">
-            {{ form_row(form.cobradoAt, {"label": "Estado", "attr": {"class": "input-sm"}}) }}
+            {{ form_row(form.cobradoAt, {label: "Estado", "attr": {"class": "input-sm"}}) }}
         </div>
         <div class="col-xs-6 col-sm-2">
-            {{ form_row(form.clientNames, {"label": "Clientes", "attr": {"class": "input-sm"}}) }}
+            {{ form_row(form.clientNames, {label: "Nombre(s)", "attr": {"class": "input-sm"}}) }}
         </div>
         <div class="col-xs-6 col-sm-2">
-            {{ form_row(form.serviceTypeName, {"label": "Tipo de servicio", "attr": {"class": "input-sm"}}) }}
+            {{ form_row(form.serviceTypeName, {label: "Tipo de servicio", "attr": {"class": "input-sm"}}) }}
         </div>
     </div>
     {{ form_rest(form) }}

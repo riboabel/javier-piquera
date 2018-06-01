@@ -18,13 +18,10 @@
                 {{ form_row(form.drivers) }}
                 {{ form_row(form.serviceType) }}
                 <div class="row">
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-sm-6 col-xs-12">
                         {{ form_row(form.includePlacesAddress) }}
                     </div>
-                    <div class="col-sm-4 col-xs-12">
-                        {{ form_row(form.showProviderLogoIfPossible) }}
-                    </div>
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-sm-6 col-xs-12">
                         {{ form_row(form.includeAllRecords) }}
                     </div>
                 </div>
@@ -51,7 +48,7 @@
     $(document).ready(function() {
         $('#{{ form.startAt.left_date.vars.id }}, #{{ form.startAt.right_date.vars.id }}').datepicker({format: 'dd/mm/yyyy', autoclose: true});
         $('#{{ form.drivers.vars.id }}, #{{ form.serviceType.vars.id }}').select2({width: '100%'});
-        $('#{{ form.includePlacesAddress.vars.id }}, #{{ form.showProviderLogoIfPossible.vars.id }}, #{{ form.includeAllRecords.vars.id }}').iCheck({
+        $('#{{ form.includePlacesAddress.vars.id }}, #{{ form.includeAllRecords.vars.id }}').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
         });
 
