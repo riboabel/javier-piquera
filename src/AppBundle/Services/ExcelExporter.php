@@ -121,6 +121,29 @@ class ExcelExporter
         /** @var \PHPExcel_Worksheet $sheet */
         $sheet = $this->phpExcelObject->createSheet();
 
+        // headers
+        $sheet->fromArray(array(
+            'NÚMERO DE CONFIRMACIÓN',
+            'INICIO',
+            'TERMINACIÓN',
+            'CLIENTE',
+            'CONDUCTOR',
+            'REFERENCIA DEL CLIENTE',
+            'DESCRIPCIÓN DEL SERVICIO',
+            'NOMBRES',
+            'ESTADO',
+            'MONTO PAGADO',
+            'FECHA DE PAGO',
+            'MONTO COBRADO',
+            'FECHA DE COBRO',
+            'TIPO DE SERVICIO',
+            'GUÍA',
+            'PAX',
+            'NOTAS DE EJECUCIÓN',
+            'USUARIO CREADOR',
+            'USUARIO MODIFICADOR'
+        ));
+
         foreach ($result as $index => $row) {
             //Confirmation number
             $sheet->setCellValueByColumnAndRow(
@@ -291,7 +314,7 @@ class ExcelExporter
                     $row['createdBy']
                 );
             }
-            //Created by
+            //Modified by
             if ($row['updatedBy']) {
                 $sheet->setCellValueByColumnAndRow(
                     18,
@@ -302,23 +325,27 @@ class ExcelExporter
         }
 
         $sheet
-            ->getStyleByColumnAndRow(1, 1, 2, count($result))
+            ->getStyleByColumnAndRow(0, 1, 18, 1)
+            ->getFont()
+            ->setBold(true);
+        $sheet
+            ->getStyleByColumnAndRow(1, 2, 2, count($result) + 1)
             ->getNumberFormat()
             ->setFormatCode(self::FORMAT_DATETIME);
         $sheet
-            ->getStyleByColumnAndRow(9, 1, 9, count($result))
+            ->getStyleByColumnAndRow(9, 2, 9, count($result) + 1)
             ->getNumberFormat()
             ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
         $sheet
-            ->getStyleByColumnAndRow(10, 1, 10, count($result))
+            ->getStyleByColumnAndRow(10, 2, 10, count($result) + 1)
             ->getNumberFormat()
             ->setFormatCode(self::FORMAT_DATETIME);
         $sheet
-            ->getStyleByColumnAndRow(11, 1, 11, count($result))
+            ->getStyleByColumnAndRow(11, 2, 11, count($result) + 1)
             ->getNumberFormat()
             ->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00);
         $sheet
-            ->getStyleByColumnAndRow(12, 1, 12, count($result))
+            ->getStyleByColumnAndRow(12, 2, 12, count($result) + 1)
             ->getNumberFormat()
             ->setFormatCode(self::FORMAT_DATETIME);
     }
