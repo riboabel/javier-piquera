@@ -145,14 +145,8 @@
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
                                     <li><a href="{{ path("app_reports_old_cobros") }}" class="link-report">Cobros realizados</a></li>
                                     <li><a href="{{ path("app_reports_old_pays") }}" class="link-report">Pagos realizados</a></li>
+                                    <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "clasicos"}) }}" class="link-report">Clásicos</a></li>
                                 {% endif %}
-                                <li>
-                                    <a href="#">Terceros <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "clasicos"}) }}" class="link-report">Clásicos</a></li>
-                                        <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "microbus"}) }}" class="link-report">Microbus</a></li>
-                                    </ul>
-                                </li>
                             </ul>
                         </li>
                         {% if is_granted('ROLE_OWNER') %}
