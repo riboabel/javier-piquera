@@ -1,7 +1,9 @@
 App = typeof App !== 'undefined' ? App : {};
 App.Drivers = typeof App.Drivers !== 'undefined' ? App.Drivers : {};
 
-+(App.Drivers.Index = function($) {
++(App.Drivers.Index = function($, window) {
+    'use strict';
+
     var $table = $('table#dataTables-drivers');
 
     var initDatatable = function() {
@@ -18,12 +20,12 @@ App.Drivers = typeof App.Drivers !== 'undefined' ? App.Drivers : {};
                 data: function(baseData) {
                     var fields = [];
                     $.each($('#formFilter').serializeArray(), function(i, e) {
-                        fields[e['name']] = e['value'];
+                        fields[e.name] = e.value;
                     });
 
                     return $.extend(true, baseData, fields);
                 },
-                url: Routing.generate('app_admin_drivers_getdata'),
+                url: window.Routing.generate('app_admin_drivers_getdata'),
                 method: 'GET'
             },
             columns: [
@@ -66,10 +68,27 @@ App.Drivers = typeof App.Drivers !== 'undefined' ? App.Drivers : {};
         $table.on('click', '.btn-delete', function(event) {
             event.preventDefault();
 
-            if ($('.modal[data-for="' + $table.attr('id') + '"]').length > 0) {
-                $('.modal[data-for="' + $table.attr('id') + '"] .btn-danger').attr('href', $(this).attr('href'));
-                $('.modal[data-for="' + $table.attr('id') + '"]').modal();
-            }
+            var url = $(this).attr('href'),
+                a = $(this);
+
+            window.swal({
+                showCancelButton: true,
+                title: 'Confirmar eliminación',
+                text: 'Se dispone a eliminar la información de un conductor. Todos los viajes realizados por este serán eliminados del sistema. ¿Desea continuar?',
+                type: 'warning'
+            }, function(confirm) {
+                if (confirm) {
+                    a.closest('td').empty().text('Eliminando...');
+                    $.ajax({
+                        method: 'POST',
+                        success: function(json) {
+                            $table.DataTable().draw(false);
+                        },
+                        type: 'json',
+                        url: url
+                    });
+                }
+            });
         });
     }
 
@@ -84,5 +103,5 @@ App.Drivers = typeof App.Drivers !== 'undefined' ? App.Drivers : {};
             initDatatable();
             initFilter();
         }
-    }
-}(jQuery));
+    };
+}(jQuery, window));

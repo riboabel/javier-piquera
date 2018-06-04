@@ -185,7 +185,7 @@ class DriversController extends Controller
      * @Route("/{id}/editar", requirements={"id": "\d+"})
      * @Method({"post"})
      * @ParamConverter("driver", class="AppBundle\Entity\Driver")
-     * @param AppBundle\Entity\Driver
+     * @param \AppBundle\Entity\Driver
      * @return Response
      */
     public function updateAction(Driver $driver, Request $request)
@@ -209,7 +209,7 @@ class DriversController extends Controller
 
     /**
      * @Route("/{id}/eliminar", requirements={"id": "\d+"})
-     * @Method({"get", "post"})
+     * @Method({"POST"})
      * @ParamConverter("driver", class="AppBundle\Entity\Driver")
      * @param Driver $driver
      * @return RedirectResponse
@@ -219,6 +219,12 @@ class DriversController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->remove($driver);
         $em->flush();
+
+        if ($this->get('request')->isXmlHttpRequest()) {
+            return new JsonResponse(array(
+                'result' => 'success'
+            ));
+        }
 
         return $this->redirectToRoute('app_drivers_index');
     }
