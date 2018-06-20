@@ -134,7 +134,7 @@ class PricesController extends Controller
         $pairs = explode(';', $request->get('id'));
         foreach ($pairs as $pair) {
             $parts = explode(':', $pair);
-            $$parts[0] = $parts[1];
+            ${$parts[0]} = $parts[1];
         }
 
         $manager = $this->getDoctrine()->getManager();
