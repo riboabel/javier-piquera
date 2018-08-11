@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App: {};
 App.Prices = typeof App.Prices !== 'undefined' ? App.Prices : {};
 
-+(App.Prices.Index = function($) {
++(App.Prices.Index = function($, Routing) {
     "use strict";
 
     var $table = $('table#table-x');
@@ -13,7 +13,7 @@ App.Prices = typeof App.Prices !== 'undefined' ? App.Prices : {};
             name = this.options[this.selectedIndex].text;
         $('#link-print').attr('href', id !== '' ? Routing.generate('app_prices_print', {id: id}) : Routing.generate('app_prices_print'));
         $('#link-print').empty().append('<span class="fa fa-print"/> Imprimir precios' + ('' !== id ? ' para ' + name : ''));
-    }
+    };
 
     var initPrintControls = function() {
         $('#link-print').on('click', function(event) {
@@ -26,13 +26,13 @@ App.Prices = typeof App.Prices !== 'undefined' ? App.Prices : {};
                 $modal.find('select').select2({'width': '100%'});
             });
         });
-    }
+    };
 
     var initFilter = function() {
         $('form#filter select').on('change', changeSelect).select2({
             "width": '100%'
         });
-    }
+    };
 
     var initTable = function() {
         $('#table-x').on('preDraw.dt', function() {
@@ -96,7 +96,7 @@ App.Prices = typeof App.Prices !== 'undefined' ? App.Prices : {};
                 }
             ]
         });
-    }
+    };
 
     var initPrices = function() {
         $table.on('click', 'button.btn-clear-price', function() {
@@ -128,13 +128,13 @@ App.Prices = typeof App.Prices !== 'undefined' ? App.Prices : {};
                         $input.removeData('xhr-saving').css('border-color', '');
                     },
                     error: function() {
-                        alert('Error intentando guardar precio');
+                        window.alert('Error intentando guardar precio');
                     }
                 });
 
             $(this).data('xhr-saving', xhr);
         });
-    }
+    };
 
     return {
         init: function() {
@@ -143,5 +143,5 @@ App.Prices = typeof App.Prices !== 'undefined' ? App.Prices : {};
             initTable();
             initPrices();
         }
-    }
-}(jQuery));
+    };
+}(jQuery, Routing));
