@@ -16,8 +16,9 @@
                     <i class="fa fa-plus-circle"></i>
                     Crear conductor
                 </a>
-                <button type="button" data-target="#collapseFilter" data-toggle="collapse" class="btn btn-default"><span
-                            class="fa fa-filter"></span></button>
+                <button type="button" data-target="#collapseFilter" data-toggle="collapse" class="btn btn-default">
+                    <span class="fa fa-filter"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -45,32 +46,6 @@
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
-
-    <div class="modal fade" data-for="dataTables-drivers">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" data-dismiss="modal" class="close">&times;</button>
-                    <h4 class="modal-title">Confirmar eliminación</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger">
-                        Se dispone a eliminar la información de un conductor. Todos los viajes realizados por este serán eliminados del sistema. ¿Desea continuar?
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-danger btn-md">
-                        <i class="fa fa-remove"></i>
-                        Eliminar
-                    </a>
-                    <button class="btn btn-default btn-md" data-dismiss="modal">
-                        <i class="fa fa-undo"></i>
-                        Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
 
 {% block page_javascripts %}

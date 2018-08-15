@@ -1,7 +1,9 @@
 App = typeof App !== 'undefined' ? App : {};
 App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.ReservasClasicos : {};
 
-+(App.ReservasClasicos.Index = function() {
++(App.ReservasClasicos.Index = function($, window) {
+    'use strict';
+
     var $table = $('#dataTables-reservas');
 
     var initTable = function() {
@@ -22,15 +24,15 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
                 data: function(baseData) {
                     var filter = [];
                     $.each($('form#formFilter').serializeArray(), function(i, e) {
-                        filter[e['name']] = e['value'];
+                        filter[e.name] = e.value;
                     });
 
                     return $.extend(true, baseData, filter);
                 },
-                url: Routing.generate('app_reservasclasicos_getdata'),
+                url: window.Routing.generate('app_reservasclasicos_getdata'),
                 method: 'GET',
                 error: function() {
-                    alert('Error obteniendo datos de listado')
+                    window.alert('Error obteniendo datos de listado');
                 }
             },
             columns: [
@@ -87,24 +89,33 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
             searching: false,
             sorting: [[2, 'asc']]
         });
-    }
+    };
 
     var initActions = function() {
         $table.on('click', '.btn-delete', function(event) {
             event.preventDefault();
 
-            if (confirm('¿Seguro desea borrar esta reserva?')) {
-                var url = $(this).attr('href');
-                $(this).closest('td').text('Eliminando...')
-                $.ajax({
-                    method: 'POST',
-                    success: function(json) {
-                        $table.DataTable().draw(true);
-                    },
-                    dataType: 'json',
-                    url: url
-                });
-            }
+            var url = $(this).attr('href'),
+                a = $(this);
+
+            window.swal({
+                showCancelButton: true,
+                title: 'Confirmar eliminación',
+                text: '¿Seguro desea borrar esta reserva?',
+                type: 'warning'
+            }, function(confirm) {
+                if (confirm) {
+                    a.closest('td').text('Eliminando...');
+                    $.ajax({
+                        method: 'POST',
+                        success: function(json) {
+                            $table.DataTable().draw(true);
+                        },
+                        dataType: 'json',
+                        url: url
+                    });
+                }
+            });
         });
 
         $table.on('click', '.btn-execute', function(event) {
@@ -148,7 +159,7 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
                 });
             });
         });
-    }
+    };
 
     var initTools = function() {
         $('#link-select-all').on('click', function(event) {
@@ -162,7 +173,7 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
 
             $table.find('input:checkbox').iCheck('uncheck');
         });
-    }
+    };
 
     var initFilter = function() {
         $('#formFilter').find('input:text.datepicker').datepicker({
@@ -179,16 +190,16 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
         $('#formFilter input:text:not(.datepicker)').on('keyup', function() {
             $table.DataTable().draw();
         });
-    }
+    };
 
     var showNotices = function(notices) {
         if (notices.length > 0) {
-            swal({
+            $.swal({
                 'title': 'Notificaciones',
                 'text': notices[0].replace(/\\n/g, "\n")
             });
         }
-    }
+    };
 
     return {
         init: function(notices) {
@@ -198,5 +209,5 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
             initFilter();
             showNotices(notices);
         }
-    }
-}(jQuery));
+    };
+}(jQuery, window));
