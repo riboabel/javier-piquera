@@ -1221,12 +1221,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle.git",
-                "reference": "cbe7ba6817c7bf9b9d908d149dd8b9f9f0dd3628"
+                "reference": "fce90c6d283f46e7ae1beb39c9c018c1a702442e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/cbe7ba6817c7bf9b9d908d149dd8b9f9f0dd3628",
-                "reference": "cbe7ba6817c7bf9b9d908d149dd8b9f9f0dd3628",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/fce90c6d283f46e7ae1beb39c9c018c1a702442e",
+                "reference": "fce90c6d283f46e7ae1beb39c9c018c1a702442e",
                 "shasum": ""
             },
             "require": {
@@ -1272,7 +1272,7 @@
                 "javascript",
                 "routing"
             ],
-            "time": "2018-06-10T19:26:42+00:00"
+            "time": "2018-09-29T11:04:35+00:00"
         },
         {
             "name": "friendsofsymfony/user-bundle",
@@ -1430,16 +1430,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.9.12",
+            "version": "8.9.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "b906325b1bcf99309bc10bff7cbdc1ed8fbcf774"
+                "reference": "3189adeaaa27d657a96f580d71365d9e76f04a75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/b906325b1bcf99309bc10bff7cbdc1ed8fbcf774",
-                "reference": "b906325b1bcf99309bc10bff7cbdc1ed8fbcf774",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/3189adeaaa27d657a96f580d71365d9e76f04a75",
+                "reference": "3189adeaaa27d657a96f580d71365d9e76f04a75",
                 "shasum": ""
             },
             "require": {
@@ -1453,7 +1453,7 @@
                 "pear/versioncontrol_git": "^0.5",
                 "phing/phing": "^2.7",
                 "php-coveralls/php-coveralls": "^1.0|^2.0",
-                "phpunit/phpunit": "^4.8|^5.0",
+                "phpunit/phpunit": "^4.8.36|^5.0",
                 "symfony/console": "^2.8|^3.0"
             },
             "type": "library",
@@ -1494,7 +1494,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2018-08-23T10:23:25+00:00"
+            "time": "2018-10-04T12:19:57+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -1799,16 +1799,16 @@
         },
         {
             "name": "knplabs/knp-components",
-            "version": "v1.3.9",
+            "version": "v1.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/knp-components.git",
-                "reference": "f0f830361ff0ee83ea5c5ffe49b429d2b0ff4266"
+                "reference": "fc1755ba2b77f83a3d3c99e21f3026ba2a1429be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/knp-components/zipball/f0f830361ff0ee83ea5c5ffe49b429d2b0ff4266",
-                "reference": "f0f830361ff0ee83ea5c5ffe49b429d2b0ff4266",
+                "url": "https://api.github.com/repos/KnpLabs/knp-components/zipball/fc1755ba2b77f83a3d3c99e21f3026ba2a1429be",
+                "reference": "fc1755ba2b77f83a3d3c99e21f3026ba2a1429be",
                 "shasum": ""
             },
             "require": {
@@ -1861,7 +1861,7 @@
                 "pager",
                 "paginator"
             ],
-            "time": "2018-08-03T08:37:27+00:00"
+            "time": "2018-09-11T07:54:48+00:00"
         },
         {
             "name": "knplabs/knp-paginator-bundle",
@@ -3908,16 +3908,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.45",
+            "version": "v2.8.46",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "289dc238c533476d0101d736816b408b02e51751"
+                "reference": "a7f5ade1f8b3eb74a130cf681c45bfa991c330d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/289dc238c533476d0101d736816b408b02e51751",
-                "reference": "289dc238c533476d0101d736816b408b02e51751",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/a7f5ade1f8b3eb74a130cf681c45bfa991c330d1",
+                "reference": "a7f5ade1f8b3eb74a130cf681c45bfa991c330d1",
                 "shasum": ""
             },
             "require": {
@@ -4044,20 +4044,20 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2018-08-27T17:33:57+00:00"
+            "time": "2018-09-30T03:53:41+00:00"
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "6.2.17",
+            "version": "6.2.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "64fc19439863e1b1314487a72a74d9bfd0b55a53"
+                "reference": "a5135e2cf02f8c935b71e9e7d676f0f1d31b1b9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/64fc19439863e1b1314487a72a74d9bfd0b55a53",
-                "reference": "64fc19439863e1b1314487a72a74d9bfd0b55a53",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/a5135e2cf02f8c935b71e9e7d676f0f1d31b1b9d",
+                "reference": "a5135e2cf02f8c935b71e9e7d676f0f1d31b1b9d",
                 "shasum": ""
             },
             "require": {
@@ -4106,7 +4106,7 @@
                 "pdf417",
                 "qrcode"
             ],
-            "time": "2018-02-24T11:48:20+00:00"
+            "time": "2018-09-23T07:52:24+00:00"
         },
         {
             "name": "twig/extensions",
@@ -4522,16 +4522,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v2.8.45",
+            "version": "v2.8.46",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "85c95412dd60855542256d4c40992062f37912cf"
+                "reference": "a1295ca6e2a7f2d8ced9e0dd70900d7a64d9474b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/85c95412dd60855542256d4c40992062f37912cf",
-                "reference": "85c95412dd60855542256d4c40992062f37912cf",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/a1295ca6e2a7f2d8ced9e0dd70900d7a64d9474b",
+                "reference": "a1295ca6e2a7f2d8ced9e0dd70900d7a64d9474b",
                 "shasum": ""
             },
             "require": {
@@ -4576,7 +4576,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26T11:13:39+00:00"
+            "time": "2018-09-19T20:34:51+00:00"
         }
     ],
     "aliases": [],
