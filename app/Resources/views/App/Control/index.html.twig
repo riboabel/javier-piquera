@@ -9,6 +9,18 @@
     </div>
     <!-- /.row -->
 
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="active">
+            <a>Ordinarias</a>
+        </li>
+        <li role="presentation">
+            <a href="{{ path('app_control_clasicos_index') }}">
+                Clásicos
+            </a>
+        </li>
+    </ul>
+    <br>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="dataTable_wrapper">
@@ -40,7 +52,7 @@
 {% block page_javascripts %}
     <script>
         $(document).ready(function() {
-            App.Control.Index.init();
+            App.Control.Ordinarios.Index.init();
         });
     </script>
 {% endblock %}

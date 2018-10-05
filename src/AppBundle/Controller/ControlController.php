@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  * Description of ControlController
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
- * @Route("/control")
+ * @Route("/control/ordinarios")
  */
 class ControlController extends Controller
 {
@@ -27,25 +27,12 @@ class ControlController extends Controller
      */
     public function indexAction()
     {
-        $manager = $this->container->get('doctrine')->getManager();
-        $tomorrow = new \DateTime('tomorrow');
-        $query = $manager->createQuery('SELECT r FROM AppBundle:Reserva AS r JOIN r.driver AS d ' .
-                'WHERE r.isCancelled = :false AND r.isExecuted = :false ' .
-                'AND r.startAt >= :startAt AND r.startAt <= :endAt')
-                ->setParameters(array(
-                    'false' => false,
-                    'startAt' => $tomorrow->format('Y-m-d H:i:s'),
-                    'endAt' => $tomorrow->format('Y-m-d 23:59:59')
-                ));
-
-        return $this->render('App/Control/index.html.twig', array(
-            'records' => $query
-        ));
+        return $this->render('App/Control/index.html.twig');
     }
 
     /**
      * @Route("/get-data", options={"expose": true})
-     * @Method({"post"})
+     * @Method({"GET"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -156,7 +143,7 @@ class ControlController extends Controller
         }
 
         $renderer = $this->container->get('twig');
-        $template = $renderer->loadTemplate('App/Control/_row.html.twig');
+        $template = $renderer->load('App/Control/_row.html.twig');
         $data = array_map(function(Reserva $record) use ($template) {
             return array(
                 $template->renderBlock('start_at', array('record' => $record)),

@@ -85,3 +85,7 @@ button[data-toggle="collapse"][aria-expanded="true"] {
 button[data-toggle="collapse"][aria-expanded="true"]:hover {
     color: #23527c;
 }
+
+.badge.badge-danger {
+    background-color: #d9534f !important;
+}

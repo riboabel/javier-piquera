@@ -226,6 +226,20 @@ class ReservaTercero
     private $cobroNotes;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="control_1", type="string", length=10, nullable=true)
+     */
+    private $control1;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="control_2", type="string", length=10, nullable=true)
+     */
+    private $control2;
+
+    /**
      * ReservaTercero constructor.
      */
     public function __construct()
@@ -833,5 +847,53 @@ class ReservaTercero
     public function getCobroCharge()
     {
         return $this->cobroCharge;
+    }
+
+    /**
+     * Set control1
+     *
+     * @param string $control1
+     *
+     * @return ReservaTercero
+     */
+    public function setControl1($control1)
+    {
+        $this->control1 = $control1;
+
+        return $this;
+    }
+
+    /**
+     * Get control1
+     *
+     * @return string
+     */
+    public function getControl1()
+    {
+        return $this->control1;
+    }
+
+    /**
+     * Set control2
+     *
+     * @param string $control2
+     *
+     * @return ReservaTercero
+     */
+    public function setControl2($control2)
+    {
+        $this->control2 = $control2;
+
+        return $this;
+    }
+
+    /**
+     * Get control2
+     *
+     * @return string
+     */
+    public function getControl2()
+    {
+        return $this->control2;
     }
 }
