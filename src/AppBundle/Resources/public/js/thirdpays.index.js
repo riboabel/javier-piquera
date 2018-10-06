@@ -2,6 +2,8 @@ App = typeof App !== 'undefined' ? App : {};
 App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {};
 
 +(App.ThirdPays.Index = function($) {
+    'use strict';
+
     var $table = $('table#pays');
 
     var initTable = function() {

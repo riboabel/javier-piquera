@@ -68,7 +68,18 @@ class ClasicosController extends Controller
         $andX->add($qb->expr()->gte('r.startAt', $qb->expr()->literal($startAt->format('Y-m-d H:i:s'))));
         $andX->add($qb->expr()->lte('r.startAt', $qb->expr()->literal($endAt->format('Y-m-d H:i:s'))));
 
-        /** Aqui va el search  */
+        if (isset($search['value']) && $search['value'] != '') {
+            $orX = $qb->expr()->orX(
+                $qb->expr()->like('r.clientSerial', ':q'),
+                $qb->expr()->like('r.clientNames', ':q'),
+                $qb->expr()->like('st.name', ':q'),
+                $qb->expr()->like('c.name', ':q'),
+                $qb->expr()->like('p.name', ':q')
+            );
+            $andX->add($orX);
+
+            $qb->setParameter('q', sprintf('%%%s%%', $search['value']));
+        }
 
         if ($andX->count() > 0) {
             $qb->where($andX);

@@ -13,7 +13,8 @@
 {% block title %}GESTIÓN DE PIQUERA{% endblock %}
 
 {% block stylesheets %}
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+    {#<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">#}
+    <link rel="stylesheet" href="{{ asset('css/open-sans.css') }}">
 
     <!-- BEGIN GLOBAL STYLESHEETS -->
     {% stylesheets filter="cssrewrite,?scssphp" output="compiled/css/plugins.min.css"
@@ -277,7 +278,7 @@
     </script>
 
     {% javascripts filter="?jsqueeze" output="compiled/js/app.min.js"
-        "@AppBundle/Resources/public/js/*.js"
+        '@AppBundle/Resources/public/js/*.js'
         "js/form-guide.js"
         "js/guides.js"
         'js/dashboard.js'
@@ -288,8 +289,6 @@
         'js/form-provider.js'
         'js/prices.js'
         'js/pays.index.js'
-        'js/control.ordinarios.js'
-        'js/control.clasicos.js'
         "js/invoices.index.js"
         "js/invoices.form.js"
         %}

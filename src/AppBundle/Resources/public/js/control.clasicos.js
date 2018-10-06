@@ -57,12 +57,14 @@ App.Control.Clasicos = typeof App.Control.Clasicos !== 'undefined' ? App.Control
                     "method": 'GET',
                     "url": Routing.generate('app_control_clasicos_getdata')
                 },
-                searching: false,
                 ordering: false
             });
     };
 
     var handleClickControl = function(event) {
+        var button = $(this);
+        button.attr('disabled', 'disabled');
+
         event.preventDefault();
 
         $('#dR').remove();
@@ -73,6 +75,7 @@ App.Control.Clasicos = typeof App.Control.Clasicos !== 'undefined' ? App.Control
                 target: $dR.find('.modal-content')
             });
             $dR.modal();
+            button.removeAttr('disabled');
         });
     };
 

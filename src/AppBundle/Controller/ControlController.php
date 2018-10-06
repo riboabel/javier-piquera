@@ -49,7 +49,6 @@ class ControlController extends Controller
         $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order', array());
-        $filter = $request->get('filter', array());
 
         $andX = $qb->expr()->andX(
                 $qb->expr()->eq('r.isExecuted', $qb->expr()->literal(false)),
