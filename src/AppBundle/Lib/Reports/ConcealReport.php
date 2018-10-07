@@ -2,6 +2,7 @@
 
 namespace AppBundle\Lib\Reports;
 
+use AppBundle\Entity\ReservaTercero;
 use AppBundle\Lib\Reports\Report;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\Provider;
@@ -51,6 +52,7 @@ class ConcealReport extends Report
 
         $this->renderHeader();
         $this->render();
+        $this->renderTerceros();
 
         return $this->getPdfContent();
     }
@@ -81,8 +83,10 @@ class ConcealReport extends Report
                 array(25, $record->getProviderReference()),
                 array(61, $record->getServiceType()->getName()),
                 array(20, $record->getProvider()->getName()),
-                array(50, $record->getClientNames()),
-                array(0, $record->getPax())
+                array(30, $record->getClientNames()),
+                array(10, $record->getPax()),
+                array(20, $record->getGuide() ? $record->getGuide()->getName() : ''),
+                array(0, $record->getDriver() ? $record->getDriver()->getName() : '')
             ));
 
             $this->pdf->MultiCell(24, $h, $record->getSerialNumber(), 1, 'L', false, 0);
@@ -109,10 +113,10 @@ class ConcealReport extends Report
             }
 
             $h = $this->getRowHeight(array(
-                array(16, 'Desde'),
+                array(24, 'Desde'),
                 array(30, $record->getStartPlace()->getName()),
                 array(80, $record->getStartPlace()->getPostalAddress()),
-                array(16, 'Hasta'),
+                array(24, 'Hasta'),
                 array(30, $record->getEndPlace()->getName()),
                 array(0, $record->getEndPlace()->getPostalAddress())
             ));
@@ -149,6 +153,39 @@ class ConcealReport extends Report
         }
     }
 
+    private function renderTerceros()
+    {
+        $records = $this->getQueryTerceros()->getResult();
+
+        if (!$records) {
+            return $this;
+        }
+
+        $this->pdf->SetFont('Helvetica', 'B', 15);
+        $this->pdf->Cell(0, 0, 'SERVICIOS EN AUTO CLÁSICO', 0, 1, 'C');
+
+        $this->pdf->Cell(30, 0, 'Inicio', 1, 0, 'C');
+        $this->pdf->Cell(30, 0, 'Fin', 1, 0, 'C');
+        $this->pdf->Cell(30, 0, 'Referencia', 1, 0, 'C');
+        $this->pdf->Cell(40, 0, 'Servicio', 1, 0, 'C');
+        $this->pdf->Cell(15, 0, 'PAX', 1, 0, 'C');
+        $this->pdf->Cell(0, 0, 'Nombres', 1, 1, 'C');
+
+        $this->pdf->SetFont('Helvetica', '', 10);
+
+        /** @var ReservaTercero $r */
+        foreach ($records as $r) {
+            $this->pdf->Cell(30, 0, $r->getStartAt()->format('d/m/Y H:i'), 1, 0, 'C');
+            $this->pdf->Cell(30, 0, $r->getEndAt() ? $r->getEndAt()->format('d/m/Y H:i') : '', 1, 0, 'C');
+            $this->pdf->Cell(30, 0, $r->getClientSerial(), 1, 0, 'C');
+            $this->pdf->Cell(40, 0, $r->getServiceType()->getName(), 1, 0, 'C');
+            $this->pdf->Cell(15, 0, $r->getPax(), 1, 0, 'C');
+            $this->pdf->Cell(0, 0, $r->getClientNames(), 1, 1, 'L');
+        }
+
+        return $this;
+    }
+
     private function getQuery()
     {
         $qb = $this->em->getRepository('AppBundle:Reserva')
@@ -176,5 +213,32 @@ class ConcealReport extends Report
         $qb->where($andX);
 
         return $qb->getQuery();
+    }
+
+    private function getQueryTerceros()
+    {
+        $qb = $this->em->getRepository('AppBundle:ReservaTercero')
+            ->createQueryBuilder('r')
+            ->join('r.client', 'c')
+            ->join('r.serviceType', 'st')
+            ->join('r.provider', 'p')
+            ->orderBy('r.startAt');
+
+        $andX = $qb->expr()->andX(
+            $qb->expr()->eq('r.type', $qb->expr()->literal(ReservaTercero::TYPE_CLASICOS)),
+            $qb->expr()->eq('r.state', $qb->expr()->literal(ReservaTercero::STATE_CREATED)),
+            $qb->expr()->eq('p.id', $qb->expr()->literal($this->provider->getId()))
+        );
+
+        if ($this->start) {
+            $andX->add($qb->expr()->gte('r.startAt', ':startAt'));
+            $qb->setParameter('startAt', $this->start->format('Y-m-d'));
+        }
+        if ($this->end) {
+            $andX->add($qb->expr()->lte('r.startAt', ':endAt'));
+            $qb->setParameter('endAt', $this->end->format('Y-m-d 23:59:59'));
+        }
+
+        return $qb->where($andX)->getQuery();
     }
 }

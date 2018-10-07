@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\ReservaTercero;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -30,7 +31,7 @@ class DefaultController extends Controller
      */
     public function dropdownNotificationsAction()
     {
-        if (!in_array(date('w'), array(1))) {
+        if (!in_array(date('w'), array(1, 0))) {
             return new Response();
         }
 
@@ -49,7 +50,7 @@ class DefaultController extends Controller
         $endAt = new \DateTime(\date('Y-m-d H:i:s', \strtotime('+6 days', $startAt->format('U'))));
         $thisWeek = \date('W');
 
-        $providers = $manager->createQuery('SELECT p.id, p.name FROM AppBundle:Reserva AS r JOIN r.provider AS p WHERE r.startAt >= :startAt AND r.startAt <= :endAt AND r.isCancelled = :no GROUP BY p.name, p.id')
+        $ordinaryProviders = $manager->createQuery('SELECT p.id FROM AppBundle:Reserva AS r JOIN r.provider AS p WHERE r.startAt >= :startAt AND r.startAt <= :endAt AND r.isCancelled = :no GROUP BY p.id')
                 ->setParameters(array(
                     'startAt' => $startAt->format('Y-m-d 00:00:00'),
                     'endAt' => $endAt->format('Y-m-d 23:59:59'),
@@ -57,6 +58,30 @@ class DefaultController extends Controller
                 ))
                 ->getResult()
                 ;
+        $thirdProviders = $manager->createQuery('SELECT c.id FROM AppBundle:ReservaTercero AS r JOIN r.client AS c WHERE r.type = :clasicos AND r.startAt >= :startAt AND r.startAt <= :endAt AND r.state = :statusCreated GROUP BY c.id')
+            ->setParameters(array(
+                'clasicos' => ReservaTercero::TYPE_CLASICOS,
+                'startAt' => $startAt->format('Y-m-d 00:00:00'),
+                'endAt' => $endAt->format('Y-m-d 23:59:59'),
+                'statusCreated' => ReservaTercero::STATE_CREATED
+            ))
+            ->getResult();
+        $sumProviders = array_merge(array_map(
+            function($p) {
+                return $p['id'];
+            },
+            $ordinaryProviders
+        ), array_map(
+            function($p) {
+                return $p['id'];
+            },
+            $thirdProviders
+        ));
+
+        $providers = $manager->createQuery('SELECT p.id, p.name FROM AppBundle:Provider AS p WHERE p.id IN (:ids) ORDER BY p.name')
+            ->setParameter('ids', $sumProviders)
+            ->getResult();
+
         $counter = 0; $total = count($providers);
         foreach ($providers as $p) {
             $record = $manager->getRepository('AppBundle:WeekConceal')->findOneBy(array(
@@ -88,19 +113,42 @@ class DefaultController extends Controller
         $thisWeek = date('W');
         $thisYear = date('Y');
 
-        $providers = $manager->createQuery('SELECT p.id, p.name FROM AppBundle:Reserva AS r JOIN r.provider AS p WHERE r.startAt >= :startAt AND r.startAt <= :endAt AND r.isCancelled = :no GROUP BY p.name, p.id')
-                ->setParameters(array(
-                    'startAt' => $startAt->format('Y-m-d 00:00:00'),
-                    'endAt' => $endAt->format('Y-m-d 23:59:59'),
-                    'no' => false
-                ))
-                ->getResult()
-                ;
-        $counter = 0; $total = count($providers);
+        $ordinaryProviders = $manager->createQuery('SELECT p.id FROM AppBundle:Reserva AS r JOIN r.provider AS p WHERE r.startAt >= :startAt AND r.startAt <= :endAt AND r.isCancelled = :no GROUP BY p.id')
+            ->setParameters(array(
+                'startAt' => $startAt->format('Y-m-d 00:00:00'),
+                'endAt' => $endAt->format('Y-m-d 23:59:59'),
+                'no' => false
+            ))
+            ->getResult()
+        ;
+        $thirdProviders = $manager->createQuery('SELECT c.id FROM AppBundle:ReservaTercero AS r JOIN r.client AS c WHERE r.type = :clasicos AND r.startAt >= :startAt AND r.startAt <= :endAt AND r.state = :statusCreated GROUP BY c.id')
+            ->setParameters(array(
+                'clasicos' => ReservaTercero::TYPE_CLASICOS,
+                'startAt' => $startAt->format('Y-m-d 00:00:00'),
+                'endAt' => $endAt->format('Y-m-d 23:59:59'),
+                'statusCreated' => ReservaTercero::STATE_CREATED
+            ))
+            ->getResult();
+        $sumProviders = array_merge(array_map(
+            function($p) {
+                return $p['id'];
+            },
+            $ordinaryProviders
+        ), array_map(
+            function($p) {
+                return $p['id'];
+            },
+            $thirdProviders
+        ));
+
+        $providers = $manager->createQuery('SELECT p.id, p.name FROM AppBundle:Provider AS p WHERE p.id IN (:ids) ORDER BY p.name')
+            ->setParameter('ids', $sumProviders)
+            ->getResult();
+
         foreach ($providers as $i => $p) {
             $record = $manager->getRepository('AppBundle:WeekConceal')->findOneBy(array(
                 'week' => $thisWeek,
-                'year' => date('Y'),
+                'year' => $thisYear,
                 'provider' => $p['id']
             ));
 
@@ -115,7 +163,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/generate-week_conceal-report/{id}", requirements={"id": "\d+"})
+     * @Route("/generate-week-conceal-report/{id}", requirements={"id": "\d+"})
      * @Method({"get"})
      * @ParamConverter("provider", class="AppBundle\Entity\Provider")
      * @param \AppBundle\Entity\Provider $provider
