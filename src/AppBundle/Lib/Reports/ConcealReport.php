@@ -66,7 +66,7 @@ class ConcealReport extends Report
         $this->pdf->Cell(61, 0, 'Servicio', 1, 0, 'C');
         $this->pdf->Cell(20, 0, 'Cliente', 1, 0, 'C');
         $this->pdf->Cell(50, 0, 'Nombres', 1, 0, 'C');
-        $this->pdf->Cell(0, 0, 'Pax', 1, 0, 'C');
+        $this->pdf->Cell(0, 0, 'Pax', 1, 1, 'C');
     }
 
     private function render()
