@@ -31,7 +31,7 @@ class DefaultController extends Controller
      */
     public function dropdownNotificationsAction()
     {
-        if (!in_array(date('w'), array(1, 0))) {
+        if (!in_array(date('w'), array(1))) {
             return new Response();
         }
 
