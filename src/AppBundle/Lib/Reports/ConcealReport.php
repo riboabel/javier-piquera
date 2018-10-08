@@ -100,18 +100,6 @@ class ConcealReport extends Report
             $this->pdf->MultiCell(20, $h, $record->getGuide() ? $record->getGuide()->getName() : '', 1, 'L', false, 0);
             $this->pdf->MultiCell(0, $h, $record->getDriver() ? $record->getDriver()->getName() : '', 1, 'L', false, 1);
 
-            if (null !== $record->getServiceDescription()) {
-                $this->pdf->SetFont('', 'B', 8);
-                $this->pdf->MultiCell(0, 0, 'Descripción del servicio', 'LR', 'L', false, 1);
-                $this->pdf->SetFont('', '');
-
-                $x = $this->pdf->GetX();
-                $y = $this->pdf->GetY();
-                $this->pdf->writeHTMLCell(0, 0, $x, $y, $record->getServiceDescription(), 'LBR', 1);
-
-                $this->pdf->SetFont('', '', 10);
-            }
-
             $h = $this->getRowHeight(array(
                 array(24, 'Desde'),
                 array(30, $record->getStartPlace()->getName()),
@@ -164,10 +152,11 @@ class ConcealReport extends Report
         $this->pdf->SetFont('Helvetica', 'B', 15);
         $this->pdf->Cell(0, 0, 'SERVICIOS EN AUTO CLÁSICO', 0, 1, 'C');
 
+        $this->pdf->Cell(30, 0, 'Número', 1, 0, 'C');
         $this->pdf->Cell(30, 0, 'Inicio', 1, 0, 'C');
-        $this->pdf->Cell(30, 0, 'Fin', 1, 0, 'C');
+        $this->pdf->Cell(50, 0, 'Lugar', 1, 0, 'C');
         $this->pdf->Cell(30, 0, 'Referencia', 1, 0, 'C');
-        $this->pdf->Cell(40, 0, 'Servicio', 1, 0, 'C');
+        $this->pdf->Cell(50, 0, 'Servicio', 1, 0, 'C');
         $this->pdf->Cell(15, 0, 'PAX', 1, 0, 'C');
         $this->pdf->Cell(0, 0, 'Nombres', 1, 1, 'C');
 
@@ -175,10 +164,11 @@ class ConcealReport extends Report
 
         /** @var ReservaTercero $r */
         foreach ($records as $r) {
+            $this->pdf->Cell(30, 0, (string) $r, 1, 0, 'C');
             $this->pdf->Cell(30, 0, $r->getStartAt()->format('d/m/Y H:i'), 1, 0, 'C');
-            $this->pdf->Cell(30, 0, $r->getEndAt() ? $r->getEndAt()->format('d/m/Y H:i') : '', 1, 0, 'C');
+            $this->pdf->Cell(50, 0, $r->getStartIn()->getName(), 1, 0, 'C');
             $this->pdf->Cell(30, 0, $r->getClientSerial(), 1, 0, 'C');
-            $this->pdf->Cell(40, 0, $r->getServiceType()->getName(), 1, 0, 'C');
+            $this->pdf->Cell(50, 0, $r->getServiceType()->getName(), 1, 0, 'C');
             $this->pdf->Cell(15, 0, $r->getPax(), 1, 0, 'C');
             $this->pdf->Cell(0, 0, $r->getClientNames(), 1, 1, 'L');
         }
@@ -221,13 +211,12 @@ class ConcealReport extends Report
             ->createQueryBuilder('r')
             ->join('r.client', 'c')
             ->join('r.serviceType', 'st')
-            ->join('r.provider', 'p')
             ->orderBy('r.startAt');
 
         $andX = $qb->expr()->andX(
             $qb->expr()->eq('r.type', $qb->expr()->literal(ReservaTercero::TYPE_CLASICOS)),
             $qb->expr()->eq('r.state', $qb->expr()->literal(ReservaTercero::STATE_CREATED)),
-            $qb->expr()->eq('p.id', $qb->expr()->literal($this->provider->getId()))
+            $qb->expr()->eq('c.id', $qb->expr()->literal($this->provider->getId()))
         );
 
         if ($this->start) {
