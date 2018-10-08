@@ -121,6 +121,7 @@
                                 <li>
                                     <a href="{{ path("app_reservas_index") }}">Reservas</a>
                                 </li>
+                                <li><a href="{{ path("app_reservasclasicos_index") }}">Reservas de clásicos</a></li>
                                 <li>
                                     <a href="{{ path("app_driverplanning_index") }}">Planificación de conductores</a>
                                 </li>
@@ -130,7 +131,6 @@
                                     <li><a href="{{ path("app_cobros_index") }}">Cobros a clientes</a></li>
                                     <li><a href="{{ path("app_invoices_index") }}">Facturación de servicios</a></li>
                                     <li><a href="{{ path("app_pays_index") }}">Pagos a conductores</a></li>
-                                    <li><a href="{{ path("app_reservasclasicos_index") }}">Reservas de clásicos</a></li>
                                     <li><a href="{{ path("app_thirdpays_index") }}">Pagos a terceros</a></li>
                                     <li><a href="{{ path("app_thirdcobros_index") }}">Cobros de terceros</a></li>
                                 {% endif %}
@@ -143,10 +143,10 @@
                                 <li><a href="{{ path("app_reports_all_reservas_by_provider") }}" class="link-report">Servicios por cliente</a></li>
                                 <li><a href="{{ path("app_reports_all_reservas_by_driver") }}" class="link-report">Servicios por conductor</a></li>
                                 <li><a href="{{ path("app_reports_showprogrammodelform") }}" class="link-report">Modelo de programa</a></li>
+                                <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "clasicos"}) }}" class="link-report">Clásicos</a></li>
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
                                     <li><a href="{{ path("app_reports_old_cobros") }}" class="link-report">Cobros realizados</a></li>
                                     <li><a href="{{ path("app_reports_old_pays") }}" class="link-report">Pagos realizados</a></li>
-                                    <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "clasicos"}) }}" class="link-report">Clásicos</a></li>
                                 {% endif %}
                             </ul>
                         </li>
