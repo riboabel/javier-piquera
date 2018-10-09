@@ -18,12 +18,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ClasicosController
+ * Class GuiaController
  *
- * @Route("/control/clasicos")
+ * @Route("/control/guia")
  * @author Raibel Botta <raibelbotta@gmail.com>
  */
-class ClasicosController extends Controller
+class GuiaController extends Controller
 {
     /**
      * @Route("/")
@@ -32,7 +32,7 @@ class ClasicosController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('App/Control/Clasicos/index.html.twig');
+        return $this->render('App/Control/Guia/index.html.twig');
     }
 
     /**
@@ -59,7 +59,7 @@ class ClasicosController extends Controller
             $qb->expr()->eq('r.type', ':type'),
             $qb->expr()->eq('r.state', $qb->expr()->literal(ReservaTercero::STATE_CREATED))
         );
-        $qb->setParameter('type', ReservaTercero::TYPE_CLASICOS);
+        $qb->setParameter('type', ReservaTercero::TYPE_GUIA);
 
         $startAt = new \DateTime('tomorrow');
         $endAt = date_create($startAt->format('Y-m-d 23:59:59'));
@@ -97,7 +97,7 @@ class ClasicosController extends Controller
         $total = $pagination->getTotalItemCount();
 
         $renderer = $this->container->get('twig');
-        $template = $renderer->load('App/Control/Clasicos/_row.html.twig');
+        $template = $renderer->load('App/Control/Guia/_row.html.twig');
         $data = array_map(function(ReservaTercero $record) use ($template) {
             return array(
                 $record->getStartAt()->format('d/m/Y H:i'),
@@ -160,7 +160,7 @@ class ClasicosController extends Controller
             return new Response('<script>$(".modal").modal("hide"); $("#table-xs").DataTable().draw(false);</script>');
         }
 
-        return $this->render('App/Control/Clasicos/edit.html.twig', array(
+        return $this->render('App/Control/Guia/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }

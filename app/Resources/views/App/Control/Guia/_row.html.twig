@@ -1,0 +1,12 @@
+{% block controls %}
+    {% set checked = record.control1 is not empty and record.control2 is not empty %}
+    <div class="text-center">
+        <a href="{{ path("app_control_guia_edit", {id: record.id}) }}" class="btn btn-{{ checked ? 'success' : 'info' }} btn-control btn-xs">
+            {% if checked %}
+                <span class="fa fa-check"></span>
+            {% else %}
+                <span class="fa fa-square-o"></span>
+            {% endif %}
+        </a>
+    </div>
+{% endblock %}

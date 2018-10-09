@@ -35,31 +35,38 @@ App.Control.Ordinarios = typeof App.Control.Ordinarios !== 'undefined' ? App.Con
                 $(this).unblock();
             })
             .DataTable({
-                "aoColumns": [
+                aoColumns: [
                     {
-                        "name": "startAt"
+                        name: "startAt",
+                        title: 'Inicio'
                     },
                     {
-                        "name": "provider"
+                        name: "provider",
+                        title: 'Cliente'
                     },
                     {
-                        "name": "serialNumber"
+                        name: "serialNumber",
+                        title: 'Número'
                     },
                     {
-                        "name": "providerReference"
+                        name: "providerReference",
+                        title: 'Referencia'
                     },
                     {
-                        "name": "clientNames"
+                        name: "clientNames",
+                        title: 'Nombre(s)'
                     },
                     {
                         name: 'pax',
-                        searchable: false
+                        searchable: false,
+                        title: 'PAX'
                     },
                     {
-                        "name": "serviceType"
+                        name: "serviceType",
+                        title: 'Servicio'
                     },
                     {
-                        "name": "driver",
+                        name: "driver",
                         title: 'Conductor'
                     },
                     {
@@ -69,19 +76,20 @@ App.Control.Ordinarios = typeof App.Control.Ordinarios !== 'undefined' ? App.Con
                         sortable: false
                     },
                     {
-                        "name": "control",
-                        "searchable": false,
-                        "sortable": false
+                        name: "control",
+                        title: 'Control',
+                        searchable: false,
+                        sortable: false
                     }
                 ],
                 "aaSorting": [[0, "asc"]],
                 "aLengthMenu": [200, 400, 800, 1000],
                 "responsive": true,
-                "bServerSide": true,
-                "bProcessing": false,
-                "ajax": {
-                    "method": 'GET',
-                    "url": Routing.generate('app_control_getdata')
+                bServerSide: true,
+                bProcessing: false,
+                ajax: {
+                    method: 'GET',
+                    url: Routing.generate('app_control_getdata')
                 }
             });
     };
