@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * ReservasMicrobusController
+ * ReservasClasicosController
  *
  * @author Raibel Botta <raibelbotta@gmail.com>
  * @Route("/reservas-clasicos")
