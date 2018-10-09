@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class ThirdProvider
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ThirdProviderRepository")
  * @ORM\Table(name="third_provider")
  * @UniqueThirdProviderSerialPrefix
  */
@@ -17,6 +17,7 @@ class ThirdProvider
 {
     const TYPE_MICROBUS = 'microbus';
     const TYPE_CLASICOS = 'clasicos';
+    const TYPE_GUIA = 'guia';
 
     /**
      * @var string
@@ -31,7 +32,7 @@ class ThirdProvider
      * @var string
      *
      * @ORM\Column(length=10)
-     * @Assert\Regex("/^(clasicos|microbus)$/")
+     * @Assert\Regex("/^(clasicos|microbus|guia)$/")
      */
     private $type;
 

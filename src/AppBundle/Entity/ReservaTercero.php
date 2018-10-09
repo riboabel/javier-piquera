@@ -22,6 +22,7 @@ class ReservaTercero
 {
     const TYPE_MICROBUS = 'microbus';
     const TYPE_CLASICOS = 'clasicos';
+    const TYPE_GUIA = 'guia';
 
     const STATE_CREATED = 'created';
     const STATE_EXECUTED = 'executed';
@@ -40,7 +41,7 @@ class ReservaTercero
      * @var string
      *
      * @ORM\Column(length=10)
-     * @Assert\Regex("/^(microbus|clasicos)$/")
+     * @Assert\Regex("/^(microbus|clasicos|guia)$/")
      */
     private $type;
 

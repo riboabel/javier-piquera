@@ -22,8 +22,9 @@ class ThirdProviderFormType extends AbstractType
             ->add('name')
             ->add('type', ChoiceType::class, array(
                 'choices' => array(
-                    'Microbus' => 'microbus',
-                    'Cläsicos' => 'clasicos'
+                    'Microbus' => ThirdProvider::TYPE_MICROBUS,
+                    'Cläsicos' => ThirdProvider::TYPE_CLASICOS,
+                    'Guía' => ThirdProvider::TYPE_GUIA
                 ),
                 'choices_as_values' => true
             ))

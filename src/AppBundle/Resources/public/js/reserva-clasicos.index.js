@@ -1,7 +1,7 @@
 App = typeof App !== 'undefined' ? App : {};
-App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.ReservasClasicos : {};
+App.ReservasGuia = typeof App.ReservasGuia !== 'undefined' ? App.ReservasGuia : {};
 
-+(App.ReservasClasicos.Index = function($, window) {
++(App.ReservasGuia.Index = function($, window) {
     'use strict';
 
     var $table = $('#dataTables-reservas');

@@ -1,7 +1,9 @@
 App = typeof App !== 'undefined' ? App : {};
-App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.ReservasClasicos :{};
+App.ReservasGuia = typeof App.ReservasGuia !== 'undefined' ? App.ReservasGuia :{};
 
-+(App.ReservasClasicos.Form = function($) {
++(App.ReservasGuia.Form = function($) {
+    'use strict';
+
     var initValidator = function() {
         $.validator.addMethod('validdatetime', function(value, element) {
             return this.optional(element) || /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/\d{4}\s([0-1]\d|2[0-3]):[0-5]\d$/.test(value);
@@ -30,7 +32,7 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
                 }
             }
         });
-    }
+    };
 
     var initControls = function() {
         $('#reserva_tercero_form_startIn, #reserva_tercero_form_endIn').select2({
@@ -63,12 +65,12 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
             }
 
         }).trigger('change');
-    }
+    };
 
     return {
         init: function() {
             initControls();
             initValidator();
         }
-    }
+    };
 }(jQuery));
