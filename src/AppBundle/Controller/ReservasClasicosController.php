@@ -50,8 +50,8 @@ class ReservasClasicosController extends Controller
 
         $qb = $em->getRepository('AppBundle:ReservaTercero')
                 ->createQueryBuilder('r')
-                ->where('r.type = :microbus')
-                ->setParameter('microbus', ReservaTercero::TYPE_CLASICOS)
+                ->where('r.type = :clasicos')
+                ->setParameter('clasicos', ReservaTercero::TYPE_CLASICOS)
                 ;
 
         $columns = $request->get('columns');
