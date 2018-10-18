@@ -3,6 +3,8 @@
         CLÁSICOS
     {% elseif record.type == constant('AppBundle\\Entity\\ThirdProvider::TYPE_MICROBUS') %}
         MICROBUS
+    {% elseif record.type == constant('AppBundle\\Entity\\ThirdProvider::TYPE_GUIA') %}
+        GUIA
     {% endif %}
 {% endblock %}
 
