@@ -156,7 +156,7 @@ class ServicesForThirdProviderReport extends Report
 
     private function getProviderSerialNumber(ReservaTercero $record)
     {
-        return ReservaTercero::TYPE_CLASICOS == $record->getType() ? (string)$record : $record->getProviderSerial();
+        return $record->getProvider()->getIsSerialGenerator() ? (string)$record : $record->getProviderSerial();
     }
 
     private function renderFooter()

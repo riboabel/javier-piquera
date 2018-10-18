@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ThirdProviderReportsController extends Controller
 {
     /**
-     * @Route("/reservas-{type}", requirements={"type": "clasicos|microbus"})
+     * @Route("/reservas-{type}", requirements={"type": "clasicos|microbus|guia"})
      * @Method({"get", "post"})
      * @param Request $request
      * @return Response
@@ -50,7 +50,7 @@ class ThirdProviderReportsController extends Controller
                     return $repository->createQueryBuilder('p')
                         ->where('p.type = :type')
                         ->orderBy('p.name')
-                        ->setParameter('type', $type == 'clasicos' ? ThirdProvider::TYPE_CLASICOS : ThirdProvider::TYPE_MICROBUS);
+                        ->setParameter('type', $type);
                 },
                 'required' => true
             ))
@@ -60,7 +60,7 @@ class ThirdProviderReportsController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $manager = $this->getDoctrine()->getManager();
-                $report = new Reports\ServicesForThirdProviderReport($form->getData(), $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination'], $type == 'clasicos' ? ReservaTercero::TYPE_CLASICOS : ReservaTercero::TYPE_MICROBUS);
+                $report = new Reports\ServicesForThirdProviderReport($form->getData(), $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination'], $type);
 
                 return new StreamedResponse(function() use($report) {
                     file_put_contents('php://output', $report->getContent());
