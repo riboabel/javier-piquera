@@ -107,13 +107,3 @@
         </div>
     </div>
 {% endblock page_content %}
-
-{% block page_javascripts %}
-    <script src="{{ asset("plugins/raphael/raphael-min.js") }}"></script>
-    <script src="{{ asset("plugins/morrisjs/morris.min.js") }}"></script>
-    <script>
-        $(document).ready(function() {
-            App.Dashboard.init();
-        });
-    </script>
-{% endblock %}

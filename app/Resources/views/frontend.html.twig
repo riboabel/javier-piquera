@@ -221,29 +221,6 @@
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
-    <script src="{{ asset('plugins/knockout.js') }}"></script>
-    <script type="text/javascript">
-        +(function(ko){
-            'use strict';
-
-            var templateLoaderByUrl = {
-                loadTemplate: function(name, templateConfig, callback) {
-                    if (templateConfig.fromUrl) {
-                        var url = '/templates/' + templateConfig.fromUrl;
-
-                        $.get(url, function(markupString) {
-                            ko.components.defaultLoader.loadTemplate(name, markupString, callback);
-                        });
-                    } else {
-                        callback(null);
-                    }
-                }
-            }
-
-            ko.components.loaders.unshift(templateLoaderByUrl);
-        }(ko));
-    </script>
-
     <!-- BEGIN GLOBAL JAVASCRIPTS -->
     {% javascripts filter="?jsqueeze" output="compiled/js/plugins.min.js"
         'plugins/jquery/jquery-3.3.1.js'
@@ -283,7 +260,6 @@
         '@AppBundle/Resources/public/js/*.js'
         "js/form-guide.js"
         "js/guides.js"
-        'js/dashboard.js'
         'js/tables.js'
         'js/users.js'
         'js/form-user.js'
