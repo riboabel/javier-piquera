@@ -14,15 +14,7 @@
         %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
-    <script type="text/javascript">
-        var require = {
-            baseUrl: '/',
-            paths: {
-                'jquery': 'plugins/jquery/jquery-3.3.1.min',
-                'bootstrap': 'plugins/bootstrap/js/bootstrap'
-            }
-        }
-    </script>
+    <script type="text/javascript" src="{{ asset('js/require-config.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/require.js') }}"></script>
 </head>
 <body>
