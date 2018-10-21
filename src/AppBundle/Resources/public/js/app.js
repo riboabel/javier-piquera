@@ -39,7 +39,7 @@ App = typeof App !== 'undefined' ? App : {};
         if (element.is('li')) {
             element.addClass('active');
         }
-    }
+    };
 
     var initTooltipster = function() {
         if ($.fn.tooltipster) {
@@ -47,7 +47,7 @@ App = typeof App !== 'undefined' ? App : {};
         } else {
             console.log('Tooltip plugin not present');
         }
-    }
+    };
 
     var initValidator = function(element, options) {
         $(element).each(function() {
@@ -84,7 +84,7 @@ App = typeof App !== 'undefined' ? App : {};
                 }
             }, options));
         });
-    }
+    };
 
     var initDatetimepicker = function() {
         if ($.datepicker) {

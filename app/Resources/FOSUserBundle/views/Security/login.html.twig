@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GESTIÓN DE PIQUERA :: Ingreso</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+    {#<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">#}
+    <link rel="stylesheet" href="{{ asset('css/open-sans.css') }}">
     {% stylesheets filter="cssrewrite,?scssphp" output="compiled/css/login.min.css"
         "plugins/bootstrap/css/bootstrap.min.css"
         "plugins/bootstrap/css/bootstrap-theme.min.css"
@@ -13,6 +14,16 @@
         %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
+    <script type="text/javascript">
+        var require = {
+            baseUrl: '/',
+            paths: {
+                'jquery': 'plugins/jquery/jquery-3.3.1.min',
+                'bootstrap': 'plugins/bootstrap/js/bootstrap'
+            }
+        }
+    </script>
+    <script type="text/javascript" src="{{ asset('js/require.js') }}"></script>
 </head>
 <body>
     <div class="container">
@@ -50,12 +61,12 @@
             </div>
         </div>
     </div>
-    {% javascripts filter="?jsqueeze" output="compiled/js/login.min.js"
-        "plugins/jquery/jquery-3.3.1.js"
-        "plugins/bootstrap/js/bootstrap.js"
-        "plugins/jquery.validate/jquery.validate.min.js"
-        %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script type="text/javascript">
+        require([
+            'jquery'
+        ], function () {
+            require(['bootstrap']);
+        });
+    </script>
 </body>
 </html>
