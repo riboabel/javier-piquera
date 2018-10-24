@@ -118,6 +118,21 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
             });
         });
 
+        $table.on('click', '.btn-confirm', function(event) {
+            event.preventDefault();
+
+            var url = $(this).attr('href');
+            $(this).closest('td').empty().text('Confirmando...');
+
+            $.ajax({
+                method: 'POST',
+                url: url,
+                success: function (response) {
+                    $table.DataTable().draw(true);
+                }
+            });
+        });
+
         $table.on('click', '.btn-execute', function(event) {
             event.preventDefault();
 

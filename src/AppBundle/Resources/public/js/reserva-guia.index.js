@@ -118,6 +118,21 @@ App.ReservasGuia = typeof App.ReservasGuia !== 'undefined' ? App.ReservasGuia : 
             });
         });
 
+        $table.on('click', '.btn-confirm', function(event) {
+            event.preventDefault();
+
+            var url = $(this).attr('href');
+            $(this).closest('td').empty().text('Confirmando...');
+
+            $.ajax({
+                method: 'POST',
+                success: function(response) {
+                    $table.DataTable().draw(true);
+                },
+                url: url
+            });
+        });
+
         $table.on('click', '.btn-execute', function(event) {
             event.preventDefault();
 

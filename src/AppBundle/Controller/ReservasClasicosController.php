@@ -161,6 +161,24 @@ class ReservasClasicosController extends Controller
     }
 
     /**
+     * @Route("/{id}/confirmar", requirements={"id": "\d+"})
+     * @Method("POST")
+     * @param ReservaTercero $reserva
+     * @return JsonResponse
+     */
+    public function setConfirmedAction(ReservaTercero $reserva)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $reserva->setConfirmed(true);
+        $manager->flush();
+
+        return new JsonResponse(array(
+            'result' => 'success'
+        ));
+    }
+
+    /**
      * @Route("/{id}/ejecutar", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param ReservaTercero $reserva

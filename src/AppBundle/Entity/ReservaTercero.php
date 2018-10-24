@@ -54,6 +54,13 @@ class ReservaTercero
     private $state;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $confirmed;
+
+    /**
      * @var ServiceType
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ServiceType")
@@ -246,6 +253,7 @@ class ReservaTercero
     public function __construct()
     {
         $this->state = self::STATE_CREATED;
+        $this->confirmed = false;
     }
 
     /**
@@ -896,5 +904,29 @@ class ReservaTercero
     public function getControl2()
     {
         return $this->control2;
+    }
+
+    /**
+     * Set confirmed
+     *
+     * @param boolean $confirmed
+     *
+     * @return ReservaTercero
+     */
+    public function setConfirmed($confirmed)
+    {
+        $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    /**
+     * Get confirmed
+     *
+     * @return boolean
+     */
+    public function getConfirmed()
+    {
+        return $this->confirmed;
     }
 }
