@@ -17,6 +17,12 @@
         %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
+
+    <script src="{{ asset('js/require-config.js') }}"></script>
+    <script src="{{ asset('js/require.js') }}"></script>
+    <script type="text/javascript">
+        require(['bootstrap']);
+    </script>
 {% endblock %}
 
 {% block body %}
@@ -33,9 +39,19 @@
                 </div>
                 <div class="pull-right form-inline">
                     <label for="from-date">Desde</label>
-                    <input type="text" id="from-date" class="form-control input-sm datepicker">
+                    <div class="input-group input-group-sm">
+                        <input type="text" id="from-date" class="form-control datepicker" value="{{ today|date('d/m/Y') }}">
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
                     <label for="to-date">Hasta</label>
-                    <input type="text" id="to-date" class="form-control input-sm datepicker">
+                    <div class="input-group input-group-sm">
+                        <input type="text" id="to-date" class="form-control input-sm datepicker" value="{{ next_7_days|date('d/m/Y') }}">
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
                     <a href="{{ path("homepage") }}" class="btn btn-default">
                         Cerrar
                     </a>
@@ -71,25 +87,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts filter="?jsqueeze" output="compiled/js/driver-planning.min.js"
-        "plugins/jquery/jquery-3.3.1.js"
-        "plugins/jquery/jquery-migrate-3.0.0.min.js"
-        "plugins/jquery.ui/js/jquery-ui-1.11.4.min.js"
-        "plugins/bootstrap/js/bootstrap.min.js"
-        "plugins/jquery.validate/jquery.validate.min.js"
-        "plugins/jquery.validate/localization/messages_es.min.js"
-        "plugins/tooltipster-master/js/jquery.tooltipster.min.js"
-        "plugins/jquery.dataTables/datatables.min.js"
-        "plugins/select2/js/select2.min.js"
-        "plugins/select2/js/i18n/es.js"
-        "js/driver-planning.js"
-        %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
     <script type="text/javascript">
-        $(document).ready(function() {
-            App.init();
-        });
+        require(['js/driver-planning']);
     </script>
 {% endblock %}

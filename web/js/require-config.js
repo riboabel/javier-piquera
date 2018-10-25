@@ -2,6 +2,14 @@ var require = {
     baseUrl: '/',
     paths: {
         'jquery': 'plugins/jquery/jquery-3.3.1.min',
-        'bootstrap': 'plugins/bootstrap/js/bootstrap'
+        'jquery/ui': 'plugins/jquery.ui/js/jquery-ui-1.11.4.min',
+        'bootstrap': 'plugins/bootstrap/js/bootstrap',
+        'jquery/select2': 'plugins/select2/js/select2',
+        'jquery/select2.i18n-es': 'plugins/select2/js/i18n/es',
+        'datatables.net': 'plugins/jquery.dataTables/amd/datatables',
+        'datatables.net-bs': 'plugins/jquery.dataTables/amd/datatables.bootstrap'
+    },
+    shim: {
+        'bootstrap': ['jquery']
     }
 };

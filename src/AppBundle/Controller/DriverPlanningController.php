@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Reserva;
+use AppBundle\Entity\ReservaLog;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -24,7 +25,13 @@ class DriverPlanningController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('App/DriverPlanning/index.html.twig');
+        $today = new \DateTime('now');
+        $next7days = new \DateTime('+7 days');
+
+        return $this->render('App/DriverPlanning/index.html.twig', array(
+            'today' => $today,
+            'next_7_days' => $next7days
+        ));
     }
 
     /**
@@ -205,12 +212,12 @@ class DriverPlanningController extends Controller
      */
     public function saveDriverAction(\AppBundle\Entity\Reserva $reserva, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $manager = $this->getDoctrine()->getManager();
 
-        $reserva->setDriver($em->find('AppBundle:Driver', $request->get('driver')));
+        $reserva->setDriver($manager->find('AppBundle:Driver', $request->get('driver')));
         $reserva->addLog(new ReservaLog());
 
-        $em->flush();
+        $manager->flush();
 
         return new JsonResponse(array('result' => 'success'));
     }

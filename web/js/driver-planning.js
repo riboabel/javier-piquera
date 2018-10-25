@@ -1,4 +1,14 @@
-App = function() {
+require([
+    'jquery',
+    'jquery/ui',
+    'jquery/select2',
+    'datatables.net',
+    'datatables.net-bs'
+], function ($) {
+    'use strict';
+
+    require(['jquery/select2.i18n-es']);
+
     var datatable, $table;
 
     var handleDrawTable = function() {
@@ -17,13 +27,13 @@ App = function() {
                     return {
                         q: params.term,
                         page: params.page
-                    }
+                    };
                 }
             }
         });
 
         $table.find('select').on('change', handleSelect2Change);
-    }
+    };
 
     var handleSelect2Change = function() {
         var url = $(this).data('save-url');
@@ -37,8 +47,8 @@ App = function() {
             success: function(json) {
                 datatable.DataTable().draw(false);
             }
-        })
-    }
+        });
+    };
 
     var initTable = function() {
         $table = $('table#table-records');
@@ -111,7 +121,7 @@ App = function() {
                 }
             }
         });
-    }
+    };
 
     var initDatepickers = function() {
         $('.datepicker').on('change', function() {
@@ -122,12 +132,10 @@ App = function() {
             autoclose: true,
             clearBtn: true
         });
-    }
+    };
 
-    return {
-        init: function() {
-            initTable();
-            initDatepickers();
-        }
-    }
-}();
+    $(document).ready(function () {
+        initTable();
+        initDatepickers();
+    });
+});
