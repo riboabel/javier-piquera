@@ -156,8 +156,6 @@ class ReportsController extends Controller
      */
     public function reservasByDriverAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $form = $this->createForm(ReservasByDriverReportFilterFormType::class);
 
         if ($request->getMethod() == 'POST') {
@@ -165,7 +163,8 @@ class ReportsController extends Controller
             $queryBuilder = $manager->getRepository('AppBundle:Reserva')
                 ->createQueryBuilder('r')
                 ->join('r.serviceType', 'st')
-                ->where('r.isCancelled = false');
+                ->where('r.isCancelled = false')
+                ->orderBy('r.startAt');
 
             $form->submit($request->request->get($form->getName()));
             $this->container->get('lexik_form_filter.query_builder_updater')
