@@ -24,6 +24,7 @@ class ThirdPayFilterFormType extends AbstractType
                 'choices' => array(
                     'CLÁSICOS' => ReservaTercero::TYPE_CLASICOS,
                     'MICROBUS' => ReservaTercero::TYPE_MICROBUS,
+                    'GUÍA' => ReservaTercero::TYPE_GUIA
                 ),
                 'choices_as_values' => true,
                 'required' => true

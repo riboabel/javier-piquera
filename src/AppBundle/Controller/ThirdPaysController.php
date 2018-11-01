@@ -47,6 +47,8 @@ class ThirdPaysController extends Controller
 
         $qb = $manager->getRepository('AppBundle:ReservaTercero')
             ->createQueryBuilder('r')
+            ->join('r.provider', 'p')
+            ->join('r.serviceType', 's')
             ->where('r.state <> :state')
             ->setParameter('state', ReservaTercero::STATE_CANCELLED)
             ;
