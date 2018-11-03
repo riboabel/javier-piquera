@@ -153,7 +153,7 @@ App.Reservas = typeof App.Reservas !== 'undefined' ? App.Reservas : {};
     };
 
     var initControls = function() {
-        $('#reserva_form_isDriverConfirmed').iCheck({
+        $('#reserva_form_isDriverConfirmed, #reserva_form_hasIncompleteData').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
         });
 

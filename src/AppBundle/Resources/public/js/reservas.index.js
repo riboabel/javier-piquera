@@ -231,6 +231,12 @@ App.Reservas.Index = function($) {
             oSearch: {
                 "sSearch": settings.search
             },
+            rowCallback: function (row) {
+                if ($('span.fa.fa-exclamation-triangle.text-warning', row).length > 0) {
+                    $(row).find('span.fa.fa-exclamation-triangle.text-warning').remove();
+                    $(row).find('td').css('background-color', '#ffc4c4');
+                }
+            },
             serverSide: true,
             processing: false
         });

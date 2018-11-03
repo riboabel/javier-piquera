@@ -18,6 +18,13 @@
     <div title="{{ record.provider.contactInfo }}">{{ record.provider.name }}</div>
 {% endblock %}
 
+{% block serial_number %}
+    {{ record.serialNumber }}
+    {% if record.hasIncompleteData %}
+        <span class="fa fa-exclamation-triangle text-warning" title="Faltan datos por completar o verificar"></span>
+    {% endif %}
+{% endblock %}
+
 {% block pax %}
     <div class="center">{{ record.pax }}</div>
 {% endblock %}

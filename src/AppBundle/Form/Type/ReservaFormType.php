@@ -78,6 +78,11 @@ class ReservaFormType extends AbstractType
                     'required' => false,
                     'label' => 'Confirmado'
                 ))
+                ->add('hasIncompleteData', ICheckType::class, array(
+                    'required' => false,
+                    'label' => 'Marque esta casilla si desea que esta reserva sea mostrada con advertencia hasta que su infromación sea completada'
+                ))
+                ->add('notesAboutDataToComplete')
                 ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
                     $form = $event->getForm();
                     $data = $event->getData();
