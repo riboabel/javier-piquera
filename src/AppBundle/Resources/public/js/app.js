@@ -222,13 +222,13 @@ App = typeof App !== 'undefined' ? App : {};
                 }
             }
         });
-    }
+    };
 
     var initIcheckControls = function() {
         $('input:checkbox.icheck').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
         });
-    }
+    };
 
     return {
         init: function(options) {
