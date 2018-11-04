@@ -161,4 +161,21 @@ class ThirdPaysController extends Controller
             'form' => $form->createView()
         ));
     }
+
+    public function possibleChargeForServiceAction(ReservaTercero $service)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $price = $manager->getRepository('AppBundle:Price')
+            ->findOneBy(array(
+                'provider' => $service->getClient()->getId(),
+                'serviceType' => $service->getServiceType()->getId()
+            ))
+        ;
+
+        if ($price && $price->getPayableCharge()) {
+            return new Response($price->getPayableCharge());
+        }
+
+        return new Response($service->getServiceType()->getDefaultPayAmount());
+    }
 }
