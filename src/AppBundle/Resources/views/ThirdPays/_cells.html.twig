@@ -40,11 +40,11 @@
 
 {% block charge %}
     <div class="text-right">
-        {% if record.paidCharge is empty %}
+        {% if current_charge is empty %}
             <span class="fa fa-fire"></span>
-            {{ render(controller("AppBundle:ThirdPays:possibleChargeForService", {service: record})) }}
+            {{ '%0.2f'|format(price) }}
         {% else %}
-            {{ "%0.2f"|format(record.paidCharge) }}
+            {{ "%0.2f"|format(current_charge) }}
         {% endif %}
     </div>
 {% endblock %}

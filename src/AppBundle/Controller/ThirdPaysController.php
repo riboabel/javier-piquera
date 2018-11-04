@@ -47,11 +47,15 @@ class ThirdPaysController extends Controller
 
         $qb = $manager->getRepository('AppBundle:ReservaTercero')
             ->createQueryBuilder('r')
+            ->addSelect('s')
+            ->addSelect('p')
+            ->addSelect('c')
+            ->addSelect('(SELECT pr.payableCharge FROM AppBundle:Price AS pr WHERE pr.provider = c.id AND pr.serviceType = s.id) AS payableCharge')
             ->join('r.provider', 'p')
             ->join('r.serviceType', 's')
+            ->join('r.client', 'c')
             ->where('r.state <> :state')
-            ->setParameter('state', ReservaTercero::STATE_CANCELLED)
-            ;
+            ->setParameter('state', ReservaTercero::STATE_CANCELLED);
 
         $search = $request->get('search');
         $columns = $request->get('columns');
@@ -63,7 +67,7 @@ class ThirdPaysController extends Controller
         $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $qb);
 
         if ($orders) {
-            $column = call_user_func(function($name) use($qb) {
+            $column = call_user_func(function ($name) use ($qb) {
                 if ($name === 'startat') {
                     return 'r.startAt';
                 } elseif ($name === 'service') {
@@ -85,17 +89,20 @@ class ThirdPaysController extends Controller
         $total = $pagination->getTotalItemCount();
 
         $template = $this->get('twig')->load('@App/ThirdPays/_cells.html.twig');
-        $data = array_map(function(ReservaTercero $record) use($template) {
+        $data = array_map(function (array $record) use ($template) {
             return array(
-                $template->renderBlock('selector', array('record' => $record)),
-                $template->renderBlock('service', array('record' => $record)),
-                $template->renderBlock('startAt', array('record' => $record)),
-                $template->renderBlock('provider', array('record' => $record)),
-                $template->renderBlock('provider_reference', array('record' => $record)),
-                $template->renderBlock('customer', array('record' => $record)),
-                $template->renderBlock('customer_reference', array('record' => $record)),
-                $template->renderBlock('state', array('record' => $record)),
-                $template->renderBlock('charge', array('record' => $record))
+                $template->renderBlock('selector', array('record' => $record[0])),
+                $template->renderBlock('service', array('record' => $record[0])),
+                $template->renderBlock('startAt', array('record' => $record[0])),
+                $template->renderBlock('provider', array('record' => $record[0])),
+                $template->renderBlock('provider_reference', array('record' => $record[0])),
+                $template->renderBlock('customer', array('record' => $record[0])),
+                $template->renderBlock('customer_reference', array('record' => $record[0])),
+                $template->renderBlock('state', array('record' => $record[0])),
+                $template->renderBlock('charge', array(
+                    'current_charge' => $record[0]->getPaidCharge(),
+                    'price' => $record['payableCharge']
+                ))
             );
         }, $pagination->getItems());
 
@@ -124,8 +131,7 @@ class ThirdPaysController extends Controller
         $services = $manager
             ->createQuery('SELECT s FROM AppBundle:ReservaTercero AS s WHERE s.id IN (:ids) ORDER BY s.startAt')
             ->setParameter('ids', $ids)
-            ->getResult()
-            ;
+            ->getResult();
         $pay = new ThirdPayAct();
         foreach ($services as $service) {
             $pay->addService($service);
@@ -154,22 +160,5 @@ class ThirdPaysController extends Controller
         return $this->render('@App/ThirdPays/prepare_pay.html.twig', array(
             'form' => $form->createView()
         ));
-    }
-
-    public function possibleChargeForServiceAction(ReservaTercero $service)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $price = $manager->getRepository('AppBundle:Price')
-            ->findOneBy(array(
-                'provider' => $service->getClient()->getId(),
-                'serviceType' => $service->getServiceType()->getId()
-            ))
-            ;
-
-        if ($price && $price->getPayableCharge()) {
-            return new Response($price->getPayableCharge());
-        }
-
-        return new Response($service->getServiceType()->getDefaultPayAmount());
     }
 }
