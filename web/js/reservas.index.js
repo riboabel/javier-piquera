@@ -1,6 +1,7 @@
 define([
     'jquery',
     'js/app/router',
+    'js/app/fixed-messages',
     'bootstrap',
     'js/app/datatables-init',
     'plugins/jquery.blockUI',
@@ -9,7 +10,7 @@ define([
     'plugins/tooltipster',
     'plugins/icheck',
     'plugins/jquery.form'
-], function ($, router) {
+], function ($, router, messageManager) {
     'use strict';
 
     var datatable;
@@ -242,7 +243,7 @@ define([
             rowCallback: function (row) {
                 if ($('span.fa.fa-exclamation-triangle.text-warning', row).length > 0) {
                     $(row).find('span.fa.fa-exclamation-triangle.text-warning').remove();
-                    $(row).find('td').css('background-color', '#ffc4c4');
+                    $(row).find('td').css('background-color', '#fcf8e3');
                 }
             },
             serverSide: true,
@@ -341,15 +342,6 @@ define([
         $('a#linkPrintSpecialReport').on('click', handleClickSpecialReport);
     };
 
-    var showNotices = function(notices) {
-        if (notices.length > 0) {
-            swal({
-                'title': 'Notificaciones',
-                'text': notices[0].replace(/\\n/g, "\n")
-            });
-        }
-    };
-
     return {
         init: function(settings) {
             $(document).ready(function () {
@@ -358,7 +350,7 @@ define([
                 initCancelModal();
                 initFilter();
                 initSelectionTools();
-                showNotices(settings.notices);
+                messageManager(settings.notices);
             });
         }
     };

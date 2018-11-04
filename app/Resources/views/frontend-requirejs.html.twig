@@ -279,14 +279,18 @@
         {#<script src="{{ asset_url }}"></script>#}
     {#{% endjavascripts %}#}
 
-    {#<script type="text/javascript">#}
-        {#$(document).ready(function() {#}
-            {#App.Main.init({#}
-                {#loadingImageSrc: '{{ asset('bundles/app/images/grid-loading.gif') }}',#}
-                {#notices: {{ app.session.flashBag.get('notice')|json_encode|raw }}#}
-            {#});#}
-        {#});#}
-    {#</script>#}
+    <script type="text/javascript">
+        requirejs([
+            'js/app/main'
+        ], function (app) {
+            'use strict';
+
+            app.init({
+                loadingImageSrc: '{{ asset('bundles/app/images/grid-loading.gif') }}',
+                notices: {{ app.session.flashBag.get('notice')|json_encode|raw }}
+            });
+        });
+    </script>
     <!-- END GLOBAL JAVASCRIPTS -->
 
     <!-- BEGIN PAGE JAVASCRIPTS -->

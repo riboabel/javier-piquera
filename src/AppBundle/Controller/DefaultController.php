@@ -43,12 +43,12 @@ class DefaultController extends Controller
      */
     public function alertsDropdownAction()
     {
-        $fifteenDaysAgo = new \DateTime('-15 days');
+        $fifteenDaysForward = new \DateTime('+15 days');
 
         $manager = $this->getDoctrine()->getManager();
-        $query = $manager->createQuery('SELECT COUNT(r) FROM AppBundle:Reserva AS r WHERE r.startAt >= :date15 AND r.startAt <= :today AND r.isExecuted = false AND r.isCancelled = false AND r.hasIncompleteData = true')
+        $query = $manager->createQuery('SELECT COUNT(r) FROM AppBundle:Reserva AS r WHERE r.startAt <= :date15 AND r.startAt >= :today AND r.isExecuted = false AND r.isCancelled = false AND r.hasIncompleteData = true')
             ->setParameters(array(
-                'date15' => $fifteenDaysAgo->format('Y-m-d H:i:s'),
+                'date15' => $fifteenDaysForward->format('Y-m-d'),
                 'today' => date('Y-m-d H:i:s')
             ));
         $result = $query->getResult();

@@ -9,12 +9,15 @@ var require = {
         'datatables.net': 'plugins/jquery.dataTables/amd/datatables',
         'datatables.net-bs': 'plugins/jquery.dataTables/amd/datatables.bootstrap',
         'plugins/tooltipster': 'plugins/tooltipster-master/js/jquery.tooltipster',
-        'plugins/icheck': 'plugins/iCheck/icheck'
+        'plugins/icheck': 'plugins/iCheck/icheck',
+        'plugins/metisMenu': 'plugins/metisMenu/dist/metisMenu'
     },
     shim: {
         'bootstrap': ['jquery'],
         'plugins/datepicker/bootstrap-datepicker': ['jquery'],
         'plugins/tooltipster': ['jquery'],
-        'plugins/icheck': ['jquery']
+        'plugins/icheck': ['jquery'],
+        'plugins/metisMenu': ['jquery'],
+        'plugins/jquery.copiq': ['jquery']
     }
 };
