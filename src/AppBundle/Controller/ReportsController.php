@@ -68,7 +68,6 @@ class ReportsController extends Controller
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $data = $form->getData();
                 $report = new Reports\ServicesBetweenDatesReport($form->getData(),
                         $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
 
