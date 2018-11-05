@@ -1,7 +1,77 @@
 {% if alerts > 0 %}
+    <style type="text/css">
+        .flashing {
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+            animation-name: flash;
+            animation-timing-function: linear;
+            -moz-animation-duration: 1s;
+            -moz-animation-iteration-count: infinite;
+            -moz-animation-name: flash;
+            -moz-animation-timing-function: linear;
+            -webkit-animation-duration: 1s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-name: flash;
+            -webkit-animation-timing-function: linear;
+        }
+
+        @keyframes flash {
+            0% {
+                opacity: 1.0;
+            }
+            25% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0
+            }
+            75% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1.0;
+            }
+        }
+
+        @-moz-keyframes flash {
+            0% {
+                opacity: 1.0;
+            }
+            25% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0
+            }
+            75% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1.0;
+            }
+        }
+
+        @-webkit-keyframes flash {
+            0% {
+                opacity: 1.0;
+            }
+            25% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0
+            }
+            75% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1.0;
+            }
+        }
+    </style>
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <i class="fa fa-bell fa-fw text-danger"></i>  <i class="fa fa-caret-down"></i>
+            <i class="fa fa-bell fa-fw text-danger flashing"></i>  <i class="fa fa-caret-down"></i>
         </a>
         <ul class="dropdown-menu dropdown-alerts">
             <li>
