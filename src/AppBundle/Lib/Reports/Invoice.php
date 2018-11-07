@@ -176,6 +176,12 @@ class Invoice extends Report
                 $this->pdf->MultiCell(23, $h, $line->getClientReference(), 1, 'L', false, 0);
                 $this->pdf->MultiCell(23, $h, $line->getServiceSerialNumber(), 1, 'L', false, 0);
                 $this->pdf->MultiCell(0, $h, sprintf('%0.2f', $line->getTotalPrice()), 1, 'R');
+
+                if ($line->getNotes()) {
+                    $this->pdf->SetFont('', '', 8);
+                    $this->pdf->MultiCell(0, 0, $line->getNotes(), 1, 'L');
+                    $this->pdf->SetFont('', '', 10);
+                }
             }
 
             $this->pdf->SetFont('', 'B');
@@ -188,15 +194,6 @@ class Invoice extends Report
     {
         $this->pdf->SetY(220, true);
 
-        if ($this->record->getServiceDescription()) {
-            $this->pdf->Cell(0, 0, 'Descripción del servicio', 'LTR', 1, 'L');
-            $this->pdf->SetFont('', '');
-            $this->pdf->MultiCell(0, 0, $this->record->getServiceDescription(), 'LBR', 'L');
-            $this->pdf->Ln(15);
-        } else {
-            $this->pdf->Ln(20);
-        }
-        
         $this->pdf->SetFont('', '');
         $this->pdf->Cell(35, 6, '', 1);
         $this->pdf->Cell(80, 6, 'Acreedor', 1, 0, 'C');
