@@ -188,6 +188,15 @@ class Invoice extends Report
     {
         $this->pdf->SetY(220, true);
 
+        if ($this->record->getServiceDescription()) {
+            $this->pdf->Cell(0, 0, 'Descripción del servicio', 'LTR', 1, 'L');
+            $this->pdf->SetFont('', '');
+            $this->pdf->MultiCell(0, 0, $this->record->getServiceDescription(), 'LBR', 'L');
+            $this->pdf->Ln(15);
+        } else {
+            $this->pdf->Ln(20);
+        }
+        
         $this->pdf->SetFont('', '');
         $this->pdf->Cell(35, 6, '', 1);
         $this->pdf->Cell(80, 6, 'Acreedor', 1, 0, 'C');
