@@ -74,6 +74,10 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="hidden-xs hidden-sm">{{ 'now'|date('j \\d\\e F \\d\\e Y | H:i') }}</span>
+                    <span class="visible-xs visible-sm">{{ 'now'|date('d/m/Y | H:i') }}</span>
+                </li>
                 {{ render(controller('AppBundle:Default:alertsDropdown')) }}
                 {{ render(controller("AppBundle:Messages:dropdown")) }}
                 {{ render(controller("AppBundle:Default:dropdownNotifications")) }}

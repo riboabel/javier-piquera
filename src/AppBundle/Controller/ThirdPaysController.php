@@ -6,12 +6,15 @@ use AppBundle\Entity\ReservaTercero;
 use AppBundle\Entity\ThirdPayAct;
 use AppBundle\Form\Type\ThirdPayActFormType;
 use AppBundle\Form\Type\ThirdPayFilterFormType;
+use AppBundle\Lib\Reports\ThirdProviderPayPreReport;
+use AppBundle\Lib\Reports\ThirdProviderPayReport;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * ThridPaysController
@@ -115,6 +118,68 @@ class ThirdPaysController extends Controller
     }
 
     /**
+     * @Route("/pagos")
+     * @Method("GET")
+     * @return Response
+     */
+    public function payIndexAction()
+    {
+        return $this->render('@App/ThirdPays/pay_index.html.twig');
+    }
+
+    /**
+     * @Route("/obtener-pagos-datos", options={"expose": true})
+     * @Method({"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getPayDataAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $queryBuilder = $manager->getRepository('AppBundle:ThirdPayAct')
+            ->createQueryBuilder('p')
+            ->addSelect('(SELECT SUM(r.paidCharge) FROM AppBundle:ReservaTercero AS r WHERE r.payAct = p.id) AS price');
+
+        $columns = $request->get('columns');
+        $orders = $request->get('order', array());
+
+        if ($orders) {
+            $column = call_user_func(function ($name) use ($queryBuilder) {
+                if ($name === 'date') {
+                    return 'p.createdAt';
+                }
+
+                return null;
+            }, $columns[$orders[0]['column']]['name']);
+            if (null !== $column) {
+                $queryBuilder->orderBy($column, strtoupper($orders[0]['dir']));
+            }
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $page = $request->get('start', 0) / $request->get('length') + 1;
+        $pagination = $paginator->paginate($queryBuilder->getQuery(), $page, $request->get('length'));
+        $total = $pagination->getTotalItemCount();
+
+        $template = $this->container->get('twig')->load('@App/ThirdPays/_pay_row.html.twig');
+        $data = array_map(function (array $record) use ($template) {
+            return array(
+                $record[0]->getCreatedAt()->format('d/m/Y H:i'),
+                sprintf('%0.2f', $record['price']),
+                $template->renderBlock('actions', array('record' => $record[0]))
+            );
+        }, $pagination->getItems());
+
+        return new JsonResponse(array(
+            'data' => $data,
+            'draw' => $request->get('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total
+        ));
+    }
+
+    /**
      * @Route("/prepare-pay", options={"expose": true})
      * @Method({"GET", "POST"})
      * @param Request $request
@@ -162,6 +227,52 @@ class ThirdPaysController extends Controller
         ));
     }
 
+    /**
+     * @Route("/generar-pre-reporte-pago", options={"expose": true})
+     * @Method("POST")
+     * @param Request $request
+     * @return Response
+     */
+    public function printPreReportAction(Request $request)
+    {
+        $records = array(
+            'ids' => $request->request->get('ids'),
+            'charges' => $request->request->get('charges'),
+            'notes' => $request->request->get('notes')
+        );
+
+        $report = new ThirdProviderPayPreReport($records, $this->getDoctrine()->getManager());
+
+        return new StreamedResponse(function () use ($report) {
+            file_put_contents('php://output', $report->getContent());
+        }, 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="third-pay-model.pdf"'
+        ));
+    }
+
+    /**
+     * @Route("/pagados/{id}/imprimir", requirements={"id": "\d+"})
+     * @Method({"GET"})
+     * @param ThirdPayAct $act
+     * @return StreamedResponse
+     */
+    public function printReportAction(ThirdPayAct $act)
+    {
+        $report = new ThirdProviderPayReport($act);
+
+        return new StreamedResponse(function () use ($report) {
+            file_put_contents('php://output', $report->getContent());
+        }, 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="third-pay-model.pdf"'
+        ));
+    }
+
+    /**
+     * @param ReservaTercero $service
+     * @return Response
+     */
     public function possibleChargeForServiceAction(ReservaTercero $service)
     {
         $manager = $this->getDoctrine()->getManager();
@@ -177,5 +288,16 @@ class ThirdPaysController extends Controller
         }
 
         return new Response($service->getServiceType()->getDefaultPayAmount());
+    }
+
+    /**
+     * @Route("/pagados/{id}/ver")
+     * @Method("GET")
+     * @param ThirdPayAct $pay
+     * @return Response
+     */
+    public function viewPayAction(ThirdPayAct $pay)
+    {
+        return $this->render('@App/ThirdPays/view.html.twig', array('record' => $pay));
     }
 }

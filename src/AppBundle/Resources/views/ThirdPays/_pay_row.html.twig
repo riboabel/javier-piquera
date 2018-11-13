@@ -1,0 +1,8 @@
+{% block actions %}
+    <a href="{{ path('app_thirdpays_viewpay', {id: record.id}) }}" role="button" class="btn btn-xs btn-default btn-view">
+        <span class="fa fa-eye"></span>
+    </a>
+    <a href="{{ path('app_thirdpays_printreport', {id: record.id}) }}" role="button" class="btn btn-default btn-xs btn-print" target="_blank">
+        <span class="fa fa-print"></span>
+    </a>
+{% endblock %}

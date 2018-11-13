@@ -22,9 +22,11 @@
                     {{ form_row(service.payNotes, {label: false, attr: {placeholder: "Notas de pago", class: "input-sm"}}) }}
                 </div>
             </div>
+            <input type="hidden" name="id[]" value="{{ service.vars.data.id }}">
         {% endfor %}
     </div>
     <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-print-report">Generar modelo</button>
         <button type="submit" class="btn btn-success">Realizar pago</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
     </div>

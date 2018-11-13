@@ -1,0 +1,94 @@
+{% extends "frontend-requirejs.html.twig" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Pagos a terceros <small>pagos</small></h1>
+        </div>
+    </div>
+    <ul class="nav nav-tabs">
+        <li role="presentation">
+            <a href="{{ path('app_thirdpays_index') }}">Serivicios</a>
+        </li>
+        <li class="active" role="presentation">
+            <a>Pagos realizados</a>
+        </li>
+    </ul>
+    <br>
+    <table class="table table-striped table-bordered table-hover" id="pays"></table>
+{% endblock %}
+
+{% block page_javascripts %}
+    <script type="text/javascript">
+        requirejs([
+            'jquery',
+            'js/app/router',
+            'js/app/datatables-init'
+        ], function ($, Router) {
+            'use strict';
+
+            var loading = '{{ asset('bundles/app/images/grid-loading.gif') }}';
+
+            $('#pays').css('width', '100%').dataTable({
+                aaSorting: [[0, 'desc']],
+                ajax: {
+                    method: 'GET',
+                    url: Router.generate('app_thirdpays_getpaydata')
+                },
+                columns: [
+                    {
+                        name: 'date',
+                        title: 'Fecha'
+                    },
+                    {
+                        name: 'price',
+                        sortable: false,
+                        title: 'Importe'
+                    },
+                    {
+                        searchable: false,
+                        sortable: false,
+                        width: '55px'
+                    }
+                ],
+                processing: false,
+                searching: false,
+                serverSide: true
+            });
+
+            $('#pays').on('click', '.btn-view', function (event) {
+                event.preventDefault();
+
+                var img = $(
+                    '<img/>'
+                ).attr(
+                    {
+                        src: loading,
+                        alt: 'Cargando...',
+                        title: 'Cargando...'
+                    }
+                );
+                var td = $(this).closest('td');
+                var a = $(this);
+
+                var modal = $('<div class="modal fade">' +
+                    '<div class="modal-dialog">' +
+                    '<div class="modal-content"></div>' +
+                    '</div>' +
+                    '</div>');
+
+                a.hide();
+                td.append(img);
+
+                modal.find('.modal-content').load($(this).attr('href'), function () {
+                    modal.modal({
+                        backdrop: 'static'
+                    });
+
+                    img.remove();
+                    a.show();
+                });
+            });
+        });
+    </script>
+{% endblock %}

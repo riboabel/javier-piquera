@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <button type="button" data-dismiss="modal" class="close">&times;</button>
+    <h4 class="modal-title">
+        Detalles de pago
+    </h4>
+</div>
+<div class="modal-body">
+    <dl class="dl-horizontal">
+        <dt>Fecha</dt>
+        <dd>{{ record.createdAt.format('d/m/Y H:i') }}</dd>
+        <dt>Beneficiario</dt>
+        <dd>{{ record.services[0].provider }}</dd>
+    </dl>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Servicio</th>
+                <th>Cliente</th>
+                <th>Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in record.services %}
+                <tr>
+                    <td>{{ service.startAt.format('d/m/Y H:i') }}</td>
+                    <td>{{ service.serviceType }}</td>
+                    <td>{{ service.client }}</td>
+                    <td>{{ "%0.2f"|format(service.paidCharge) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default btn-sm" data-dismiss="modal" type="button">Cerrar</button>
+    <a href="#" class="btn btn-default btn-sm" role="button" target="_blank">Imprimir</a>
+</div>

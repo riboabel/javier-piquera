@@ -83,7 +83,7 @@ App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {}
             processing: false,
             serverSide: true
         });
-    }
+    };
 
     var initFilter = function() {
         $('form#formFilter').find('input:text, select').on('change', function() {
@@ -96,7 +96,7 @@ App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {}
             clearBtn: true,
             language: 'es'
         });
-    }
+    };
 
     var initTools = function() {
         $('a#link-select-all').on('click', function(event) {
@@ -157,13 +157,65 @@ App.ThirdPays = typeof App.ThirdPays !== 'undefined' ? typeof App.ThirdPays : {}
                 url: Routing.generate('app_thirdpays_pay', {id: ids})
             });
         });
-    }
+    };
+
+    var initModalControls = function() {
+        $('body').on('click', '.modal-pay button.btn.btn-print-report', function () {
+            var form = $(this).closest('form'),
+                ids = form.find('input[name="id[]"]');
+
+            var rForm = $('<form/>').attr({
+                action: Routing.generate('app_thirdpays_printprereport'),
+                method: 'POST',
+                target: '_blank'
+            }).appendTo($('body'));
+
+            ids.each(function(index) {
+                var id = $(this),
+                    charge = form.find('input:text[name$="[services][' + index + '][paidCharge]"]'),
+                    note = form.find('input:text[name$="[services][' + index + '][payNotes]"]');
+
+                rForm.append(
+                    $(
+                        '<input type="hidden"/>'
+                    ).attr(
+                        'name',
+                        'ids[]'
+                    ).val(
+                        id.val()
+                    )
+                ).append(
+                    $(
+                        '<input type="hidden"/>'
+                    ).attr(
+                        'name',
+                        'charges[]'
+                    ).val(
+                        charge.val()
+                    )
+                ).append(
+                    $(
+                        '<input type="hidden"/>'
+                    ).attr(
+                        'name',
+                        'notes[]'
+                    ).val(
+                        note.val()
+                    )
+                );
+            });
+
+            rForm.submit();
+            rForm.remove();
+        });
+    };
 
     return {
         init: function () {
             initTable();
             initFilter();
             initTools();
+            initModalControls();
         }
-    }
+    };
 }(jQuery));

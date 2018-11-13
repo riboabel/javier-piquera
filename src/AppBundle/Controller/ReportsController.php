@@ -68,8 +68,11 @@ class ReportsController extends Controller
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $report = new Reports\ServicesBetweenDatesReport($form->getData(),
-                        $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']);
+                $report = new Reports\ServicesBetweenDatesReport(
+                    $form->getData(),
+                    $manager,
+                    $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination']
+                );
 
                 return new StreamedResponse(function() use($report) {
                     file_put_contents('php://output', $report->getContent());
