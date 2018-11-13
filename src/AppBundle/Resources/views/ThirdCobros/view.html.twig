@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <button class="close" type="button" data-dismiss="modal">
+        &times;
+    </button>
+    <h4 class="modal-title">Detalles de cobro</h4>
+</div>
+<div class="modal-body">
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Servicio</th>
+                <th>Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in record.services %}
+                <tr>
+                    <td>{{ service.startAt|date('d/m/Y H:i') }}</td>
+                    <td>{{ service.serviceType }}</td>
+                    <td>{{ '%0.2f'|format(service.cobroCharge) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+</div>

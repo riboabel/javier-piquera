@@ -1,0 +1,14 @@
+{% block price %}
+    {% set price = 0 %}
+    {% for service in record.services %}
+        {% set price = price + service.cobroCharge|default(0) %}
+    {% endfor %}
+    {{ '%0.2f'|format(price) }}
+{% endblock %}
+
+{% block actions %}
+    <div class="btn-group">
+        <button href="{{ path('app_thirdcobros_view', {id: record.id}) }}" title="Ver detalle" type="button" class="btn btn-default btn-xs btn-view"><span class="fa fa-eye"></span></button>
+        <a href="{{ path('app_thirdcobros_printreport', {id: record.id}) }}" target="_blank" title="Imprimir modelo" class="btn btn-default btn-xs btn-print"><span class="fa fa-print"></span></a>
+    </div>
+{% endblock %}

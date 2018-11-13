@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * ThirdCobrosController
@@ -107,6 +108,69 @@ class ThirdCobrosController extends Controller
         ));
     }
 
+    /**
+     * @Route("/cobrados")
+     * @Method("GET")
+     * @return Response
+     */
+    public function indexCobrosAction()
+    {
+        return $this->render('AppBundle:ThirdCobros:index_cobros.html.twig');
+    }
+
+    /**
+     * @Route("/cobrados/obtener-datos", options={"expose": true})
+     * @Method("GET")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getCobrosDataAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        $queryBuilder = $manager->getRepository('AppBundle:ThirdCobro')
+            ->createQueryBuilder('c')
+        ;
+        $columns = $request->get('columns');
+        $orders = $request->get('order', array());
+
+        if ($orders) {
+            $column = call_user_func(function($name) use($queryBuilder) {
+                if ($name === 'created_at') {
+                    return 'c.createdAt';
+                }
+
+                return null;
+            }, $columns[$orders[0]['column']]['name']);
+            if (null !== $column) {
+                $queryBuilder->orderBy($column, strtoupper($orders[0]['dir']));
+            }
+        }
+
+        $paginator = $this->get('knp_paginator');
+        $page = $request->get('start', 0) / $request->get('length') + 1;
+        $pagination = $paginator->paginate($queryBuilder->getQuery(), $page, $request->get('length'));
+        $total = $pagination->getTotalItemCount();
+
+        $template = $this->container->get('twig')->load('AppBundle:ThirdCobros:_cells_cobros.html.twig');
+        $data = array_map(function(ThirdCobro $record) use ($template) {
+            $services = $record->getServices();
+
+            return array(
+                $record->getCreatedAt()->format('d/m/Y H:i'),
+                $services[0]->getClient()->getName(),
+                $template->renderBlock('actions', array('record' => $record))
+            );
+        }, $pagination->getItems());
+
+        return new JsonResponse(array(
+            'data' => $data,
+            'draw' => $request->get('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total
+        ));
+    }
+
     public function getPossibleChargeForServiceAction(ReservaTercero $service)
     {
         $manager = $this->getDoctrine()->getManager();
@@ -169,5 +233,38 @@ class ThirdCobrosController extends Controller
         return $this->render('@App/ThirdCobros/prepare_cobro.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * @Route("/cobrados/{id}/ver", requirements={"id": "\d+"})
+     * @Method("GET")
+     * @param ThirdCobro $record
+     * @return Response
+     */
+    public function viewAction(ThirdCobro $record)
+    {
+        return $this->render('@App/ThirdCobros/view.html.twig', array('record' => $record));
+    }
+
+    /**
+     * @Route("/cobrados/generar-pre-modelo", options={"expose": true})
+     * @Method({"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function printPreReportAction(Request $request)
+    {
+
+    }
+
+    /**
+     * @Route("/cobrados/{id}/imprimir-model", requirements={"id": "\d+"})
+     * @Method({"GET"})
+     * @param ThirdCobro $record
+     * @return StreamedResponse
+     */
+    public function printReportAction(ThirdCobro $record)
+    {
+
     }
 }

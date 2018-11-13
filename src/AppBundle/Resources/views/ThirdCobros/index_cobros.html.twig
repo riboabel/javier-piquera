@@ -1,0 +1,83 @@
+{% extends "frontend-requirejs.html.twig" %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Cobros de servicios de terceros <small>listado</small></h1>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs">
+        <li role="presentation"><a href="{{ path('app_thirdcobros_index') }}">Servicios</a></li>
+        <li role="presentation" class="active"><a>Cobros realizados</a></li>
+    </ul>
+    <br>
+    <table class="table table-striped table-bordered table-hover" id="cobros"></table>
+{% endblock %}
+
+{% block page_javascripts %}
+    <script type="text/javascript">
+        requirejs([
+            'jquery',
+            'js/app/router',
+            'js/app/datatables-init',
+            'plugins/jquery.blockUI',
+            'bootstrap'
+        ], function ($, Router) {
+            'use strict';
+
+            var table = $('#cobros').css('width', '100%');
+
+            table.on('preDraw.dt', function () {
+                $(this).block({
+                    message: 'Procesando...'
+                });
+            }).on('draw.dt', function () {
+                $(this).unblock();
+            });
+
+            table.dataTable({
+                aaSorting: [[0, 'desc']],
+                ajax: {
+                    method: 'GET',
+                    url: Router.generate('app_thirdcobros_getcobrosdata')
+                },
+                aoColumns: [{
+                    name: 'created_at',
+                    title: 'Fecha'
+                }, {
+                    name: 'client',
+                    title: 'Cliente',
+                    sortable: false
+                }, {
+                    sortable: false,
+                    width: '55px'
+                }],
+                processing: false,
+                searching: false,
+                serverSide: true
+            });
+
+            table.on('click', '.btn-view', function (event) {
+                var button = $(this);
+
+                button.attr('disabled', 'disabled');
+
+                var modal = $(
+                    '<div class="modal fade" data-backdrop="static"/>'
+                ).appendTo(
+                    $('body')
+                ).append(
+                    $(
+                        '<div class="modal-dialog"><div class="modal-content"></div></div>'
+                    )
+                );
+
+                modal.find('.modal-content').load($(this).attr('href'), function () {
+                    button.removeAttr('disabled');
+                    modal.modal();
+                });
+            });
+        });
+    </script>
+{% endblock %}

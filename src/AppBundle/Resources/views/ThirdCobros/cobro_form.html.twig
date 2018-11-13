@@ -7,6 +7,7 @@
         {% for service in form.services %}
             <div class="row">
                 <div class="col-xs-2">
+                    <input type="hidden" name="services[{{ loop.index0 }}][id]" value="{{ service.vars.data.id }}">
                     <div class="form-control-static input-sm">{{ service.vars.data.startAt|date('d/m/Y H:i') }}</div>
                 </div>
                 <div class="col-xs-2">
@@ -25,6 +26,7 @@
         {% endfor %}
     </div>
     <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-print">Generar modelo</button>
         <button type="submit" class="btn btn-success">Realizar cobro</button>
         <button type="button" data-dismiss="modal" class="btn btn-default">Cancelar</button>
     </div>
