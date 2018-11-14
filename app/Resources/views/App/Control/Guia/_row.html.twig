@@ -1,3 +1,9 @@
+{% block start_at %}
+    <div title="{{ record.startIn }}{{ record.endIn ? ' a ' ~ record.endIn : '' }}">
+        {{ record.startAt|date('d/m/Y H:i') }}
+    </div>
+{% endblock %}
+
 {% block controls %}
     {% set checked = record.control1 is not empty and record.control2 is not empty %}
     <div class="text-center">

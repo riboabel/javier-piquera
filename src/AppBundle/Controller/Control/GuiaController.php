@@ -100,7 +100,7 @@ class GuiaController extends Controller
         $template = $renderer->load('App/Control/Guia/_row.html.twig');
         $data = array_map(function(ReservaTercero $record) use ($template) {
             return array(
-                $record->getStartAt()->format('d/m/Y H:i'),
+                $template->renderBlock('start_at', array('record' => $record)),
                 $record->getProviderSerial(),
                 $record->getClient()->getName(),
                 $record->getClientSerial(),
