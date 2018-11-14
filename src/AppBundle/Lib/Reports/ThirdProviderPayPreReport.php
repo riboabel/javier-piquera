@@ -59,15 +59,19 @@ class ThirdProviderPayPreReport extends Report
         $this->pdf->SetFont('', 'B');
         $this->pdf->Cell(32, 0, 'Fecha', 1, 0, 'C');
         $this->pdf->Cell(100, 0, 'Servicio', 1, 0, 'C');
-        $this->pdf->Cell(40, 0, 'Cliente', 1, 0, 'C');
+        $this->pdf->Cell(40, 0, 'Referencia', 1, 0, 'C');
         $this->pdf->Cell(0, 0, 'Importe', 1, 1, 'C');
 
         $this->pdf->SetFont('', '');
+        $totalPrice = 0;
+
         foreach ($this->services as $service) {
             $this->pdf->Cell(32, 0, $service['record']->getStartAt()->format('d/m/Y H:i'), 1, 0);
             $this->pdf->Cell(100, 0, (string) $service['record']->getServiceType(), 1, 0);
-            $this->pdf->Cell(40, 0, (string) $service['record']->getClient(), 1, 0);
+            $this->pdf->Cell(40, 0, (string) $service['record']->getClientSerial(), 1, 0);
             $this->pdf->Cell(0, 0, sprintf('%0.2f', $service['charge']), 1, 1, 'R');
+
+            $totalPrice += $service['charge'];
 
             if ($service['note']) {
                 $fontSize = $this->pdf->getFontSizePt();
@@ -76,6 +80,9 @@ class ThirdProviderPayPreReport extends Report
                 $this->pdf->SetFontSize($fontSize);
             }
         }
+
+        $this->pdf->Cell(172, 0, 'Total', 1, 0);
+        $this->pdf->Cell(0, 0, sprintf('%0.2f', $totalPrice), 1, 1, 'R');
     }
 
     private function loadRecords($requestParams)
