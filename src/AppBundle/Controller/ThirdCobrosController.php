@@ -130,6 +130,7 @@ class ThirdCobrosController extends Controller
 
         $queryBuilder = $manager->getRepository('AppBundle:ThirdCobro')
             ->createQueryBuilder('c')
+            ->select('c AS record', '(SELECT SUM(s.cobroCharge) FROM AppBundle:ReservaTercero AS s WHERE s.cobro = c.id) AS totalPrice')
         ;
         $columns = $request->get('columns');
         $orders = $request->get('order', array());
@@ -153,13 +154,14 @@ class ThirdCobrosController extends Controller
         $total = $pagination->getTotalItemCount();
 
         $template = $this->container->get('twig')->load('AppBundle:ThirdCobros:_cells_cobros.html.twig');
-        $data = array_map(function(ThirdCobro $record) use ($template) {
-            $services = $record->getServices();
+        $data = array_map(function($record) use ($template) {
+            $services = $record['record']->getServices();
 
             return array(
-                $record->getCreatedAt()->format('d/m/Y H:i'),
+                $record['record']->getCreatedAt()->format('d/m/Y H:i'),
                 $services[0]->getClient()->getName(),
-                $template->renderBlock('actions', array('record' => $record))
+                sprintf('%0.2f', $record['totalPrice']),
+                $template->renderBlock('actions', array('record' => $record['record']))
             );
         }, $pagination->getItems());
 
