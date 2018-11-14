@@ -7,7 +7,7 @@ App = typeof App !== 'undefined' ? App : {};
 
     var initMetisMenu = function() {
         $('#side-menu').metisMenu();
-    }
+    };
 
     var resizeWindowHandler = function() {
         var topOffset = 50,
@@ -133,7 +133,7 @@ App = typeof App !== 'undefined' ? App : {};
         } else {
             console.log('Datepicker is not present');
         }
-    }
+    };
 
     var initializeReportLinks = function() {
         $('a.link-report').on('click', function(event) {
@@ -154,7 +154,7 @@ App = typeof App !== 'undefined' ? App : {};
                 self.find('img').remove();
             });
         });
-    }
+    };
 
     var clickMessageHandler = function(event) {
         event.preventDefault();
@@ -222,13 +222,13 @@ App = typeof App !== 'undefined' ? App : {};
                 }
             }
         });
-    }
+    };
 
     var initIcheckControls = function() {
         $('input:checkbox.icheck').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
         });
-    }
+    };
 
     return {
         init: function(options) {

@@ -139,9 +139,47 @@ App.ThirdCobros = typeof App.ThirdCobros !== 'undefined' ? App.ThirdCobros : {};
                     modal.modal();
                 },
                 url: Routing.generate('app_thirdcobros_cobrar', {id: ids})
-            })
+            });
         });
-    }
+
+        $(document).on('click', '.modal-footer .btn-print', function() {
+            var form = $(this).closest('form'),
+                controls = form.find('input:text, input:hidden');
+
+            var nForm = $(
+                '<form/>'
+            ).attr(
+                {
+                    action: Routing.generate('app_thirdcobros_printprereport'),
+                    method: 'POST',
+                    target: '_blank'
+                }
+            ).appendTo(
+                $('body')
+            );
+
+            var addControl = function (name, value) {
+                return nForm.append(
+                    $(
+                        '<input type="hidden"/>'
+                    ).attr(
+                        'name',
+                        name
+                    ).val(
+                        value
+                    )
+                );
+            };
+
+            form.find('input:hidden[name^="services]["][name$="][id]"]').each(function (index, input) {
+                addControl('services[' + index + '][id]', $(input).val());
+                addControl('services[' + index + '][charge]', form.find('input:text[name$="[' + index + '][cobroCharge]"]').val());
+                addControl('services[' + index + '][note]', form.find('input:text[name$="[' + index + '][cobroNotes]"]').val());
+            });
+
+            nForm.submit().remove();
+        });
+    };
 
     var initFilter = function() {
         $('form#formFilter').find('input:text[name$="[startAt][left_date]"], input:text[name$="[startAt][right_date]"]').datepicker({

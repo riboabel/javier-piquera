@@ -162,7 +162,7 @@ class ReservasController extends Controller
                 $template->renderBlock('state', array('record' => $record)),
                 $template->renderBlock('inicio', array('record' => $record)),
                 $template->renderBlock('provider', array('record' => $record)),
-                $record->getSerialNumber(),
+                $template->renderBlock('serial_number', array('record' => $record)),
                 $record->getProviderReference(),
                 $record->getClientNames(),
                 $template->renderBlock('pax', array('record' => $record)),

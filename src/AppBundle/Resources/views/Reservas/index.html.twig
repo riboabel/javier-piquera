@@ -1,4 +1,4 @@
-{% extends "frontend.html.twig" %}
+{% extends "frontend-requirejs.html.twig" %}
 
 {% form_theme form _self %}
 
@@ -181,8 +181,12 @@
 
 {% block page_javascripts %}
     <script type="text/javascript">
-        $(document).ready(function() {
-            App.Reservas.Index.init({
+        requirejs([
+            'js/reservas.index'
+        ], function (app) {
+            'use strict';
+
+            app.init({
                 search: '{{ q }}',
                 pageLength: {{ page_length }},
                 notices: {{ app.session.flashBag.get('fixed-notice')|json_encode|raw }}

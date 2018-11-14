@@ -6,8 +6,9 @@
         {% endblock %}
         <title>{% block title %}{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
+        {% block head_javascripts %}{% endblock %}
         {% block favicon %}
-        <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}" />
+            <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}" />
         {% endblock %}
     </head>
     <body>

@@ -108,6 +108,17 @@
             </div>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Información Para completar</div>
+        <div class="panel-body">
+            <div class="form-group">
+                {{ form_widget(form.hasIncompleteData) }}
+            </div>
+            <div class="form-group">
+                {{ form_widget(form.notesAboutDataToComplete) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block collection_row %}

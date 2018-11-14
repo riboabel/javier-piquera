@@ -261,6 +261,20 @@ class Reserva implements DeleteTraceableInterface
      */
     private $control2;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="has_incomplete_data", type="boolean", options={"default": false})
+     */
+    private $hasIncompleteData;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="notes_about_data_to_complete", type="text", nullable=true)
+     */
+    private $notesAboutDataToComplete;
+
     public function __toString()
     {
         return $this->getSerialNumber();
@@ -273,6 +287,7 @@ class Reserva implements DeleteTraceableInterface
     {
         $this->passingPlaces = new \Doctrine\Common\Collections\ArrayCollection();
         $this->logs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hasIncompleteData = false;
     }
 
     public function getDeleteTraceableData()
@@ -1058,5 +1073,53 @@ class Reserva implements DeleteTraceableInterface
     public function getControl2()
     {
         return $this->control2;
+    }
+
+    /**
+     * Set hasIncompleteData
+     *
+     * @param boolean $hasIncompleteData
+     *
+     * @return Reserva
+     */
+    public function setHasIncompleteData($hasIncompleteData)
+    {
+        $this->hasIncompleteData = $hasIncompleteData;
+
+        return $this;
+    }
+
+    /**
+     * Get hasIncompleteData
+     *
+     * @return boolean
+     */
+    public function getHasIncompleteData()
+    {
+        return $this->hasIncompleteData;
+    }
+
+    /**
+     * Set notesAboutDataToComplete
+     *
+     * @param string $notesAboutDataToComplete
+     *
+     * @return Reserva
+     */
+    public function setNotesAboutDataToComplete($notesAboutDataToComplete)
+    {
+        $this->notesAboutDataToComplete = $notesAboutDataToComplete;
+
+        return $this;
+    }
+
+    /**
+     * Get notesAboutDataToComplete
+     *
+     * @return string
+     */
+    public function getNotesAboutDataToComplete()
+    {
+        return $this->notesAboutDataToComplete;
     }
 }

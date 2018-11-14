@@ -1,0 +1,140 @@
+{% if alerts > 0 %}
+    <style type="text/css">
+        .flashing {
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+            animation-name: flash;
+            animation-timing-function: linear;
+            -moz-animation-duration: 1s;
+            -moz-animation-iteration-count: infinite;
+            -moz-animation-name: flash;
+            -moz-animation-timing-function: linear;
+            -webkit-animation-duration: 1s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-name: flash;
+            -webkit-animation-timing-function: linear;
+        }
+
+        @keyframes flash {
+            0% {
+                opacity: 1.0;
+            }
+            25% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0
+            }
+            75% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1.0;
+            }
+        }
+
+        @-moz-keyframes flash {
+            0% {
+                opacity: 1.0;
+            }
+            25% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0
+            }
+            75% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1.0;
+            }
+        }
+
+        @-webkit-keyframes flash {
+            0% {
+                opacity: 1.0;
+            }
+            25% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0
+            }
+            75% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1.0;
+            }
+        }
+    </style>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="fa fa-bell fa-fw text-danger flashing"></i>  <i class="fa fa-caret-down"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-alerts">
+            <li>
+                <a href="{{ path('app_reservas_index') }}">
+                    <div>
+                        <i class="fa fa-warning fa-fw text-warning"></i>
+                        {{ alerts }} reserva(s) con datos incompletos
+                    </div>
+                </a>
+            </li>
+            {#<li>#}
+                {#<a href="{{ path('app_reservas_index') }}">#}
+                    {#<div>#}
+                        {#<i class="fa fa-comment fa-fw"></i> New Comment#}
+                        {#<span class="pull-right text-muted small">4 minutes ago</span>#}
+                    {#</div>#}
+                {#</a>#}
+            {#</li>#}
+            {#<li class="divider"></li>#}
+            {#<li>#}
+            {#<a href="#">#}
+            {#<div>#}
+            {#<i class="fa fa-twitter fa-fw"></i> 3 New Followers#}
+            {#<span class="pull-right text-muted small">12 minutes ago</span>#}
+            {#</div>#}
+            {#</a>#}
+            {#</li>#}
+            {#<li class="divider"></li>#}
+            {#<li>#}
+            {#<a href="#">#}
+            {#<div>#}
+            {#<i class="fa fa-envelope fa-fw"></i> Message Sent#}
+            {#<span class="pull-right text-muted small">4 minutes ago</span>#}
+            {#</div>#}
+            {#</a>#}
+            {#</li>#}
+            {#<li class="divider"></li>#}
+            {#<li>#}
+            {#<a href="#">#}
+            {#<div>#}
+            {#<i class="fa fa-tasks fa-fw"></i> New Task#}
+            {#<span class="pull-right text-muted small">4 minutes ago</span>#}
+            {#</div>#}
+            {#</a>#}
+            {#</li>#}
+            {#<li class="divider"></li>#}
+            {#<li>#}
+            {#<a href="#">#}
+            {#<div>#}
+            {#<i class="fa fa-upload fa-fw"></i> Server Rebooted#}
+            {#<span class="pull-right text-muted small">4 minutes ago</span>#}
+            {#</div>#}
+            {#</a>#}
+            {#</li>#}
+            {#<li class="divider"></li>#}
+            {#<li>#}
+            {#<a class="text-center" href="#">#}
+            {#<strong>See All Alerts</strong>#}
+            {#<i class="fa fa-angle-right"></i>#}
+            {#</a>#}
+            {#</li>#}
+        </ul>
+        <!-- /.dropdown-alerts -->
+    </li>
+    <!-- /.dropdown -->
+{% endif %}
