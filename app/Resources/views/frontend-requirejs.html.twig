@@ -55,14 +55,14 @@
     <!-- BEGIN PAGE STYLESHEETS -->
     {% block page_stylesheets %}{% endblock %}
     <!-- END PAGE STYLESHEETS -->
+{% endblock %}
 
-    {% block head_javascripts %}
-        <script type="text/javascript">
-            var routesUrl = '{{ path('fos_js_routing_js', {'callback': 'define'}) }}';
-        </script>
-        <script type="text/javascript" src="{{ asset('js/require-config.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/require.js') }}"></script>
-    {% endblock %}
+{% block head_javascripts %}
+    <script type="text/javascript">
+        var routesUrl = '{{ path('fos_js_routing_js', {'callback': 'define'}) }}';
+    </script>
+    <script type="text/javascript" src="{{ asset('js/require-config.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/require.js') }}"></script>
 {% endblock %}
 
 {% block body %}
