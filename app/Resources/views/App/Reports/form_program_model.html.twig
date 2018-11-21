@@ -1,4 +1,4 @@
-<div class="modal fade" data-backdrop="statuc">
+<div class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -40,64 +40,7 @@
 </div>
 
 <script type="text/javascript">
-    (function () {
-        var factory = function ($, Routing) {
-            $('#zSsDesde, #zSsHasta').on('changeDate', function () {
-                $('#zSsBtn').addClass('hidden');
-                $('#zSsService').select2('val', '');
-            }).datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                clearBtn: true,
-                language: 'es'
-            });
-
-            $('#zSsService').on('change', function () {
-                if ($('#zSsService').select2('data').length) {
-                    $('#zSsBtn').removeClass('hidden');
-                }
-            }).select2({
-                width: '100%',
-                ajax: {
-                    url: Routing.generate('app_reports_getservicesbydates'),
-                    data: function (param) {
-                        return {
-                            q: param.term,
-                            page: param.page || 1,
-                            from: $('#zSsDesde input:text').val(),
-                            to: $('#zSsHasta input:text').val()
-                        }
-                    },
-                    method: 'GET'
-                },
-                cache: true,
-                minimunInputLength: 1,
-                templateResult: function (result) {
-                    if (!result.id) {
-                        return result.text;
-                    }
-
-                    var info = result.extra_data, r = $('<div class="row"/>');
-                    if (info.provider_image) {
-                        r.append($('<div class="col-sm-2"/>').append($('<img class="img img-responsive"/>').attr({src: info.provider_image})));
-                        var rT = $('<div class="col-sm-10"/>').appendTo(r);
-                    } else {
-                        var rT = $('<div class="col-sm-12"/>').appendTo(r);
-                    }
-                    rT.append($('<div/>').text(result.text))
-                    rT.append($('<div><small><strong>Cliente:</strong> ' + info.provider + ' || <strong>Fecha:</strong> ' + info.start_at + ' || <strong>Servicio:</strong> ' + info.service_name + (info.driver_name ? ' || <strong>Conductor:</strong> ' + info.driver_name : '') + '</small></div>'));
-
-                    return r;
-                }
-            });
-
-            $('#zSsBtn').on('click', function () {
-                var recordId = $('#zSsService').select2('data')[0].id;
-
-                window.open(Routing.generate('app_reports_printprogramservicemodel', {id: recordId}));
-            });
-        };
-
+    (function(factory) {
         if (typeof define === 'function' && define.amd) {
             require([
                 'jquery',
@@ -107,9 +50,64 @@
                 'jquery/select2.i18n-es'
             ], factory);
         } else {
-            $(document).ready(function () {
-                factory(jQuery, Routing);
-            });
+            factory(jQuery, Routing);
         }
-    }());
+    }(function($, Routing) {
+        'use strict';
+
+        $('#zSsDesde, #zSsHasta').on('changeDate', function () {
+            $('#zSsBtn').addClass('hidden');
+            $('#zSsService').select2('val', '');
+        }).datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            clearBtn: true,
+            language: 'es'
+        });
+
+        $('#zSsService').on('change', function () {
+            if ($('#zSsService').select2('data').length) {
+                $('#zSsBtn').removeClass('hidden');
+            }
+        }).select2({
+            width: '100%',
+            ajax: {
+                url: Routing.generate('app_reports_getservicesbydates'),
+                data: function (param) {
+                    return {
+                        q: param.term,
+                        page: param.page || 1,
+                        from: $('#zSsDesde input:text').val(),
+                        to: $('#zSsHasta input:text').val()
+                    }
+                },
+                method: 'GET'
+            },
+            cache: true,
+            minimunInputLength: 1,
+            templateResult: function (result) {
+                if (!result.id) {
+                    return result.text;
+                }
+
+                var info = result.extra_data, r = $('<div class="row"/>');
+                if (info.provider_image) {
+                    r.append($('<div class="col-sm-2"/>').append($('<img class="img img-responsive"/>').attr({src: info.provider_image})));
+                    var rT = $('<div class="col-sm-10"/>').appendTo(r);
+                } else {
+                    var rT = $('<div class="col-sm-12"/>').appendTo(r);
+                }
+                rT.append($('<div/>').text(result.text));
+                rT.append($('<div><small><strong>Cliente:</strong> ' + info.provider + ' || <strong>Fecha:</strong> ' + info.start_at + ' || <strong>Servicio:</strong> ' + info.service_name + (info.driver_name ? ' || <strong>Conductor:</strong> ' + info.driver_name : '') + '</small></div>'));
+
+                return r;
+            }
+        });
+
+        $('#zSsBtn').on('click', function () {
+            var recordId = $('#zSsService').select2('data')[0].id;
+
+            window.open(Routing.generate('app_reports_printprogramservicemodel', {id: recordId}));
+        });
+    }));
 </script>

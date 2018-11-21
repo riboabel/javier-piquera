@@ -44,8 +44,16 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function() {
+<script type="text/javascript">
+    (function(factory) {
+        if (typeof define === 'function' && define.amd) {
+            require(['jquery'], factory);
+        } else {
+            factory($);
+        }
+    }(function($) {
+        'use strict';
+
         $('#{{ form.startAt.left_date.vars.id }}, #{{ form.startAt.right_date.vars.id }}').datepicker({format: 'dd/mm/yyyy', autoclose: true});
         $('#{{ form.drivers.vars.id }}, #{{ form.serviceType.vars.id }}').select2({width: '100%'});
         $('#{{ form.includePlacesAddress.vars.id }}, #{{ form.includeAllRecords.vars.id }}').iCheck({
@@ -94,7 +102,7 @@
                 },
                 url: '{{ path('app_reports_loadserviceidsforreport') }}'
             });
-        }
+        };
 
         function loadRecordsIds() {
             $('#servicesIds').css('overflow-y', 'hidden').slideDown(function() {
@@ -134,5 +142,5 @@
         $('#modalReservasByDriver').on('hide.bs.modal', function() {
             stopLoadingRecords();
         });
-    });
+    }));
 </script>
