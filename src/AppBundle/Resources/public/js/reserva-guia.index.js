@@ -209,7 +209,7 @@ App.ReservasGuia = typeof App.ReservasGuia !== 'undefined' ? App.ReservasGuia : 
 
     var showNotices = function(notices) {
         if (notices.length > 0) {
-            $.swal({
+            swal({
                 'title': 'Notificaciones',
                 'text': notices[0].replace(/\\n/g, "\n")
             });

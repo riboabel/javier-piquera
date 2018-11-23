@@ -209,7 +209,7 @@ App.ReservasClasicos = typeof App.ReservasClasicos !== 'undefined' ? App.Reserva
 
     var showNotices = function(notices) {
         if (notices.length > 0) {
-            $.swal({
+            swal({
                 'title': 'Notificaciones',
                 'text': notices[0].replace(/\\n/g, "\n")
             });
