@@ -78,7 +78,7 @@
                 <li>
                     <a href="{{ path('app_reservas_edit', {id: reserva.id}) }}">
                         <div>
-                            {{ reserva.serialNumber }} para {{ reserva.provider }}
+                            {{ reserva.serialNumber }} para {{ reserva.provider }} ({{ reserva.startAt|date('d/m/Y') }})
                         </div>
                     </a></li>
             {% endfor %}
