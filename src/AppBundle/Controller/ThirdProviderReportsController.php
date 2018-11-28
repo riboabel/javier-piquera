@@ -60,7 +60,11 @@ class ThirdProviderReportsController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $manager = $this->getDoctrine()->getManager();
-                $report = new Reports\ServicesForThirdProviderReport($form->getData(), $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination'], $type);
+                if ($type == 'guia') {
+                    $report = new Reports\ServicesForThirdProviderGuideReport($form->getData(), $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination'], $type);
+                } else {
+                    $report = new Reports\ServicesForThirdProviderReport($form->getData(), $manager, $this->container->getParameter('vich_uploader.mappings')['logos']['upload_destination'], $type);
+                }
 
                 return new StreamedResponse(function() use($report) {
                     file_put_contents('php://output', $report->getContent());
