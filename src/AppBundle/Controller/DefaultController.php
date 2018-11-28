@@ -53,8 +53,17 @@ class DefaultController extends Controller
             ));
         $result = $query->getResult();
 
+        $elements = $manager->createQuery('SELECT r FROM AppBundle:Reserva AS r WHERE r.startAt <= :date15 AND r.startAt >= :today AND r.isExecuted = false AND r.isCancelled = false AND r.hasIncompleteData = true ORDER BY r.startAt ASC')
+            ->setParameters(array(
+                'date15' => $fifteenDaysForward->format('Y-m-d'),
+                'today' => date('Y-m-d H:i:s')
+            ))
+            ->setMaxResults(10)
+            ->getResult();
+
         return $this->render('App/Default/_alerts_dropdown.html.twig', array(
-            'alerts' => $result[0][1]
+            'total_items' => $result[0][1],
+            'items' => $elements
         ));
     }
 

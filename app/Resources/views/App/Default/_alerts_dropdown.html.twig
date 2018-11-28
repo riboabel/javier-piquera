@@ -1,4 +1,4 @@
-{% if alerts > 0 %}
+{% if total_items > 0 %}
     <style type="text/css">
         .flashing {
             animation-duration: 1s;
@@ -74,65 +74,27 @@
             <i class="fa fa-bell fa-fw text-danger flashing"></i>  <i class="fa fa-caret-down"></i>
         </a>
         <ul class="dropdown-menu dropdown-alerts">
-            <li>
-                <a href="{{ path('app_reservas_index') }}">
-                    <div>
-                        <i class="fa fa-warning fa-fw text-warning"></i>
-                        {{ alerts }} reserva(s) con datos incompletos
-                    </div>
-                </a>
-            </li>
-            {#<li>#}
-                {#<a href="{{ path('app_reservas_index') }}">#}
-                    {#<div>#}
-                        {#<i class="fa fa-comment fa-fw"></i> New Comment#}
-                        {#<span class="pull-right text-muted small">4 minutes ago</span>#}
-                    {#</div>#}
-                {#</a>#}
-            {#</li>#}
-            {#<li class="divider"></li>#}
-            {#<li>#}
-            {#<a href="#">#}
-            {#<div>#}
-            {#<i class="fa fa-twitter fa-fw"></i> 3 New Followers#}
-            {#<span class="pull-right text-muted small">12 minutes ago</span>#}
-            {#</div>#}
-            {#</a>#}
-            {#</li>#}
-            {#<li class="divider"></li>#}
-            {#<li>#}
-            {#<a href="#">#}
-            {#<div>#}
-            {#<i class="fa fa-envelope fa-fw"></i> Message Sent#}
-            {#<span class="pull-right text-muted small">4 minutes ago</span>#}
-            {#</div>#}
-            {#</a>#}
-            {#</li>#}
-            {#<li class="divider"></li>#}
-            {#<li>#}
-            {#<a href="#">#}
-            {#<div>#}
-            {#<i class="fa fa-tasks fa-fw"></i> New Task#}
-            {#<span class="pull-right text-muted small">4 minutes ago</span>#}
-            {#</div>#}
-            {#</a>#}
-            {#</li>#}
-            {#<li class="divider"></li>#}
-            {#<li>#}
-            {#<a href="#">#}
-            {#<div>#}
-            {#<i class="fa fa-upload fa-fw"></i> Server Rebooted#}
-            {#<span class="pull-right text-muted small">4 minutes ago</span>#}
-            {#</div>#}
-            {#</a>#}
-            {#</li>#}
-            {#<li class="divider"></li>#}
-            {#<li>#}
-            {#<a class="text-center" href="#">#}
-            {#<strong>See All Alerts</strong>#}
-            {#<i class="fa fa-angle-right"></i>#}
-            {#</a>#}
-            {#</li>#}
+            {% for reserva in items %}
+                <li>
+                    <a href="{{ path('app_reservas_edit', {id: reserva.id}) }}">
+                        <div>
+                            {{ reserva.serialNumber }} para {{ reserva.provider }}
+                        </div>
+                    </a></li>
+            {% endfor %}
+            {% if total_items - items|length > 0 %}
+                <li class="divider"></li>
+                <li>
+                    <a class="text-center" href="{{ path("app_reservas_index") }}">
+                        <strong>
+                            {% transchoice total_items - items|length %}
+                                {1} ...y una resrerva más|]1,Inf[ ...y %count% reservas más
+                            {% endtranschoice %}
+                        </strong>
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </li>
+            {% endif %}
         </ul>
         <!-- /.dropdown-alerts -->
     </li>
