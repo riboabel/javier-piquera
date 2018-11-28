@@ -73,10 +73,9 @@ class ServicesForThirdProviderGuideReport extends Report
         $this->pdf->SetFont('Helvetica', 'B', 13);
 
         $this->pdf->Cell(40, 0, 'Inicio', 1, 0, 'C');
-        $this->pdf->Cell(40, 0, 'Fin', 1, 0, 'C');
         $this->pdf->Cell(35, 0, 'Referencia', 1, 0, 'C');
         $this->pdf->Cell(60, 0, 'Servicio', 1, 0, 'C');
-        $this->pdf->Cell(55, 0, 'Nombre(s)', 1, 0, 'C');
+        $this->pdf->Cell(85, 0, 'Nombre(s)', 1, 0, 'C');
         $this->pdf->Cell(0, 0, 'Pax', 1, 1, 'C');
     }
 
@@ -93,18 +92,16 @@ class ServicesForThirdProviderGuideReport extends Report
     {
         $h = $this->getRowHeight(array(
             array(40, $record->getStartAt()->format('d/m/Y H:i')),
-            array(40, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : ''),
             array(35, $record->getClientSerial()),
             array(60, $record->getServiceType()->getName()),
-            array(55, $record->getClientNames()),
+            array(85, $record->getClientNames()),
             array(0, $record->getPax())
         ));
 
         $this->pdf->MultiCell(40, $h, $record->getStartAt()->format('d/m/Y H:i'), 1, 'L', false, 0);
-        $this->pdf->MultiCell(40, $h, $record->getEndAt() ? $record->getEndAt()->format('d/m/Y H:i') : '', 1, 'L', false, 0);
         $this->pdf->MultiCell(35, $h, $record->getClientSerial(), 1, 'L', false, 0);
         $this->pdf->MultiCell(60, $h, $record->getServiceType()->getName(), 1, 'L', false, 0);
-        $this->pdf->MultiCell(55, $h, $record->getClientNames(), 1, 'L', false, 0);
+        $this->pdf->MultiCell(85, $h, $record->getClientNames(), 1, 'L', false, 0);
         $this->pdf->MultiCell(0, $h, $record->getPax(), 1, 'C');
 
         if (null !== $record->getServiceDescription()) {
