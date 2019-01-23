@@ -545,52 +545,6 @@ class Reserva implements DeleteTraceableInterface
     }
 
     /**
-     * Set startPlace
-     *
-     * @param string $startPlace
-     * @return Reserva
-     */
-    public function setStartPlace($startPlace)
-    {
-        $this->startPlace = $startPlace;
-
-        return $this;
-    }
-
-    /**
-     * Get startPlace
-     *
-     * @return string
-     */
-    public function getStartPlace()
-    {
-        return $this->startPlace;
-    }
-
-    /**
-     * Set endPlace
-     *
-     * @param string $endPlace
-     * @return Reserva
-     */
-    public function setEndPlace($endPlace)
-    {
-        $this->endPlace = $endPlace;
-
-        return $this;
-    }
-
-    /**
-     * Get endPlace
-     *
-     * @return string
-     */
-    public function getEndPlace()
-    {
-        return $this->endPlace;
-    }
-
-    /**
      * Set provider
      *
      * @param \AppBundle\Entity\Provider $provider
@@ -1121,5 +1075,53 @@ class Reserva implements DeleteTraceableInterface
     public function getNotesAboutDataToComplete()
     {
         return $this->notesAboutDataToComplete;
+    }
+
+    /**
+     * Set startPlace
+     *
+     * @param \AppBundle\Entity\Place $startPlace
+     *
+     * @return Reserva
+     */
+    public function setStartPlace(\AppBundle\Entity\Place $startPlace)
+    {
+        $this->startPlace = $startPlace;
+
+        return $this;
+    }
+
+    /**
+     * Get startPlace
+     *
+     * @return \AppBundle\Entity\Place
+     */
+    public function getStartPlace()
+    {
+        return $this->startPlace;
+    }
+
+    /**
+     * Set endPlace
+     *
+     * @param \AppBundle\Entity\Place $endPlace
+     *
+     * @return Reserva
+     */
+    public function setEndPlace(\AppBundle\Entity\Place $endPlace)
+    {
+        $this->endPlace = $endPlace;
+
+        return $this;
+    }
+
+    /**
+     * Get endPlace
+     *
+     * @return \AppBundle\Entity\Place
+     */
+    public function getEndPlace()
+    {
+        return $this->endPlace;
     }
 }

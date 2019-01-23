@@ -56,6 +56,7 @@ class ServicesBySelectionSpecialReport extends Report
         $this->pdf->Cell(10, 0, 'Pax', 1, 0, 'C');
         $this->pdf->Cell(30, 0, 'Origen', 1, 0, 'C');
         $this->pdf->Cell(30, 0, 'Destino', 1, 0, 'C');
+        $this->pdf->Cell(22, 0, 'Conductor', 1, 0, 'C');
         $this->pdf->Cell(0, 0, 'Localidades', 1, 1, 'C');
     }
 
@@ -63,6 +64,7 @@ class ServicesBySelectionSpecialReport extends Report
     {
         $this->pdf->SetFont('Helvetica', '', 10);
 
+        /** @var Reserva $record */
         foreach ($this->getQuery()->getResult() as $record) {
             $h = $this->getRowHeight(array(
                 array(20, $record->getStartAt()->format('d/m/Y')),
@@ -73,6 +75,7 @@ class ServicesBySelectionSpecialReport extends Report
                 array(10, $record->getPax()),
                 array(30, $record->getStartPlace()->getName()),
                 array(30, $record->getEndPlace()->getName()),
+                array(22, $record->getDriver() ? $record->getDriver()->getName() : ''),
                 array(0, $this->getLocationsText($record))
             ));
 
@@ -84,6 +87,14 @@ class ServicesBySelectionSpecialReport extends Report
             $this->pdf->MultiCell(10, $h, $record->getPax(), 1, 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $record->getStartPlace()->getName(), 1, 'L', false, 0);
             $this->pdf->MultiCell(30, $h, $record->getEndPlace()->getName(), 1, 'L', false, 0);
+            if ($record->getIsDriverConfirmed()) {
+                $this->pdf->setColor('text', 60, 118, 61);
+            } else {
+                $this->pdf->setColor('text', 169, 68, 66);
+            }
+            $this->pdf->MultiCell(22, $h, (string) $record->getDriver(), 1, 'L', false, 0);
+            $this->pdf->setColor('text');
+
             $this->pdf->MultiCell(0, $h, $this->getLocationsText($record), 1, 'L', false, 1);
         }
     }
