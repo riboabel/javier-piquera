@@ -73,6 +73,9 @@ services:
     app.services.excel_exporter:
         class: AppBundle\Services\ExcelExporter
         arguments: [ '@phpexcel', '@doctrine.orm.entity_manager' ]
+    app.services.accommodation_importer:
+        class: AppBundle\Services\AccommodationImporter
+        arguments: [ '@phpexcel', '@doctrine.orm.entity_manager' ]
 
     app.morris_graph.area:
         class: AppBundle\Services\MorrisGraphGenerator

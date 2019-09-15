@@ -136,6 +136,7 @@
                                     <a href="{{ path("app_driverplanning_index") }}">Planificación de conductores</a>
                                 </li>
                                 <li><a href="{{ path('app_control_index') }}">Control de reservas</a></li>
+                                <li><a href="{{ path('app_accommodation_index') }}">Reservas de hospedaje</a></li>
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
                                     <li><a href="{{ path("app_prices_index") }}">Catálogo de precios</a></li>
                                     <li><a href="{{ path("app_cobros_index") }}">Cobros a clientes</a></li>

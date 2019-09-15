@@ -219,8 +219,8 @@ define([
                 data: function(baseData) {
                     var filter = [];
                     $.each($('form#filter').serializeArray(), function(i, e) {
-                        if (/\[\]$/.test(e.name)) {
-                            var sName = e.name.replace(/\[\]$/, '');
+                        if (/\[]$/.test(e.name)) {
+                            var sName = e.name.replace(/\[]$/, '');
                             if (!filter[sName]) {
                                 filter[sName] = [];
                             }

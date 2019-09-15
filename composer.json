@@ -36,6 +36,7 @@
         "liuggio/excelbundle": "^2.1",
         "misd/phone-number-bundle": "^1.2",
         "moment/moment": "~2.11",
+        "nesbot/carbon": "^1.39",
         "patchwork/jsqueeze": "^2.0",
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",

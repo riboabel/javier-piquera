@@ -13,8 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class HAccommodation
  *
- * @ORM\Entity
- * @ORM\Table(name="h_accommodation")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\HAccommodationRepository")
+ * @ORM\Table(name="h_accommodation", indexes={@ORM\Index(columns={"reference"})})
  */
 class HAccommodation
 {

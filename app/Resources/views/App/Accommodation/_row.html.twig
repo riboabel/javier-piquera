@@ -1,0 +1,28 @@
+{% block reference %}
+    <div title="{{ record.details }}">
+        {{ record.reference }}
+    </div>
+{% endblock %}
+
+{% block actions %}
+    <div class="btn-group">
+        {#<a href="javascript:;" class="btn btn-default btn-xs" title="Ver detalle">#}
+            {#<span class="fa fa-file"></span>#}
+        {#</a>#}
+        {#<a href="{{ path("app_reservasguia_edit", {id: record.id}) }}" class="btn btn-primary btn-xs" title="Modificar">#}
+            {#<span class="fa fa-edit"></span>#}
+        {#</a>#}
+        {#{% if record.state == constant("AppBundle\\Entity\\ReservaTercero::STATE_CREATED") %}#}
+            {#{% if record.confirmed %}#}
+                {#<a href="{{ path("app_reservasguia_setexecuted", {id: record.id}) }}" class="btn btn-success btn-xs btn-execute" title="Ejecutar"><span class="fa fa-road"></span></a>#}
+            {#{% else %}#}
+                {#<a href="{{ path('app_reservasguia_setconfirmed', {id: record.id}) }}" class="btn btn-default btn-xs btn-confirm" title="Confirmar"><span#}
+                            {#class="fa fa-user"></span></a>#}
+            {#{% endif %}#}
+            {#<a href="{{ path("app_reservasguia_setcancelled", {id: record.id}) }}" class="btn btn-warning btn-xs btn-change-state" title="Cancelar"><span class="fa fa-ban"></span></a>#}
+        {#{% endif %}#}
+        <a href="{{ path("app_accommodation_delete", {id: record.id}) }}" class="btn btn-danger btn-xs btn-delete" title="Eliminar">
+            <span class="fa fa-remove"></span>
+        </a>
+    </div>
+{% endblock %}
