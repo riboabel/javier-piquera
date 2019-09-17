@@ -1,10 +1,11 @@
 define([
-    'jquery'
+    'jquery',
+    'plugins/icheck'
 ], function($) {
     'use strict';
 
     function initControls() {
-        $('#import_accommodation_form_removeBeforeImport').on('click', function() {
+        $('#import_accommodation_form_removeBeforeImport').on('ifChanged', function() {
             var state = $(this).prop('checked');
 
             if (state) {
@@ -14,6 +15,8 @@ define([
                 $('#import_accommodation_form_year').val('');
                 $('#import_accommodation_form_month').val('');
             }
+        }).iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
         });
     }
 

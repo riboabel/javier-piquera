@@ -9,11 +9,13 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\HAccommodation;
+use AppBundle\Form\Type\AccommodationFilterFormType;
 use AppBundle\Form\Type\ImportAccommodationFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,7 +33,9 @@ class AccommodationController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('App/Accommodation/index.html.twig');
+        $filterForm = $this->createForm(AccommodationFilterFormType::class);
+
+        return $this->render('App/Accommodation/index.html.twig', ['filter' => $filterForm->createView()]);
     }
 
     /**
@@ -55,6 +59,10 @@ class AccommodationController extends Controller
         $orders = $request->get('order', array());
         $filter = $request->get('filter', array());
         $filter['q'] = $search['value'];
+
+        $filter = $this->createForm(AccommodationFilterFormType::class);
+        $filter->submit($request->query->get($filter->getName()));
+        $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filter, $qb);
 
         if ($orders) {
             $column = call_user_func(function($name) {
@@ -114,9 +122,10 @@ class AccommodationController extends Controller
     }
 
     /**
-     * @Route("/{id}/delete", requirements={"id": "\d+"}, options={"expose": true})
+     * @Route("/{id}/eliminar", requirements={"id": "\d+"})
      * @Method("POST")
      * @param HAccommodation $accommodation
+     * @return RedirectResponse
      */
     public function deleteAction(HAccommodation $accommodation)
     {
