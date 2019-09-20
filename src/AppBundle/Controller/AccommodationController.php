@@ -274,6 +274,86 @@ class AccommodationController extends Controller
 
         }
 
-        return $this->render('App/Accommodation/payticket.html.twig', ['form' => $form->createView()]);
+        return $this->render('App/Accommodation/payticket.html.twig', [
+            'form' => $form->createView(),
+            'action' => $this->generateUrl('app_accommodation_payticket')
+        ]);
+    }
+
+    /**
+     * @Route("/reporte")
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function reportAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $providers = [];
+        foreach ($manager->createQuery('SELECT p.id, p.name FROM AppBundle:HProvider AS p ORDER BY p.name')->getResult() as $p) {
+            $providers[$p['id']] = $p['name'];
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('startDate', DateRangeFilterType::class, [
+                'label' => 'Inicio',
+                'left_date_options' => [
+                    'format' => 'dd/MM/yyyy',
+                    'html5' => false,
+                    'widget' => 'single_text',
+                    'label' => 'Desde'
+                ],
+                'right_date_options' => [
+                    'format' => 'dd/MM/yyyy',
+                    'html5' => false,
+                    'widget' => 'single_text',
+                    'label' => 'Hasta'
+                ]
+            ])
+            ->add('provider', ChoiceFilterType::class, [
+                'label' => 'Hospedaje',
+                'choices' => $providers,
+                'multiple' => true,
+                'required' => true,
+                'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
+                    if (empty($values['value'])) {
+                        return null;
+                    }
+
+                    $expression = $filterQuery->getExpr()->in('p.id', $values['value']);
+
+                    return $filterQuery->createCondition($expression);
+                }
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $queryBuilder = $manager->getRepository('AppBundle:HAccommodation')
+                ->createQueryBuilder('a')
+                ->join('a.provider', 'p');
+
+            $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $queryBuilder);
+
+            $dompdf = new \Dompdf\Dompdf();
+            $dompdf->loadHtml($this->renderView('App/Accommodation/report.html.twig', [
+                'records' => $queryBuilder->getQuery()->getResult()
+            ]));
+            $dompdf->setPaper('LETTER', 'landscape');
+            $dompdf->render();
+
+            return new StreamedResponse(function() use($dompdf) {
+                file_put_contents('php://output', $dompdf->output());
+            }, Response::HTTP_OK, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="accommodation-report.pdf"'
+            ]);
+
+        }
+
+        return $this->render('App/Accommodation/payticket.html.twig', [
+            'form' => $form->createView(),
+            'action' => $this->generateUrl('app_accommodation_report')
+        ]);
     }
 }

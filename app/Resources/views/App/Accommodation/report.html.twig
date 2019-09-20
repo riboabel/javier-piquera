@@ -1,0 +1,41 @@
+{% if records|length > 0 %}
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <table width="100%" border="1" cellspacing="0" cellpadding="3">
+        <thead>
+            <tr>
+                <th>Inicio</th>
+                <th>Terminación</th>
+                <th>Noches</th>
+                <th>Referencia</th>
+                <th>Cliente</th>
+                <th>PAX</th>
+                <th>Hospedaje</th>
+                <th>Región</th>
+                <th>Costo</th>
+                <th>Pagado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr>
+                    <td>{{ record.startDate.format('d/m/Y') }}</td>
+                    <td>{{ record.endDate.format('d/m/Y') }}</td>
+                    <td>{{ record.nights }}</td>
+                    <td>{{ record.reference }}</td>
+                    <td>{{ record.leadClient }}</td>
+                    <td>{{ record.pax }}</td>
+                    <td>{{ record.provider.name }}</td>
+                    <td>{{ record.provider.region.name }}</td>
+                    <td>{{ "%0.2f"|format(record.cost) }}</td>
+                    <td>{{ record.paidAt ? record.paidAt.format('d/m/Y') : ' ' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No hay registros</p>
+{% endif %}

@@ -152,7 +152,8 @@
                                 <li><a href="{{ path("app_reports_showprogrammodelform") }}" class="link-report">Modelo de programa</a></li>
                                 <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "clasicos"}) }}" class="link-report">Clásicos</a></li>
                                 <li><a href="{{ path("app_thirdproviderreports_reservas", {type: "guia"}) }}" class="link-report">Guías</a></li>
-                                <li><a href="{{ path('app_accommodation_payticket') }}" class="link-report">Modelo de pago de hospedajes</a></li>
+                                <li><a href="{{ path('app_accommodation_report') }}" class="link-report">Reservas de hospedaje</a></li>
+                                <li><a href="{{ path('app_accommodation_payticket') }}" class="link-report">Modelo de pago de hospedaje</a></li>
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
                                     <li><a href="{{ path("app_reports_old_cobros") }}" class="link-report">Cobros realizados</a></li>
                                     <li><a href="{{ path("app_reports_old_pays") }}" class="link-report">Pagos realizados</a></li>
