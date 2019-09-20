@@ -115,7 +115,7 @@ class Invoice extends Report
         $this->pdf->SetFont('', 'B');
         $this->pdf->Cell(0, 6, sprintf('%s   Banco Metropolitano', $this->record->getDriver()->getBankAccount()), 1, 1);
 
-        $this->pdf->ln(25);
+        $this->pdf->ln(20);
 
         $this->pdf->SetFont('', 'B');
         if ('ATRIO' === $this->record->getModelName()) {
@@ -213,7 +213,7 @@ class Invoice extends Report
         $this->pdf->SetFont('', '');
         $this->pdf->Cell(35, 8, 'Fecha', 1);
         $this->pdf->SetFont('', 'B');
-        $this->pdf->Cell(80, 8, $this->getServiceFromLine($this->record->getLines()[0])->getStartAt()->format('d/m/Y'), 1, 0, 'C');
+        $this->pdf->Cell(80, 8, $this->getServiceFromLine($this->record->getLines()[count($this->record->getLines()) - 1])->getStartAt()->format('d/m/Y'), 1, 0, 'C');
         $this->pdf->Cell(0, 8, '', 1, 1, 'C');
 
         $this->pdf->SetFont('', '');
