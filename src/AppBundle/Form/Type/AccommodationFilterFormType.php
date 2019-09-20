@@ -8,6 +8,7 @@
 
 namespace AppBundle\Form\Type;
 
+use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\BooleanFilterType;
 use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\DateRangeFilterType;
 use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\NumberRangeFilterType;
 use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\TextFilterType;
@@ -15,6 +16,7 @@ use Lexik\Bundle\FormFilterBundle\Filter\FilterOperands;
 use Lexik\Bundle\FormFilterBundle\Filter\Query\QueryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AccommodationFilterFormType extends AbstractType
 {
@@ -116,6 +118,27 @@ class AccommodationFilterFormType extends AbstractType
                     'condition_operator' => FilterOperands::OPERATOR_LOWER_THAN_EQUAL
                 ]
             ])
+            ->add('paidAt', BooleanFilterType::class, [
+                'label' => 'Padado',
+                'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
+                    if (empty($values['value'])) {
+                        return null;
+                    }
+
+                    $expression = $values['value'] == 'y' ? $filterQuery->getExpr()->isNotNull($field) :
+                        $filterQuery->getExpr()->isNull($field);
+
+                    return $filterQuery->createCondition($expression);
+                }
+            ])
             ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'csrf_protection' => false,
+            'validation_groups' => ['filtering']
+        ]);
     }
 }

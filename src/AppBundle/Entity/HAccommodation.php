@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class HAccommodation
  *
  * @ORM\Entity(repositoryClass="AppBundle\Repository\HAccommodationRepository")
- * @ORM\Table(name="h_accommodation", indexes={@ORM\Index(columns={"reference"})})
+ * @ORM\Table(name="h_accommodation", indexes={@ORM\Index(columns={"reference"}), @ORM\Index(columns={"paid_at"})})
  */
 class HAccommodation
 {
@@ -97,6 +97,13 @@ class HAccommodation
      * @Assert\Length(max="32000")
      */
     private $details;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="paid_at", type="datetime", nullable=true)
+     */
+    private $paidAt;
 
     /**
      * Get id
@@ -322,5 +329,29 @@ class HAccommodation
     public function getProvider()
     {
         return $this->provider;
+    }
+
+    /**
+     * Set paidAt
+     *
+     * @param \DateTime $paidAt
+     *
+     * @return HAccommodation
+     */
+    public function setPaidAt($paidAt)
+    {
+        $this->paidAt = $paidAt;
+
+        return $this;
+    }
+
+    /**
+     * Get paidAt
+     *
+     * @return \DateTime
+     */
+    public function getPaidAt()
+    {
+        return $this->paidAt;
     }
 }

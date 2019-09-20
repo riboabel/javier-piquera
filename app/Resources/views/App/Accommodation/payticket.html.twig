@@ -1,0 +1,93 @@
+<div class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modelo de pago para hospedajes</h4>
+            </div>
+            <form action="{{ path('app_accommodation_payticket') }}" method="POST"
+                  target="_blank"
+                  id="formGenerateAccommodationPayTicket">
+                <div class="modal-body">
+                    {{ form_row(form.provider) }}
+                    {{ form_label(form.startDate) }}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {{ form_row(form.startDate.left_date) }}
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_row(form.startDate.right_date) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button">Generar</button>
+                    <button class="btn btn-default" type="button" data-dismiss="modal">Cerrar</button>
+                </div>
+                {{ form_rest(form) }}
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        if (window['requirejs']) {
+            requirejs([
+                'jquery',
+                'plugins/sweetalert/sweetalert.min',
+                'plugins/datepicker/bootstrap-datepicker'
+            ], function($, swal) {
+                'use strict';
+
+                $('#form_startDate_left_date, #form_startDate_right_date').datepicker({
+                    autoclose: true,
+                    clearBtn: true,
+                    format: 'dd/mm/yyyy',
+                    todayBtn: true,
+                    todayHighlight: true
+                });
+
+                var form = $('#formGenerateAccommodationPayTicket');
+
+                form.find('button.btn-success').on('click', function() {
+                    var selection = form.find('select[name="form[provider][]"]')[0].selectedOptions;
+                    if (!selection.length) {
+                        swal({
+                            title: 'Error',
+                            text: 'Seleccione al menos un hospedaje'
+                        });
+                        return;
+                    }
+
+                    form.submit();
+                });
+            });
+        } else {
+            $(document).ready(function() {
+                $('#form_startDate_left_date, #form_startDate_right_date').datepicker({
+                    autoclose: true,
+                    clearBtn: true,
+                    format: 'dd/mm/yyyy',
+                    todayBtn: true,
+                    todayHighlight: true
+                });
+
+                var form = $('#formGenerateAccommodationPayTicket');
+
+                form.find('button.btn-success').on('click', function() {
+                    var selection = form.find('select[name="form[provider][]"]')[0].selectedOptions;
+                    if (!selection.length) {
+                        swal({
+                            title: 'Error',
+                            text: 'Seleccione al menos un hospedaje'
+                        });
+                        return;
+                    }
+
+                    form.submit();
+                });
+            })
+        }
+    })();
+</script>

@@ -5,15 +5,34 @@ define([
     'js/app/datatables-init',
     'plugins/jquery.blockUI',
     'plugins/tooltipster',
-    'plugins/datepicker/bootstrap-datepicker'
+    'plugins/datepicker/bootstrap-datepicker',
+    'plugins/icheck'
 ], function($, router, swal) {
     'use strict';
 
-    var datatable;
+    var table = $('#table-accommodations'),
+        datatable;
+
+    function initTableCheckboxs() {
+        table.find('input[type=checkbox].cb-pay').on('ifChanged', function() {
+            var state = $(this).prop('checked'),
+                id = $(this).attr('data-params'),
+                url = router.generate('app_accommodation_pay', {id: id});
+
+            $.ajax({
+                dataType: 'json',
+                method: 'POST',
+                url: url
+            }).done(function() {
+                datatable.DataTable().draw();
+            });
+
+        }).iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+    }
 
     function initTable() {
-        var table = $('#table-accommodations');
-
         table.on('preDraw.dt', function() {
             $(this).block({
                 message: 'Procesando...'
@@ -22,9 +41,32 @@ define([
             $(this).unblock();
 
             $(this).find('[title]').tooltip({'trigger': 'hover'});
+
+            initTableCheckboxs();
         });
 
         datatable = table.dataTable({
+            ajax: {
+                data: function(data) {
+                    var filter = [];
+                    $.each($('form#filter').serializeArray(), function(i, e) {
+                        if (/\[]$/.test(e.name)) {
+                            var sName = e.name.replace(/\[]$/, '');
+                            if (!filter[sName]) {
+                                filter[sName] = [];
+                            }
+
+                            filter[sName].push(e.value);
+                        } else {
+                            filter[e.name] = e.value;
+                        }
+                    });
+
+                    return $.extend(true, data, filter);
+                },
+                method: 'GET',
+                url: router.generate('app_accommodation_getdata')
+            },
             columns: [
                 {
                     name: 'startDate',
@@ -54,35 +96,19 @@ define([
                     name: 'cost',
                     title: 'Costo'
                 }, {
+                    name: 'paidAt',
+                    title: 'Pagado',
+                    sortable: false
+                }, {
                     name: 'actions',
                     sortable: false,
                     searchable: false,
                     width: '80px'
                 }
             ],
-            ajax: {
-                data: function(data) {
-                    var filter = [];
-                    $.each($('form#filter').serializeArray(), function(i, e) {
-                        if (/\[]$/.test(e.name)) {
-                            var sName = e.name.replace(/\[]$/, '');
-                            if (!filter[sName]) {
-                                filter[sName] = [];
-                            }
-
-                            filter[sName].push(e.value);
-                        } else {
-                            filter[e.name] = e.value;
-                        }
-                    });
-
-                    return $.extend(true, data, filter);
-                },
-                method: 'GET',
-                url: router.generate('app_accommodation_getdata')
-            },
-            serverSide: true,
-            processing: false
+            processing: false,
+            searching: false,
+            serverSide: true
         });
     }
 
@@ -123,7 +149,7 @@ define([
             todayHighlight: true
         });
 
-        $('#filter-form').find('input:text').on('change', function() {
+        $('#filter-form').find('input:text, select').on('change', function() {
             datatable.DataTable().draw();
         });
     }

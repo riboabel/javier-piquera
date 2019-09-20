@@ -4,6 +4,16 @@
     </div>
 {% endblock %}
 
+{% block paid_at %}
+    {% if record.paidAt %}
+        {{ record.paidAt.format('d/m/Y') }}
+    {% else %}
+        <div class="text-center">
+            <input type="checkbox" data-params="{{ record.id }}" class="cb-pay">
+        </div>
+    {% endif %}
+{% endblock %}
+
 {% block actions %}
     <div class="btn-group">
         {#<a href="javascript:;" class="btn btn-default btn-xs" title="Ver detalle">#}

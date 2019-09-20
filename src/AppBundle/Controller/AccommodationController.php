@@ -11,6 +11,10 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\HAccommodation;
 use AppBundle\Form\Type\AccommodationFilterFormType;
 use AppBundle\Form\Type\ImportAccommodationFormType;
+use Carbon\Carbon;
+use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\ChoiceFilterType;
+use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\DateRangeFilterType;
+use Lexik\Bundle\FormFilterBundle\Filter\Query\QueryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,6 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Class AccommodationController
@@ -109,6 +114,7 @@ class AccommodationController extends Controller
                 $record->getProvider()->getName(),
                 $record->getProvider()->getRegion()->getName(),
                 sprintf('%0.2f', $record->getCost()),
+                $template->renderBlock('paid_at', ['record' => $record]),
                 $template->renderBlock('actions', ['record' => $record])
             ];
         }, $pagination->getItems());
@@ -170,5 +176,104 @@ class AccommodationController extends Controller
         return $this->render('App/Accommodation/import.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/{id}/pagar", requirements={"id": "\d+"}, options={"expose": true})
+     * @Method("POST")
+     * @param HAccommodation $accommodation
+     * @return JsonResponse
+     */
+    public function payAction(HAccommodation $accommodation)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $accommodation->setPaidAt(Carbon::now());
+        $manager->flush();
+
+        return new JsonResponse(['result' => 'success']);
+    }
+
+    /**
+     * @Route("/payticket")
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function payTicketAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $providers = [];
+        foreach ($manager->createQuery('SELECT p.id, p.name FROM AppBundle:HProvider AS p ORDER BY p.name')->getResult() as $p) {
+            $providers[$p['id']] = $p['name'];
+        }
+
+        $form = $this->createFormBuilder()
+            ->add('startDate', DateRangeFilterType::class, [
+                'left_date_options' => [
+                    'format' => 'dd/MM/yyyy',
+                    'html5' => false,
+                    'widget' => 'single_text',
+                    'label' => 'Desde'
+                ],
+                'right_date_options' => [
+                    'format' => 'dd/MM/yyyy',
+                    'html5' => false,
+                    'widget' => 'single_text',
+                    'label' => 'Hasta'
+                ]
+            ])
+            ->add('provider', ChoiceFilterType::class, [
+                'choices' => $providers,
+                'multiple' => true,
+                'required' => true,
+                'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
+                    if (empty($values['value'])) {
+                        return null;
+                    }
+
+                    $expression = $filterQuery->getExpr()->in('p.id', $values['value']);
+
+                    return $filterQuery->createCondition($expression);
+                }
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = [];
+
+            $queryBuilder = $manager->getRepository('AppBundle:HAccommodation')
+                ->createQueryBuilder('a')
+                ->join('a.provider', 'p');
+
+            $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $queryBuilder);
+
+            $queryBuilder->andWhere($queryBuilder->expr()->isNull('a.paidAt'));
+
+            foreach ($queryBuilder->getQuery()->getResult() as $a) {
+                if (!isset($data[$a->getProvider()->getId()])) {
+                    $data[$a->getProvider()->getId()] = [
+                        'name' => $a->getProvider()->getName(),
+                        'records' => []
+                    ];
+                }
+                $data[$a->getProvider()->getId()]['records'][] = $a;
+            }
+
+            $dompdf = new \Dompdf\Dompdf();
+            $dompdf->loadHtml($this->renderView('App/Accommodation/payticket_report.html.twig', ['data' => $data]));
+            $dompdf->setPaper('LETTER');
+            $dompdf->render();
+
+            return new StreamedResponse(function() use($dompdf) {
+                file_put_contents('php://output', $dompdf->output());
+            }, Response::HTTP_OK, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="pay-ticket.pdf"'
+            ]);
+
+        }
+
+        return $this->render('App/Accommodation/payticket.html.twig', ['form' => $form->createView()]);
     }
 }
