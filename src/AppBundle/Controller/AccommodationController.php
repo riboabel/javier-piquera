@@ -314,7 +314,6 @@ class AccommodationController extends Controller
                 'label' => 'Hospedaje',
                 'choices' => $providers,
                 'multiple' => true,
-                'required' => true,
                 'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
                     if (empty($values['value'])) {
                         return null;
@@ -325,13 +324,43 @@ class AccommodationController extends Controller
                     return $filterQuery->createCondition($expression);
                 }
             ])
+            ->add('sortBy', ChoiceFilterType::class, [
+                'label' => 'Ordenar por',
+                'required' => true,
+                'choices' => [
+                    1 => 'hospedaje',
+                    2 => 'inicio',
+                    3 => 'referencia',
+                    4 => 'región'
+                ],
+                'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
+                    if (empty($values['value'])) {
+                        return null;
+                    }
+
+                    $queryBuilder = $filterQuery->getQueryBuilder();
+                    $alias = $filterQuery->getRootAlias();
+                    if ($values['value'] == 1) {
+                        $queryBuilder->orderBy('p.name');
+                    } elseif ($values['value'] == 2) {
+                        $queryBuilder->orderBy('a.startDate');
+                    } elseif ($values['value'] == 3) {
+                        $queryBuilder->orderBy('a.reference');
+                    } elseif ($values['value'] == 4) {
+                        $queryBuilder->orderBy('r.name');
+                    }
+
+                    return null;
+                }
+            ])
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $queryBuilder = $manager->getRepository('AppBundle:HAccommodation')
                 ->createQueryBuilder('a')
-                ->join('a.provider', 'p');
+                ->join('a.provider', 'p')
+                ->join('p.region', 'r');
 
             $this->container->get('lexik_form_filter.query_builder_updater')->addFilterConditions($form, $queryBuilder);
 

@@ -19,6 +19,9 @@
                             {{ form_row(form.startDate.right_date) }}
                         </div>
                     </div>
+                    {% if form.sortBy is defined %}
+                        {{ form_row(form.sortBy) }}
+                    {% endif %}
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success" type="button">Generar</button>
@@ -56,13 +59,16 @@
                 });
 
                 form.find('button.btn-success').on('click', function() {
-                    var selection = form.find('select[name="form[provider][]"]')[0].selectedOptions;
-                    if (!selection.length) {
-                        swal({
-                            title: 'Error',
-                            text: 'Seleccione al menos un hospedaje'
-                        });
-                        return;
+                    var select = form.find('select[name="form[provider][]"]');
+                    if (select.attr('required')) {
+                        var selection = select[0].selectedOptions;
+                        if (!selection.length) {
+                            swal({
+                                title: 'Error',
+                                text: 'Seleccione al menos un hospedaje'
+                            });
+                            return;
+                        }
                     }
 
                     form.submit();
@@ -85,13 +91,16 @@
                 });
 
                 form.find('button.btn-success').on('click', function() {
-                    var selection = form.find('select[name="form[provider][]"]')[0].selectedOptions;
-                    if (!selection.length) {
-                        swal({
-                            title: 'Error',
-                            text: 'Seleccione al menos un hospedaje'
-                        });
-                        return;
+                    var select = form.find('select[name="form[provider][]"]');
+                    if (select.attr('required')) {
+                        var selection = select[0].selectedOptions;
+                        if (!selection.length) {
+                            swal({
+                                title: 'Error',
+                                text: 'Seleccione al menos un hospedaje'
+                            });
+                            return;
+                        }
                     }
 
                     form.submit();
