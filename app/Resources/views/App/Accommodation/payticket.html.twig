@@ -36,9 +36,12 @@
             requirejs([
                 'jquery',
                 'plugins/sweetalert/sweetalert.min',
-                'plugins/datepicker/bootstrap-datepicker'
+                'plugins/datepicker/bootstrap-datepicker',
+                'jquery/select2'
             ], function($, swal) {
                 'use strict';
+
+                var form = $('#formGenerateAccommodationPayTicket');
 
                 $('#form_startDate_left_date, #form_startDate_right_date').datepicker({
                     autoclose: true,
@@ -48,7 +51,9 @@
                     todayHighlight: true
                 });
 
-                var form = $('#formGenerateAccommodationPayTicket');
+                form.find('[name="form[provider][]"]').select2({
+                    width: '100%'
+                });
 
                 form.find('button.btn-success').on('click', function() {
                     var selection = form.find('select[name="form[provider][]"]')[0].selectedOptions;
@@ -65,6 +70,8 @@
             });
         } else {
             $(document).ready(function() {
+                var form = $('#formGenerateAccommodationPayTicket');
+
                 $('#form_startDate_left_date, #form_startDate_right_date').datepicker({
                     autoclose: true,
                     clearBtn: true,
@@ -73,7 +80,9 @@
                     todayHighlight: true
                 });
 
-                var form = $('#formGenerateAccommodationPayTicket');
+                form.find('[name="form[provider][]"]').select2({
+                    width: '100%'
+                });
 
                 form.find('button.btn-success').on('click', function() {
                     var selection = form.find('select[name="form[provider][]"]')[0].selectedOptions;
