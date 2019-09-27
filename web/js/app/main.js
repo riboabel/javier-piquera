@@ -5,7 +5,8 @@ define([
     'bootstrap',
     'plugins/metisMenu',
     'plugins/tooltipster',
-    'plugins/icheck'
+    'plugins/icheck',
+    'plugins/jquery.validate/jquery.validate.min'
 ], function ($, toastr, volatileMessageManager) {
     'use strict';
 

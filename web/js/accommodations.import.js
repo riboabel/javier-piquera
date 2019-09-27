@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'app/main',
+    'js/app/main',
     'plugins/icheck'
 ], function($, utils) {
     'use strict';
@@ -22,14 +22,14 @@ define([
     }
 
     function initValidation() {
-        utils.validate($('form#import', {
+        utils.validate($('form#import'), {
             rules: {
                 'import_accommodation_form[year]': {
                     required: true
                 },
                 'import_accommodation_form[month]': 'required'
             }
-        }));
+        });
     }
 
     return function() {
