@@ -18,7 +18,7 @@ class HAccommodationRepository extends \Doctrine\ORM\EntityRepository
         $endDate = Carbon::instance($startDate)->lastOfMonth();
 
         $this->getEntityManager()
-            ->createQuery('DELETE FROM AppBundle:HAccommodation AS a WHERE a.startDate >= :startDate AND a.endDate <= :endDate')
+            ->createQuery('DELETE FROM AppBundle:HAccommodation AS a WHERE a.startDate >= :startDate AND a.startDate <= :endDate')
             ->setParameters(['startDate' => $startDate->format('Y-m-d'), 'endDate' => $endDate->format('Y-m-d')])
             ->execute();
     }
