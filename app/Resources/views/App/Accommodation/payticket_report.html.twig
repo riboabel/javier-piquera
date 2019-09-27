@@ -39,6 +39,7 @@
                 <td style="text-align: center;"><strong>Pax</strong></td>
                 <td style="text-align: center;"><strong>Price</strong></td>
             </tr>
+            {% set total_cost = 0 %}
             {% for accommodation in provider.records %}
                 <tr>
                     <td style="border-bottom: 1px solid black;text-align: center;">{{ accommodation.startDate.format('d/m/Y') }}</td>
@@ -48,7 +49,12 @@
                     <td style="border-bottom: 1px solid black;text-align: center;">{{ accommodation.pax }}</td>
                     <td style="border-bottom: 1px solid black;text-align: center;">{{ "%0.2f"|format(accommodation.cost) }}</td>
                 </tr>
+                {% set total_cost = total_cost + accommodation.cost %}
             {% endfor %}
+            <tr>
+                <td colspan="5" style="text-align: right;">Total</td>
+                <td style="text-align: center; font-weight: bolder;">{{ "%0.2f"|format(total_cost) }}</td>
+            </tr>
         </tbody>
     </table>
     <div style="page-break-after: always;"></div>

@@ -83,8 +83,8 @@ class AccommodationImporter
     private function importRows()
     {
         foreach ($this->rows as $row) {
-            $region = $this->getRegion($row[7]);
-            $provider = $this->getProvider($row[6], $region['entity']);
+            $region = $this->getRegion(preg_replace('/(.+)\s\([^)]+\)$/', '$1', $row[7]));
+            $provider = $this->getProvider(preg_replace('/(.+)\s\([^)]+\)$/', '$1', $row[6]), $region['entity']);
 
             $accommodation = new HAccommodation();
             $accommodation

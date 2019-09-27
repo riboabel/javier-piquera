@@ -21,6 +21,7 @@
             </tr>
         </thead>
         <tbody>
+            {% set total_cost = 0 %}
             {% for record in records %}
                 <tr>
                     <td>{{ record.startDate.format('d/m/Y') }}</td>
@@ -31,10 +32,14 @@
                     <td>{{ record.pax }}</td>
                     <td>{{ record.provider.name }}</td>
                     <td>{{ record.provider.region.name }}</td>
-                    <td>{{ "%0.2f"|format(record.cost) }}</td>
+                    <td style="text-align: right;">{{ "%0.2f"|format(record.cost) }}</td>
                     <td>{{ record.paidAt ? record.paidAt.format('d/m/Y') : ' ' }}</td>
                 </tr>
+                {% set total_cost = total_cost + record.cost %}
             {% endfor %}
+            <td colspan="8" style="text-align: right;">Total</td>
+            <td style="text-align: right; font-weight: bolder;">{{ "%0.2f"|format(total_cost) }}</td>
+            <td>&nbsp;</td>
         </tbody>
     </table>
 {% else %}
