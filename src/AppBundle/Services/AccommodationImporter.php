@@ -11,6 +11,7 @@ namespace AppBundle\Services;
 use AppBundle\Entity\HAccommodation;
 use AppBundle\Entity\HProvider;
 use AppBundle\Entity\HRegion;
+use AppBundle\Validator\Constraints\AccommodationFileValidator;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -62,40 +63,61 @@ class AccommodationImporter
 
         $book->setActiveSheetIndex(0);
         $sheet = $book->getActiveSheet();
+
+        $columns = $this->locateColumnsPosition($sheet);
+        $lastColumnIndex = \PHPExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn(1));
+
         $rows = [];
-        foreach ($sheet->getRowIterator(2) as $row) {
-            foreach ($row->getCellIterator() as $cell) {
-                if (null === $cell->getValue()) {
-                    $rows[$row->getRowIndex()][] = null;
-                } elseif (\PHPExcel_Shared_Date::isDateTime($cell)) {
-                    $rows[$row->getRowIndex()][] = date_create_from_format('U', \PHPExcel_Shared_Date::ExcelToPHP($cell->getValue(), false));
-                } else {
-                    $rows[$row->getRowIndex()][] = $cell->getValue();
+        foreach ($sheet->getRowIterator(2) as $sheetRow) {
+            $row = [];
+            for ($i = 0; $i < $lastColumnIndex; $i++) {
+                $cell = $sheet->getCellByColumnAndRow($i, $sheetRow->getRowIndex());
+                if (false !== ($key = array_search($i, $columns))) {
+                    if (null === $cell->getValue()) {
+                        $row[$key] = null;
+                    } elseif (\PHPExcel_Shared_Date::isDateTime($cell)) {
+                        $row[$key] = date_create_from_format('U', \PHPExcel_Shared_Date::ExcelToPHP($cell->getValue(), false));
+                    } else {
+                        $row[$key] = $cell->getValue();
+                    }
                 }
+            }
+            $rows[] = $row;
+        }
+
+        $this->rows = array_values($rows);
+    }
+
+    private function locateColumnsPosition($sheet)
+    {
+        $columns = [];
+        $lastColumn = \PHPExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn(1));
+        for ($i = 0; $i < $lastColumn; $i++) {
+            $cell = $sheet->getCellByColumnAndRow($i, 1);
+            if ($cell->getValue() && in_array($cell->getValue(), AccommodationFileValidator::COLUMNS)) {
+                $columns[$cell->getValue()] = $i;
             }
         }
 
-        $this->rows = array_values(array_filter($rows, function($row) {
-            return (bool) $row[0];
-        }));
+        return $columns;
     }
 
     private function importRows()
     {
         foreach ($this->rows as $row) {
-            $region = $this->getRegion(preg_replace('/(.+)\s\([^)]+\)$/', '$1', $row[7]));
-            $provider = $this->getProvider(preg_replace('/(.+)\s\([^)]+\)$/', '$1', $row[6]), $region['entity']);
+            $region = $this->getRegion(preg_replace('/(.+)\s\([^)]+\)$/', '$1', $row['PrimaryLocation']));
+            $provider = $this->getProvider(preg_replace('/(.+)\s\([^)]+\)$/', '$1', $row['ServiceName']), $region['entity']);
 
             $accommodation = new HAccommodation();
             $accommodation
-                ->setStartDate($row[0])
-                ->setEndDate($row[1])
-                ->setNights((int) $row[2])
-                ->setReference($row[3])
-                ->setLeadClient($row[4])
-                ->setPax($row[5])
-                ->setCost($row[8])
-                ->setDetails($row[9])
+                ->setStartDate($row['StartDate'])
+                ->setEndDate($row['EndDate'])
+                ->setNights((int) $row['Nights'])
+                ->setReference($row['OurReference'])
+                ->setLeadClient($row['LeadClient'])
+                ->setPax($row['Pax'])
+                ->setCost($row['Cost'])
+                ->setDetails(null)
                 ->setProvider($provider['entity']);
 
             $this->manager->persist($accommodation);

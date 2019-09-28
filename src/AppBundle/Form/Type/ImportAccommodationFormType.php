@@ -8,7 +8,7 @@
 
 namespace AppBundle\Form\Type;
 
-use AppBundle\Validator\Constraints\ExcelFile;
+use AppBundle\Validator\Constraints\AccommodationFile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -23,7 +23,7 @@ class ImportAccommodationFormType extends AbstractType
             ->add('file', FileType::class, [
                 'label' => 'Archivo',
                 'constraints' => [
-                    new ExcelFile()
+                    new AccommodationFile()
                 ]
             ])
             ->add('year', ChoiceType::class, [

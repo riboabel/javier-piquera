@@ -105,6 +105,11 @@ services:
         arguments: [ '@doctrine.orm.entity_manager' ]
         tags:
             - { name: validator.constraint_validator, alias: unique_third_provider_serial_prefix }
+    app.validator.accommodation_file_validator:
+        class: AppBundle\Validator\Constraints\AccommodationFileValidator
+        arguments: [ '@phpexcel' ]
+        tags:
+                    - { name: validator.constraint_validator, alias: accommodation_file }
 
     app.listener.trace_delete_listener:
         class: AppBundle\Listener\DeleteTraceableListener
