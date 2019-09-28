@@ -14,6 +14,7 @@ use AppBundle\Form\Type\ImportAccommodationFormType;
 use Carbon\Carbon;
 use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\ChoiceFilterType;
 use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\DateRangeFilterType;
+use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\EntityFilterType;
 use Lexik\Bundle\FormFilterBundle\Filter\Query\QueryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -209,6 +210,7 @@ class AccommodationController extends Controller
 
         $form = $this->createFormBuilder()
             ->add('startDate', DateRangeFilterType::class, [
+                'label' => 'Inicio',
                 'left_date_options' => [
                     'format' => 'dd/MM/yyyy',
                     'html5' => false,
@@ -223,6 +225,7 @@ class AccommodationController extends Controller
                 ]
             ])
             ->add('provider', ChoiceFilterType::class, [
+                'label' => 'Hospedaje',
                 'choices' => $providers,
                 'multiple' => true,
                 'required' => true,
@@ -322,6 +325,20 @@ class AccommodationController extends Controller
                     $expression = $filterQuery->getExpr()->in('p.id', $values['value']);
 
                     return $filterQuery->createCondition($expression);
+                }
+            ])
+            ->add('region', EntityFilterType::class, [
+                'label' => 'Región',
+                'multiple' => true,
+                'class' => 'AppBundle:HRegion',
+                'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
+                    if (empty($values['value'])) {
+                        return null;
+                    }
+
+                    $expression = $filterQuery->getExpr()->in('r.id', ':q_region');
+
+                    return $filterQuery->createCondition($expression, ['q_region' => $values['value']]);
                 }
             ])
             ->add('sortBy', ChoiceFilterType::class, [

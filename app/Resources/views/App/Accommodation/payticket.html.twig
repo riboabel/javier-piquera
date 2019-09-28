@@ -9,7 +9,14 @@
                   target="_blank"
                   id="formGenerateAccommodationPayTicket">
                 <div class="modal-body">
-                    {{ form_row(form.provider) }}
+                    {% if form.region is defined %}
+                        <div class="row">
+                            <div class="col-sm-6">{{ form_row(form.provider) }}</div>
+                            <div class="col-sm-6">{{ form_row(form.region) }}</div>
+                        </div>
+                    {% else %}
+                        {{ form_row(form.provider) }}
+                    {% endif %}
                     {{ form_label(form.startDate) }}
                     <div class="row">
                         <div class="col-sm-6">
@@ -54,7 +61,7 @@
                     todayHighlight: true
                 });
 
-                form.find('[name="form[provider][]"]').select2({
+                form.find('[name="form[provider][]"], [name="form[region][]"]').select2({
                     width: '100%'
                 });
 
@@ -86,7 +93,7 @@
                     todayHighlight: true
                 });
 
-                form.find('[name="form[provider][]"]').select2({
+                form.find('[name="form[provider][]"], [name="form[region][]"]').select2({
                     width: '100%'
                 });
 
