@@ -5,6 +5,7 @@ namespace AppBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 /**
  * Description of ProfileType
@@ -35,7 +36,7 @@ class ProfileType extends AbstractType
                     'required' => false,
                     'type' => 'password'
                 ))
-                ->add('imageFile', 'vich_image', array(
+                ->add('imageFile', VichImageType::class, array(
                     'required' => false
                 ));
     }

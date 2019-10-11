@@ -109,7 +109,7 @@ services:
         class: AppBundle\Validator\Constraints\AccommodationFileValidator
         arguments: [ '@phpexcel' ]
         tags:
-                    - { name: validator.constraint_validator, alias: accommodation_file }
+            - { name: validator.constraint_validator, alias: accommodation_file }
 
     app.listener.trace_delete_listener:
         class: AppBundle\Listener\DeleteTraceableListener

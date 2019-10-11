@@ -16,15 +16,19 @@ fos_user_security_logout:
     methods:    [ "get" ]
     defaults:   { _controller: "FOSUserBundle:Security:logout" }
 
-fos_user_profile_edit:
-    path:         /editar-perfil
-    defaults:     { _controller: "FOSUserBundle:Profile:edit" }
-    methods:      [ "get", "post" ]
+fos_user_profile:
+    resource: '@FOSUserBundle/Resources/config/routing/profile.xml'
+    prefix: /profile
 
-fos_user_profile_show:
-    path:         /ver-perfil
-    defaults:     { _controller: "FOSUserBundle:Profile:show" }
-    methods:      [ "get" ]
+#fos_user_profile_edit:
+#    path:         /editar-perfil
+#    defaults:     { _controller: "FOSUserBundle:Profile:editAction" }
+#    methods:      [ "get", "post" ]
+
+#fos_user_profile_show:
+#    path:         /ver-perfil
+#    defaults:     { _controller: "FOSUserBundle:Profile:showAction" }
+#    methods:      [ "get" ]
 
 app:
     resource: '@AppBundle/Controller/'
