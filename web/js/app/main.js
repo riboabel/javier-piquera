@@ -1,5 +1,6 @@
 define([
     'jquery',
+    'js/app/router',
     'plugins/toastr/toastr',
     'js/app/volatile-message',
     'bootstrap',
@@ -7,7 +8,7 @@ define([
     'plugins/tooltipster',
     'plugins/icheck',
     'plugins/jquery.validate/jquery.validate.min'
-], function ($, toastr, volatileMessageManager) {
+], function ($, router, toastr, volatileMessageManager) {
     'use strict';
 
     var loadingImageSrc;
@@ -196,7 +197,11 @@ define([
         });
 
         $('.dropdown-tasks').parent().on('shown.bs.dropdown', function() {
-            $(this).find('.dropdown-tasks').empty().append($('<li><div><p class="text-center">Cargando...</p></div></li>')).load(Routing.generate('app_default_gettasksdropdowncontent'));
+            $(this)
+                .find('.dropdown-tasks')
+                .empty()
+                .append($('<li><div><p class="text-center">Cargando...</p></div></li>'))
+                .load(router.generate('app_default_gettasksdropdowncontent'));
         });
     };
 
