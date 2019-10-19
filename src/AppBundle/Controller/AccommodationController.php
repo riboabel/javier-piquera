@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\HAccommodation;
 use AppBundle\Form\Type\AccommodationFilterFormType;
+use AppBundle\Form\Type\AccommodationFormType;
 use AppBundle\Form\Type\ImportAccommodationFormType;
 use Carbon\Carbon;
 use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\ChoiceFilterType;
@@ -126,6 +127,30 @@ class AccommodationController extends Controller
             'recordsTotal' => $total,
             'recordsFiltered' => $total
         ));
+    }
+
+    /**
+     * @Route("/{id}/editar", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param HAccommodation $accommodation
+     * @return Response
+     */
+    public function editAction(HAccommodation $accommodation, Request $request)
+    {
+        $form = $this->createForm(AccommodationFormType::class, $accommodation);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager = $this->getDoctrine()->getManager();
+            $manager->flush();
+
+            $this->addFlash('notice', 'La reserva se guardó.');
+
+            return $this->redirect($this->generateUrl('app_accommodation_index'));
+        }
+
+        return $this->render(':App/Accommodation:edit.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**

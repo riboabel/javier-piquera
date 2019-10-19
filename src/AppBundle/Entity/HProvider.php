@@ -56,6 +56,11 @@ class HProvider
      */
     private $createdAt;
 
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
     /**
      * Get id
      *

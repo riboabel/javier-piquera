@@ -118,7 +118,7 @@ App = typeof App !== 'undefined' ? App : {};
                 secondText: 'Segundo',
                 controlType: 'slider',
                 showTime: false
-            }
+            };
 
             // Usamos el datepicker de jQuery UI para estos controles
             // pero mantenemos una referencia al nuevo para posterior uso

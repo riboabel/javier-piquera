@@ -19,9 +19,9 @@
         {#<a href="javascript:;" class="btn btn-default btn-xs" title="Ver detalle">#}
             {#<span class="fa fa-file"></span>#}
         {#</a>#}
-        {#<a href="{{ path("app_reservasguia_edit", {id: record.id}) }}" class="btn btn-primary btn-xs" title="Modificar">#}
-            {#<span class="fa fa-edit"></span>#}
-        {#</a>#}
+        <a href="{{ path("app_accommodation_edit", {id: record.id}) }}" class="btn btn-primary btn-xs" title="Modificar">
+            <span class="fa fa-edit"></span>
+        </a>
         {#{% if record.state == constant("AppBundle\\Entity\\ReservaTercero::STATE_CREATED") %}#}
             {#{% if record.confirmed %}#}
                 {#<a href="{{ path("app_reservasguia_setexecuted", {id: record.id}) }}" class="btn btn-success btn-xs btn-execute" title="Ejecutar"><span class="fa fa-road"></span></a>#}
