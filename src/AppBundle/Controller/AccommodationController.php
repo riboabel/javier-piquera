@@ -210,10 +210,11 @@ class AccommodationController extends Controller
      * @param HAccommodation $accommodation
      * @return JsonResponse
      */
-    public function payAction(HAccommodation $accommodation)
+    public function payAction(HAccommodation $accommodation, Request $request)
     {
+        $op = $request->get('op');
         $manager = $this->getDoctrine()->getManager();
-        $accommodation->setPaidAt(Carbon::now());
+        $accommodation->setPaidAt($op ? null : new \DateTime('now'));
         $manager->flush();
 
         return new JsonResponse(['result' => 'success']);

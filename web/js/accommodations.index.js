@@ -15,8 +15,7 @@ define([
 
     function initTableCheckboxs() {
         table.find('input[type=checkbox].cb-pay').on('ifChanged', function() {
-            var state = $(this).prop('checked'),
-                id = $(this).attr('data-params'),
+            var id = $(this).attr('data-params'),
                 url = router.generate('app_accommodation_pay', {id: id});
 
             $.ajax({
@@ -29,6 +28,19 @@ define([
 
         }).iCheck({
             checkboxClass: 'icheckbox_flat-blue'
+        });
+
+        table.find('button.btn-unpay').on('click', function() {
+            var id = $(this).attr('data-params'),
+                url = router.generate('app_accommodation_pay', {id: id, op: 'un'});
+
+            $.ajax({
+                dataType: 'json',
+                method: 'POST',
+                url: url
+            }).done(function() {
+                datatable.DataTable().draw();
+            });
         });
     }
 
