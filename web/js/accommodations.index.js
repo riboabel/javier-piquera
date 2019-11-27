@@ -23,7 +23,7 @@ define([
                 method: 'POST',
                 url: url
             }).done(function() {
-                datatable.DataTable().draw();
+                datatable.DataTable().draw(false);
             });
 
         }).iCheck({
@@ -39,7 +39,7 @@ define([
                 method: 'POST',
                 url: url
             }).done(function() {
-                datatable.DataTable().draw();
+                datatable.DataTable().draw(false);
             });
         });
     }
