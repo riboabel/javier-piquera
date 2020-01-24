@@ -81,10 +81,10 @@ class ReservasController extends Controller
         $filter = $request->get('filter', array());
         $filter['q'] = $search['value'];
 
-        if ($search['value'] && 1 === preg_match('/^(T|t)(?P<year>\d{1})(?P<month>\d{2})(?P<day>\d{2})(|-(?P<id>(\d{2}|\d{4})))$/', $search['value'], $matches)) {
+        if ($search['value'] && (1 === preg_match('/^(T|t)(?P<year>([6-9]|[2-5]\d{1}))(?P<month>\d{2})(?P<day>\d{2})(|-(?P<id>(\d{2}|\d{4})))$/', $search['value'], $matches))) {
             $andX = $qb->expr()->andX();
 
-            $date = new \DateTime(sprintf('%s-%s-%s', substr(date('y'), 0, 1).$matches['year'], $matches['month'], $matches['day']));
+            $date = new \DateTime(sprintf('20%s-%s-%s', 2 == strlen($matches['year']) ? $matches['year'] : "1{$matches['year']}", $matches['month'], $matches['day']));
             $andX->add($qb->expr()->gte('r.startAt', $qb->expr()->literal($date->format('Y-m-d 00:00:00'))));
             $andX->add($qb->expr()->lte('r.startAt', $qb->expr()->literal($date->format('Y-m-d 23:59:59'))));
 

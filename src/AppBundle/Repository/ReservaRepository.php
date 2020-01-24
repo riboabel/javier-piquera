@@ -83,14 +83,12 @@ class ReservaRepository extends EntityRepository
         $qb = $this->createQueryBuilder('r');
         $andX = $qb->expr()->andX();
 
-        $matches = array();
-        preg_match('/^T(?P<year>\d{1})(?P<month>\d{2})(?P<day>\d{2})-(?P<id>(\d{2}|\d{4}))$/i', $serialNumber, $matches);
+        $parsed = \AppBundle\Entity\Reserva::parseSerialNumber($serialNumber);
 
-        $date = new \DateTime(sprintf('%s-%s-%s', substr(date('y'), 0, 1).$matches['year'], $matches['month'], $matches['day']));
-        $andX->add($qb->expr()->gte('r.startAt', $qb->expr()->literal($date->format('Y-m-d 00:00:00'))));
-        $andX->add($qb->expr()->lte('r.startAt', $qb->expr()->literal($date->format('Y-m-d 23:59:59'))));
-        $andX->add($qb->expr()->like('r.id', $qb->expr()->literal(sprintf('%%%s', ltrim($matches['id'], '0')))));
-        if (2 === strlen($matches['id'])) {
+        $andX->add($qb->expr()->gte('r.startAt', $qb->expr()->literal($parsed['created_at']->format('Y-m-d 00:00:00'))));
+        $andX->add($qb->expr()->lte('r.startAt', $qb->expr()->literal($parsed['created_at']->format('Y-m-d 23:59:59'))));
+        $andX->add($qb->expr()->like('r.id', $qb->expr()->literal(sprintf('%%%s', $parsed['partial_id']))));
+        if ($parsed['before_change']) {
             $andX->add($qb->expr()->lte('r.id', $qb->expr()->literal(2493)));
         }
 

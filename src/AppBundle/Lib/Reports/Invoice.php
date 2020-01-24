@@ -228,9 +228,7 @@ class Invoice extends Report
      */
     private function getServiceFromLine(InvoiceLine $line)
     {
-        $matches = array();
-        preg_match('/^(T|t)(?P<year>\d{1})(?P<month>\d{2})(?P<day>\d{2})-(?P<id>(\d{2}|\d{4}))$/', $line->getServiceSerialNumber(), $matches);
-        $date = new \DateTime(sprintf('%s%s-%s-%s', substr(date('y'), 0, 1), $matches['year'], $matches['month'], $matches['day']));
+        $parsedSerialNumber = \AppBundle\Entity\Reserva::parseSerialNumber($line->getServiceSerialNumber());
 
         $qb = $this->manager->getRepository('AppBundle:Reserva')
                 ->createQueryBuilder('r')
@@ -240,16 +238,16 @@ class Invoice extends Report
                 $qb->expr()->lte('r.startAt', ':endAt')
                 );
         $andX->add($qb->expr()->like('r.id', ':id'));
-        if (2 === strlen($matches['id'])) {
+        if ($parsedSerialNumber['before_change']) {
             $andX->add($qb->expr()->lte('r.id', $qb->expr()->literal(2493)));
         }
 
         $qb
                 ->where($andX)
                 ->setParameters(array(
-                    'startAt' => $date->format('Y-m-d 00:00:00'),
-                    'endAt' => $date->format('Y-m-d 23:59:59'),
-                    'id' => sprintf('%%%s', ltrim($matches['id'], '0'))
+                    'startAt' => $parsedSerialNumber['created_at']->format('Y-m-d 00:00:00'),
+                    'endAt' => $parsedSerialNumber['created_at']->format('Y-m-d 23:59:59'),
+                    'id' => sprintf('%%%s', $parsedSerialNumber['partial_id'])
                 ))
                 ;
 

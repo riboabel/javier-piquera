@@ -275,6 +275,30 @@ class Reserva implements DeleteTraceableInterface
      */
     private $notesAboutDataToComplete;
 
+    public static function parseSerialNumber($serialNumber)
+    {
+        $matches = array();
+        if (1 !== preg_match('/^(T|t)(?P<year>([6-9]|[2-5]\d{1}))(?P<month>\d{2})(?P<day>\d{2})-(?P<id>(\d{2}|\d{4}))$/', $serialNumber, $matches)) {
+            return false;
+        }
+
+        $year = 2 == strlen($matches['year']) ? (2000 + (int)$matches['year']) : (2010 + (int)$matches['year']);
+        $month = $matches['month'];
+        $day = $matches['day'];
+        $createdAt = new \DateTime(sprintf('%s-%s-%s 00:00:00', $year, $month, $day));
+        $partialId = ltrim($matches['id'], '0');
+        $beforeChange = 2 === strlen($matches['id']);
+
+        return [
+            'year' => $year,
+            'month' => $month,
+            'day' => $day,
+            'created_at' => $createdAt,
+            'partial_id' => $partialId,
+            'before_change' => $beforeChange
+        ];
+    }
+
     public function __toString()
     {
         return $this->getSerialNumber();
@@ -297,8 +321,12 @@ class Reserva implements DeleteTraceableInterface
 
     public function getSerialNumber()
     {
-        return sprintf('T%s-%04s', substr($this->getStartAt()->format('ymd'), 1),
-                    substr($this->getId(), -4));
+        return sprintf(
+            'T%s%s-%04s',
+            $this->getStartAt()->format('y') > 19 ? $this->getStartAt()->format('y') : substr($this->getStartAt()->format('y'), 1),
+            $this->getStartAt()->format('md'),
+            substr($this->getId(), -4)
+        );
     }
 
     /**
