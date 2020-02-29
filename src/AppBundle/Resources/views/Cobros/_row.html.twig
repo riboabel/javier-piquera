@@ -9,7 +9,11 @@
 {% endblock %}
 
 {% block service %}
-    <span title="{{ record.serviceDescription }}">{{ record.serviceType.name }}</span>
+    <span title="{{ record.plainServiceDescription|raw }}">
+        {% if record.serviceDescription %}<u>{% endif %}
+            {{ record.serviceType.name }}
+        {% if record.serviceDescription %}</u>{% endif %}
+    </span>
 {% endblock %}
 
 {% block amount %}
