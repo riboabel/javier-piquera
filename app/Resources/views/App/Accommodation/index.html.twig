@@ -165,7 +165,7 @@
         ], function(app) {
             'use strict';
 
-            app();
+            app({displayLength: {{ display_length }}, displayStart: {{ display_start }}});
         });
     </script>
 {% endblock %}

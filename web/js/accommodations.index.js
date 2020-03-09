@@ -44,7 +44,7 @@ define([
         });
     }
 
-    function initTable() {
+    function initTable(options) {
         table.on('preDraw.dt', function() {
             $(this).block({
                 message: 'Procesando...'
@@ -118,6 +118,8 @@ define([
                     width: '80px'
                 }
             ],
+            displayLength: options.displayLength,
+            displayStart: options.displayStart,
             processing: false,
             searching: false,
             serverSide: true
@@ -166,8 +168,8 @@ define([
         });
     }
 
-    return function() {
-        initTable();
+    return function(options) {
+        initTable(options);
         initControls();
         initFilters();
     };

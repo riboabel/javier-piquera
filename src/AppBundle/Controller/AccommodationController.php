@@ -40,9 +40,16 @@ class AccommodationController extends Controller
      */
     public function indexAction()
     {
-        $filterForm = $this->createForm(AccommodationFilterFormType::class);
+        $session = $this->container->get('session');
+        $data = $session->get('accommodation.index.filter', []);
 
-        return $this->render('App/Accommodation/index.html.twig', ['filter' => $filterForm->createView()]);
+        $filterForm = $this->createForm(AccommodationFilterFormType::class, $data);
+
+        return $this->render('App/Accommodation/index.html.twig', [
+            'filter' => $filterForm->createView(),
+            'display_length' => isset($data['_']['length']) ? $data['_']['length'] : 10,
+            'display_start' => isset($data['_']['start']) ? $data['_']['start'] : 0
+        ]);
     }
 
     /**
@@ -61,11 +68,8 @@ class AccommodationController extends Controller
             ->join('p.region', 'r')
         ;
 
-        $search = $request->get('search');
         $columns = $request->get('columns');
         $orders = $request->get('order', array());
-        $filter = $request->get('filter', array());
-        $filter['q'] = $search['value'];
 
         $filter = $this->createForm(AccommodationFilterFormType::class);
         $filter->submit($request->query->get($filter->getName()));
@@ -103,6 +107,12 @@ class AccommodationController extends Controller
         $page = $request->get('start', 0) / $request->get('length') + 1;
         $pagination = $paginator->paginate($qb->getQuery(), $page, $request->get('length'));
         $total = $pagination->getTotalItemCount();
+
+        $session = $this->container->get('session');
+        $filterData = $filter->getData();
+        $filterData['_']['length'] = $request->get('length');
+        $filterData['_']['start'] = $request->get('start', 0);
+        $session->set('accommodation.index.filter', $filterData);
 
         $template = $this->container->get('twig')->load('App/Accommodation/_row.html.twig');
         $data = array_map(function(HAccommodation $record) use($template) {
