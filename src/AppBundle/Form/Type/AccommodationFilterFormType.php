@@ -119,7 +119,7 @@ class AccommodationFilterFormType extends AbstractType
                 ]
             ])
             ->add('paidAt', BooleanFilterType::class, [
-                'label' => 'Padado',
+                'label' => 'Pagado',
                 'apply_filter' => function(QueryInterface $filterQuery, $field, $values) {
                     if (empty($values['value'])) {
                         return null;
