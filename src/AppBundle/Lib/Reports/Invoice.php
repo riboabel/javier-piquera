@@ -188,6 +188,14 @@ class Invoice extends Report
             $this->pdf->Cell(171, 10, 'Total', 1);
             $this->pdf->Cell(0, 10, sprintf('%0.2f', $this->record->getTotalCharge()), 1, 1, 'R');
         }
+
+        if ($this->record->getNotes()) {
+            $this->pdf->Ln(2);
+            $this->pdf->SetFont('', 'B');
+            $this->pdf->Cell(0, 10, 'Nota:', 0, 1, 'L');
+            $this->pdf->SetFont('', '');
+            $this->pdf->MultiCell(0, 10, $this->record->getNotes(), 0, 'L');
+        }
     }
 
     private function renderFooter()

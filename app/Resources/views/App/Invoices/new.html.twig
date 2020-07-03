@@ -1,4 +1,4 @@
-{% extends "frontend.html.twig" %}
+{% extends "frontend-requirejs.html.twig" %}
 
 {% form_theme form _self %}
 
@@ -62,6 +62,67 @@
             </div>
         </div>
         <!-- /.row -->
+
+        <script id="entry-atrio" type="text/x-handlebars-template">
+            <div class="row item">
+                <div class="col-sm-4 form-group">
+                    <label for="invoice_form_lines_0_service" class="required">Servicio</label>
+                    <select id="invoice_form_lines_0_service" name="invoice_form[lines][0][service]" required="required"></select>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label for="invoice_form_lines_0_meassurementUnit">Unidad</label>
+                    <input type="text" id="invoice_form_lines_0_meassurementUnit" name="invoice_form[lines][0][meassurementUnit]" maxlength="49" value="Km" class="form-control">
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label for="invoice_form_lines_0_quantity">Cantidad</label>
+                    <input type="number" id="invoice_form_lines_0_quantity" name="invoice_form[lines][0][quantity]" class="form-control text-right" required="required">
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label for="invoice_form_lines_0_unitPrice">Precio</label>
+                    <input type="text" id="invoice_form_lines_0_unitPrice" name="invoice_form[lines][0][unitPrice]" class="form-control text-right" required="required">
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label for="invoice_form_lines_0_totalPrice" class="required">Importe</label>
+                    <input type="text" id="invoice_form_lines_0_totalPrice" name="invoice_form[lines][0][totalPrice]" required="required" class="form-control text-right">
+                </div>
+                <input type="hidden" id="invoice_form_lines_0_serviceName" name="invoice_form[lines][0][serviceName]">
+                <input type="hidden" id="invoice_form_lines_0_clientsName" name="invoice_form[lines][0][clientsName]">
+                <input type="hidden" id="invoice_form_lines_0_clientReference" name="invoice_form[lines][0][clientReference]">
+                <input type="hidden" id="invoice_form_lines_0_serviceSerialNumber" name="invoice_form[lines][0][serviceSerialNumber]">
+                <input type="hidden" id="invoice_form_lines_0_notes" name="invoice_form[lines][0][notes]">
+            </div>
+            <div class="row item">
+                <div class="col-sm-4 form-group">
+                    <label for="invoice_form_lines_1_serviceName" class="required">Servicio</label>
+                    <input id="invoice_form_lines_1_serviceName" name="invoice_form[lines][1][serviceName]" required="required" value="Horas de espera" class="form-control" readonly="readonly">
+                </div>
+                <div class="form-group col-sm-2">
+                    <label for="invoice_form_lines_1_meassurementUnit">Unidad</label>
+                    <input type="text" id="invoice_form_lines_1_meassurementUnit" name="invoice_form[lines][1][meassurementUnit]" maxlength="49" value="hora" class="form-control">
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label for="invoice_form_lines_1_quantity">Cantidad</label>
+                    <input type="number" id="invoice_form_lines_1_quantity" name="invoice_form[lines][1][quantity]" class="form-control text-right" required="required">
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label for="invoice_form_lines_1_unitPrice">Precio</label>
+                    <input type="text" id="invoice_form_lines_1_unitPrice" name="invoice_form[lines][1][unitPrice]" class="form-control text-right" required="required">
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label for="invoice_form_lines_1_totalPrice" class="required">Importe</label>
+                    <input type="text" id="invoice_form_lines_1_totalPrice" name="invoice_form[lines][1][totalPrice]" required="required" class="form-control text-right">
+                </div>
+                <input type="hidden" id="invoice_form_lines_1_service" name="invoice_form[lines][1][service]">
+                <input type="hidden" id="invoice_form_lines_1_clientsName" name="invoice_form[lines][1][clientsName]">
+                <input type="hidden" id="invoice_form_lines_1_clientReference" name="invoice_form[lines][1][clientReference]">
+                <input type="hidden" id="invoice_form_lines_1_serviceSerialNumber" name="invoice_form[lines][1][serviceSerialNumber]">
+                <input type="hidden" id="invoice_form_lines_1_notes" name="invoice_form[lines][1][notes]">
+            </div>
+            <div class="item">
+                {{ form_row(form.notes) }}
+            </div>
+        </script>
+
         {{ form_rest(form) }}
     {{ form_end(form) }}
 {% endblock %}
@@ -129,9 +190,18 @@
 {% endblock %}
 
 {% block page_javascripts %}
+    {#<script>#}
+        {#$(document).ready(function() {#}
+            {#App.Invoices.Form.init();#}
+        {#});#}
+    {#</script>#}
     <script>
-        $(document).ready(function() {
-            App.Invoices.Form.init();
+        requirejs([
+            'js/invoices.form'
+        ], function(app) {
+            'use strict';
+
+            app();
         });
     </script>
 {% endblock %}

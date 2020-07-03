@@ -10,7 +10,8 @@ var require = {
         'datatables.net-bs': 'plugins/jquery.dataTables/amd/datatables.bootstrap',
         'plugins/tooltipster': 'plugins/tooltipster-master/js/jquery.tooltipster',
         'plugins/icheck': 'plugins/iCheck/icheck',
-        'plugins/metisMenu': 'plugins/metisMenu/dist/metisMenu'
+        'plugins/metisMenu': 'plugins/metisMenu/dist/metisMenu',
+        'plugins/handlebars': 'plugins/handlebars.min-v4.7.6'
     },
     shim: {
         'bootstrap': ['jquery'],

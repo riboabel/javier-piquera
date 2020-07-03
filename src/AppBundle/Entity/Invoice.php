@@ -74,6 +74,13 @@ class Invoice
     /**
      * @var string
      *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $notes;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="total_charge", type="decimal", precision=10, scale=2)
      */
     private $totalCharge;
@@ -268,5 +275,29 @@ class Invoice
     public function getLines()
     {
         return $this->lines;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param string $notes
+     *
+     * @return Invoice
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 }

@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -51,6 +52,9 @@ class InvoiceFormType extends AbstractType
                     'entry_type' => InvoiceLineType::class,
                     'allow_add' => true,
                     'by_reference' => false
+                ))
+                ->add('notes', TextareaType::class, array(
+                    'required' => false
                 ))
                 ->add('totalCharge')
                 ;
