@@ -3,6 +3,7 @@ var require = {
     paths: {
         'jquery': 'plugins/jquery/jquery-3.3.1.min',
         'jquery/ui': 'plugins/jquery.ui/js/jquery-ui-1.11.4.min',
+        'moment': 'plugins/moment',
         'bootstrap': 'plugins/bootstrap/js/bootstrap',
         'jquery/select2': 'plugins/select2/js/select2',
         'jquery/select2.i18n-es': 'plugins/select2/js/i18n/es',

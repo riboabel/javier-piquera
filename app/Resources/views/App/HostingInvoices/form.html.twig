@@ -1,0 +1,207 @@
+{% block hosting_invoice_form_row %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Encabezado</div>
+        <div class="panel-body">
+            {{ form_row(form.provider) }}
+            <div class="pull-right">
+                <button type="button" id="btnLoadServices" class="btn btn-info btn-sm"><span>Cargar servicios</span></button>
+                <script>
+                    requirejs([
+                        'jquery',
+                        'js/app/router',
+                        'moment',
+                        '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js',
+                        'plugins/jquery.blockUI'
+                    ], function($, router, moment, numeral) {
+                        'use strict';
+
+                        $(document).ready(function() {
+                            $('#btnLoadServices').on('click', function(event) {
+                                var providerId;
+
+                                event.preventDefault();
+
+                                $.blockUI();
+                                providerId = $('#{{ form.provider.vars.id }}').val();
+                                $.getJSON(router.generate('app_hostinginvoices_getservices', {id: providerId}), function(json) {
+                                    var linesContainer = $('#containerLines'),
+                                        grandTotal = 0;
+
+                                    $.unblockUI();
+
+                                    linesContainer.empty();
+
+
+                                    $.each(json.services, function(i) {
+                                        var service, index, itemHtml, item;
+
+                                        event.preventDefault();
+
+                                        index = linesContainer.attr('data-index') * 1;
+                                        itemHtml = linesContainer.attr('data-prototype').replace(/__name__/g, index);
+                                        item = $(itemHtml).appendTo(linesContainer);
+
+                                        service = json.services[i];
+                                        item.find('input[name$="[bookingReference]"]').val(service.booking_reference);
+                                        item.find('input[name$="[service]"]').val(service.service);
+                                        item.find('input[name$="[clientName]"]').val(service.client_name);
+                                        item.find('input[name$="[startDate]"]').val(moment(service.start_date, 'YYYY-MM-DD').format('DD/MM/YYYY'));
+                                        item.find('input[name$="[endDate]"]').val(moment(service.end_date, 'YYYY-MM-DD').format('DD/MM/YYYY'));
+                                        item.find('input[name$="[nights]"]').val(service.nights);
+                                        item.find('input[name$="[rowTotal]"]').val(numeral(service.row_total).format('0.00'));
+                                        item.find('input[name$="[accommodationId]"]').val(service.accommodation_id);
+
+                                        grandTotal += service.row_total;
+
+                                        item.find('input:text[name$="[startDate]"], input:text[name$="[endDate]"]').datepicker({
+                                            autoclose: true,
+                                            format: 'dd/mm/yyyy',
+                                            todayBtn: true,
+                                            todayHighlight: true
+                                        });
+                                        item.find('input:text[name$="[rowTotal]"]').on('change', function() {
+                                            var grandTotal = 0;
+                                            linesContainer.find('input[name$="[rowTotal]"]').each(function() {
+                                                grandTotal += $(this).val() * 1;
+                                            });
+                                            $('input[name$="[grandTotal]"]').val(numeral(grandTotal).format('0.00'));
+                                        });
+
+                                        linesContainer.attr('data-index', index + 1);
+                                    });
+
+                                    $('#{{ form.grandTotal.vars.id }}').val(numeral(grandTotal).format('0.00'));
+                                });
+                            });
+                        });
+                    });
+                </script>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Servicios</div>
+        <div class="panel-body">
+            {{ form_row(form.lines) }}
+
+            <div class="row">
+                <div class="col-sm-10">&nbsp;</div>
+                <div class="col-sm-2">{{ form_row(form.grandTotal, {attr: {class: 'text-right'}}) }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Pie</div>
+        <div class="panel-body">
+            {{ form_row(form.notes) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block _hosting_invoice_form_lines_row %}
+    <div id="containerLines" data-prototype="{{ form_row(form.vars.prototype)|e }}"></div>
+    <div class="pull-right">
+        <button id="btnAddLine" type="button" class="btn btn-info btn-xs" title="Agregar servicio"><span><i class="fa fa-plus-circle"></i> Agregar servicio</span></button>
+        <button type="button" class="btn btn-danger btn-xs btn-remove-all-lines"><span><i
+                        class="fa fa-minus-circle"></i> Eliminar todos los servicios</span></button>
+    </div>
+    <div class="clearfix"></div>
+    <br>
+    <script>
+        requirejs([
+            'jquery',
+            '//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js',
+            'plugins/datepicker/bootstrap-datepicker'
+        ], function($, numeral) {
+            'use strict';
+
+            $(document).ready(function() {
+                var linesContainer = $('#containerLines');
+
+                linesContainer.attr('data-index', linesContainer.find('.container-line').length);
+
+                $('button#btnAddLine').on('click', function(event) {
+                    var index, itemHtml, item, grandTotal;
+
+                    event.preventDefault();
+
+                    index = linesContainer.attr('data-index') * 1;
+                    itemHtml = linesContainer.attr('data-prototype').replace(/__name__/g, index);
+                    item = $(itemHtml).appendTo(linesContainer);
+
+                    item.find('input:text[name$="[startDate]"], input:text[name$="[endDate]"]').datepicker({
+                        autoclose: true,
+                        format: 'dd/mm/yyyy',
+                        todayBtn: true,
+                        todayHighlight: true
+                    });
+                    item.find('input:text[name$="[rowTotal]"]').on('change', function() {
+                        var grandTotal = 0;
+                        linesContainer.find('input[name$="[rowTotal]"]').each(function() {
+                            grandTotal += $(this).val() * 1;
+                        });
+                        $('input[name$="[grandTotal]"]').val(numeral(grandTotal).format('0.00'));
+                    });
+
+                    linesContainer.attr('data-index', index + 1);
+
+                    grandTotal = 0;
+                    linesContainer.find('input[name$="[rowTotal]"]').each(function() {
+                        grandTotal += $(this).val() * 1;
+                    });
+                    $('input[name$="[grandTotal]"]').val(numeral(grandTotal).format('0.00'));
+                });
+
+                linesContainer.on('click', '.btn-remove-line', function(event) {
+                    var grandTotal;
+
+                    event.preventDefault();
+
+                    if (confirm('¿Seguro?')) {
+                        $(this).closest('.container-line').remove();
+
+                        grandTotal = 0;
+                        linesContainer.find('input[name$="[rowTotal]"]').each(function() {
+                            grandTotal += $(this).val() * 1;
+                        });
+                        console.log('AA', grandTotal);
+                        $('input[name$="[grandTotal]"]').val(numeral(grandTotal).format('0.00'));
+                    }
+                });
+
+                $('.btn-remove-all-lines').on('click', function(event) {
+                    event.preventDefault();
+
+                    if (!confirm('¿Seguro?')) {
+                        return;
+                    }
+
+                    linesContainer.empty();
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block hosting_invoice_line_row %}
+    <div class="container-line">
+        <div class="row">
+            <div class="col-sm-2">{{ form_row(form.bookingReference) }}</div>
+            <div class="col-sm-5">{{ form_row(form.service) }}</div>
+            <div class="col-sm-5">{{ form_row(form.clientName) }}</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">{{ form_row(form.startDate) }}</div>
+            <div class="col-sm-4">{{ form_row(form.endDate) }}</div>
+            <div class="col-sm-2">{{ form_row(form.nights, {attr: {"class": "text-right"}}) }}</div>
+            <div class="col-sm-2">{{ form_row(form.rowTotal, {attr: {"class": "text-right"}}) }}</div>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-danger btn-xs btn-remove-line" type="button" title="Eliminar servicio"><span><i class="fa fa-minus-circle"></i></span></button>
+        </div>
+        <div class="clearfix"></div>
+        {{ form_rest(form) }}
+        <hr>
+    </div>
+{% endblock %}

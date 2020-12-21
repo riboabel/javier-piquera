@@ -127,20 +127,17 @@
                         <li>
                             <a href="#"><i class="fa fa-taxi fa-fw"></i> Gestión<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="{{ path("app_reservas_index") }}">Reservas</a>
-                                </li>
+                                <li><a href="{{ path("app_reservas_index") }}">Reservas</a></li>
                                 <li><a href="{{ path("app_reservasclasicos_index") }}">Reservas de clásicos</a></li>
                                 <li><a href="{{ path("app_reservasguia_index") }}">Reservas de guía</a></li>
-                                <li>
-                                    <a href="{{ path("app_driverplanning_index") }}">Planificación de conductores</a>
-                                </li>
+                                <li><a href="{{ path("app_driverplanning_index") }}">Planificación de conductores</a></li>
                                 <li><a href="{{ path('app_control_index') }}">Control de reservas</a></li>
                                 <li><a href="{{ path('app_accommodation_index') }}">Reservas de hospedaje</a></li>
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_OWNER') %}
                                     <li><a href="{{ path("app_prices_index") }}">Catálogo de precios</a></li>
                                     <li><a href="{{ path("app_cobros_index") }}">Cobros a clientes</a></li>
                                     <li><a href="{{ path("app_invoices_index") }}">Facturación de servicios</a></li>
+                                    <li><a href="{{ path("app_hostinginvoices_index") }}">Facturación de hospedajes</a></li>
                                     <li><a href="{{ path("app_pays_index") }}">Pagos a conductores</a></li>
                                     <li><a href="{{ path("app_thirdpays_index") }}">Pagos a terceros</a></li>
                                     <li><a href="{{ path("app_thirdcobros_index") }}">Cobros de terceros</a></li>
@@ -183,6 +180,7 @@
                                 <li><a href="{{ path("app_admin_places_index") }}">Lugares</a></li>
                                 <li><a href="{{ path("app_guides_index") }}">Guías</a></li>
                                 <li><a href="{{ path("app_admin_providers_index") }}">Terceros</a></li>
+                                <li><a href="{{ path("app_hostinginvoiceproviders_index") }}">Proveedores de hospedaje</a></li>
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <li><a href="{{ path("app_users_index") }}">Usuarios</a></li>
                                 {% endif %}
