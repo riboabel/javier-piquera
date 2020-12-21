@@ -61,7 +61,7 @@
     <script type="text/javascript">
         var routesUrl = '{{ path('fos_js_routing_js', {'callback': 'define'}) }}';
     </script>
-    <script type="text/javascript" src="{{ asset('js/require-config.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/requirejs-config.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/require.js') }}"></script>
 {% endblock %}
 
@@ -281,7 +281,7 @@
     {#{% endjavascripts %}#}
 
     <script type="text/javascript">
-        requirejs([
+        require([
             'js/app/main'
         ], function (app) {
             'use strict';

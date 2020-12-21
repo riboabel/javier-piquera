@@ -1,4 +1,4 @@
-var require = {
+var requirejs = {
     baseUrl: '/',
     paths: {
         'jquery': 'plugins/jquery/jquery-3.3.1.min',
