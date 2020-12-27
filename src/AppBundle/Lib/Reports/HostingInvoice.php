@@ -90,12 +90,16 @@ class HostingInvoice extends Report
         $this->pdf->SetY(160);
         $this->pdf->SetFont('', 'B');
         $this->pdf->Cell(15, 10, 'TOTAL', 0, 0, 'R');
+
+        $this->pdf->Cell(225, 10, $this->invoice->getCurrency(), 0, 0, 'R');
         $this->pdf->Cell(0, 10, sprintf('%0.2f', $this->invoice->getGrandTotal()), 0, 1, 'R');
     }
 
     private function renderFooter()
     {
-        $this->pdf->SetY(160);
+        $this->pdf->SetY(180);
         $this->pdf->SetFont('', 'B');
+        $this->pdf->Cell(130, 15, 'Por el deudor', 1, 0, 'L');
+        $this->pdf->Cell(0, 15, 'Por el acreedor', 1, 1, 'L');
     }
 }

@@ -76,6 +76,13 @@ class HostingInvoice
     /**
      * @var string
      *
+     * @ORM\Column(length=3)
+     */
+    private $currency;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="text", nullable=true)
      */
     private $notes;
@@ -279,5 +286,29 @@ class HostingInvoice
     public function getProvider()
     {
         return $this->provider;
+    }
+
+    /**
+     * Set currency
+     *
+     * @param string $currency
+     *
+     * @return HostingInvoice
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 }
