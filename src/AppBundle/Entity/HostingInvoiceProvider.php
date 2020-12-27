@@ -67,6 +67,13 @@ class HostingInvoiceProvider
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="last_autoincrement_reset_at", type="datetime", nullable=true)
+     */
+    private $lastAutoincrementResetAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
@@ -205,5 +212,29 @@ class HostingInvoiceProvider
     public function getRegion()
     {
         return $this->region;
+    }
+
+    /**
+     * Set lastAutoincrementResetAt
+     *
+     * @param \DateTime $lastAutoincrementResetAt
+     *
+     * @return HostingInvoiceProvider
+     */
+    public function setLastAutoincrementResetAt($lastAutoincrementResetAt)
+    {
+        $this->lastAutoincrementResetAt = $lastAutoincrementResetAt;
+
+        return $this;
+    }
+
+    /**
+     * Get lastAutoincrementResetAt
+     *
+     * @return \DateTime
+     */
+    public function getLastAutoincrementResetAt()
+    {
+        return $this->lastAutoincrementResetAt;
     }
 }

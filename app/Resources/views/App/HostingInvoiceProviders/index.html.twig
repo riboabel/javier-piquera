@@ -35,11 +35,17 @@
                                 <td>{{ provider.name }}</td>
                                 <td>{{ provider.region }}</td>
                                 <td>{{ provider.prefix }}</td>
-                                <td>{{ provider.nextAutoincrement }}</td>
+                                <td>
+                                    {{ provider.nextAutoincrement }}
+                                    {% if provider.lastAutoincrementResetAt is not empty %}
+                                        (Último reinicio: {{ provider.lastAutoincrementResetAt|date('d/m/Y') }})
+                                    {% endif %}
+                                </td>
                                 <td>
                                     <div class="btn-group">
                                         <a href="{{ path("app_hostinginvoiceproviders_edit", {id: provider.id}) }}" class="btn btn-primary btn-xs" title="Editar"><i class="glyphicon glyphicon-edit"></i></a>
                                         <a href="{{ path("app_hostinginvoiceproviders_delete", {id: provider.id}) }}" class="btn btn-danger btn-xs btn-remove" title="Eliminar"><i class="glyphicon glyphicon-remove"></i></a>
+                                        <a href="{{ path('app_hostinginvoiceproviders_resetautoincrement', {id: provider.id}) }}" onclick="javascript:{return false;}" class="btn btn-default btn-xs btn-reset"><i class="fa fa-refresh"></i></a>
                                     </div>
                                 </td>
                             </tr>

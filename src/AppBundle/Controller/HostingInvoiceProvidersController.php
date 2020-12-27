@@ -11,8 +11,10 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\HostingInvoice;
 use AppBundle\Entity\HostingInvoiceProvider;
 use AppBundle\Form\Type\HostingInvoiceProviderFormType;
+use Carbon\Carbon;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -97,5 +99,38 @@ class HostingInvoiceProvidersController extends Controller
         $this->addFlash('notice', 'El proveedor se eliminó.');
 
         return $this->redirectToRoute('app_hostinginvoiceproviders_index');
+    }
+
+    /**
+     * @Route("/{id}/reset-autoincrement", methods={"POST"}, requirements={"id": "\d+"})
+     * @param HostingInvoiceProvider $provider
+     * @return JsonResponse
+     */
+    public function resetAutoincrementAction(HostingInvoiceProvider $provider, Request $request)
+    {
+        $response = [];
+
+        if ($request->get('confirmed') == 'yes') {
+            $provider
+                ->setNextAutoincrement(1)
+                ->setLastAutoincrementResetAt(new \DateTime('now'));
+            $this->getDoctrine()->getManager()->flush();
+            $response['action'] = 'redirect';
+            $response['redirectUrl'] = $this->generateUrl('app_hostinginvoiceproviders_index');
+            $this->addFlash('notice', 'El consecutivo se reinició.');
+        } else {
+            if (!$provider->getLastAutoincrementResetAt()) {
+                $response['action'] = 'confirm';
+                $response['message'] = '¿Seguro?';
+            } else {
+                $lastReset = Carbon::instance($provider->getLastAutoincrementResetAt());
+                if ($lastReset->year == date('Y')) {
+                    $response['action'] = 'confirm';
+                    $response['message'] = sprintf('Ya reiniciaste este consecutivo una vez en este año en fecha %s. ¿Seguro que quieres volver a hacer esta operación?', $lastReset->format('d/m/Y'));
+                }
+            }
+        }
+
+        return new JsonResponse($response);
     }
 }
