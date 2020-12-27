@@ -25,7 +25,7 @@
         "doctrine/orm": "^2.4.8",
         "dompdf/dompdf": "^0.8.3",
         "egeloen/ckeditor-bundle": "^5.0",
-        "friendsofsymfony/jsrouting-bundle": "dev-master",
+        "friendsofsymfony/jsrouting-bundle": "2.4.0",
         "friendsofsymfony/user-bundle": "^2.0",
         "gedmo/doctrine-extensions": "^2.4",
         "incenteev/composer-parameter-handler": "~2.0",

@@ -106,6 +106,13 @@ class HAccommodation
     private $paidAt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(nullable=true)
+     */
+    private $invoiceNumber;
+
+    /**
      * Get id
      *
      * @return integer
@@ -353,5 +360,29 @@ class HAccommodation
     public function getPaidAt()
     {
         return $this->paidAt;
+    }
+
+    /**
+     * Set invoiceNumber
+     *
+     * @param string $invoiceNumber
+     *
+     * @return HAccommodation
+     */
+    public function setInvoiceNumber($invoiceNumber)
+    {
+        $this->invoiceNumber = $invoiceNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get invoiceNumber
+     *
+     * @return string
+     */
+    public function getInvoiceNumber()
+    {
+        return $this->invoiceNumber;
     }
 }

@@ -1,0 +1,18 @@
+{% block hosting_invoice_provider_form_row %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Datos del proveedor
+        </div>
+        <div class="panel-body">
+            {{ form_row(form.name) }}
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form_row(form.prefix) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_row(form.region) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

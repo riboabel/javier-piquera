@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Form\Type\ReservasByDriverReportFilterFormType;
+use AppBundle\Lib\PdfResponse;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -259,7 +260,7 @@ class ReportsController extends Controller
 
         $report = new Reports\ServicesBySelectionSpecialReport($request->get('ids', array()), $em);
 
-        return new Response($report->getContent(), 200, array('Content-Type' => 'application/pdf'));
+        return new PdfResponse($report);
     }
 
     /**
@@ -278,9 +279,7 @@ class ReportsController extends Controller
             'showLogosIfPosible' => $request->get('logos') === 'yes'
         ), $em, $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos');
 
-        return new StreamedResponse(function() use($report) {
-            file_put_contents('php://output', $report->getContent());
-        }, 200, array('Content-Type' => 'application/pdf'));
+        return new PdfResponse($report);
     }
 
     /**
@@ -298,9 +297,7 @@ class ReportsController extends Controller
             'prices' => $request->get('prices', array())
         ), $manager, $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos');
 
-        return new StreamedResponse(function() use($report) {
-            file_put_contents('php://output', $report->getContent());
-        }, 200, array('Content-Type' => 'application/pdf'));
+        return new PdfResponse($report);
     }
 
     /**
@@ -320,9 +317,7 @@ class ReportsController extends Controller
             'logo_path' => null !== $enterprise->getLogoName() ? sprintf('%s/../web/uploads/logos/%s', $this->container->getParameter('kernel.root_dir'), $enterprise->getLogoName()) : null
         ), $manager);
 
-        return new StreamedResponse(function() use($report) {
-            file_put_contents('php://output', $report->getContent());
-        }, 200, array('Content-Type' => 'application/pdf'));
+        return new PdfResponse($report);
     }
 
     /**
@@ -330,7 +325,7 @@ class ReportsController extends Controller
      * @Method({"get"})
      * @ParamConverter("record", class="AppBundle\Entity\Reserva", options={"repository_method": "findBySerialNumber", "map_method_signature": true})
      * @param \AppBundle\Entity\Reserva $record
-     * @return Respnse
+     * @return Response
      */
     public function printJobOrderAction(\AppBundle\Entity\Reserva $record)
     {
@@ -341,9 +336,7 @@ class ReportsController extends Controller
             'logo_path' => $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos'
         ), $em);
 
-        return new StreamedResponse(function() use($report) {
-            file_put_contents('php://output', $report->getContent());
-        }, 200, array('Content-Type' => 'application/pdf'));
+        return new PdfResponse($report);
     }
 
     /**
@@ -351,7 +344,7 @@ class ReportsController extends Controller
      * @Method({"get"})
      * @ParamConverter("record", class="AppBundle\Entity\Reserva")
      * @param \AppBundle\Entity\Reserva $record
-     * @return Respnse
+     * @return Response
      */
     public function printEmptyJobOrderAction(\AppBundle\Entity\Reserva $record)
     {
@@ -362,9 +355,7 @@ class ReportsController extends Controller
             'logo_path' => $this->container->getParameter('kernel.root_dir').'/../web/uploads/logos'
         ), $em);
 
-        return new StreamedResponse(function() use($report) {
-            file_put_contents('php://output', $report->getContent());
-        }, 200, array('Content-Type' => 'application/pdf'));
+        return new PdfResponse($report);
     }
 
     /**
@@ -396,9 +387,7 @@ class ReportsController extends Controller
             $em = $this->getDoctrine()->getManager();
             $report = new Reports\CobrosReport($em, $data['fromDate'], $data['toDate']);
 
-            return new StreamedResponse(function() use($report) {
-                file_put_contents('php://output', $report->getContent());
-            }, 200, array('Content-Type' => 'application/pdf'));
+            return new PdfResponse($report);
         }
 
         return $this->render('App/Reports/form_old_cobros.html.twig', array(
@@ -435,9 +424,7 @@ class ReportsController extends Controller
             $em = $this->getDoctrine()->getManager();
             $report = new Reports\PaysReport($em, $data['fromDate'], $data['toDate']);
 
-            return new StreamedResponse(function() use($report) {
-                file_put_contents('php://output', $report->getContent());
-            }, 200, array('Content-Type' => 'application/pdf'));
+            return new PdfResponse($report);
         }
 
         return $this->render('App/Reports/form_old_pays.html.twig', array(
@@ -540,7 +527,7 @@ class ReportsController extends Controller
      * @Route("/imprimir-modelo-programa/reserva-{id}", requirements={"id": "\d+"}, options={"expose": true})
      * @Method({"get", "post"})
      * @param Reserva $record
-     * @return StreamedResponse
+     * @return Response
      */
     public function printProgramServiceModelAction(Reserva $record)
     {
@@ -550,8 +537,6 @@ class ReportsController extends Controller
 
         $report = new Reports\ProgramServiceModel($record, $phoneService, $manager, $logoPath);
 
-        return new StreamedResponse(function() use($report) {
-            file_put_contents('php://output', $report->getContent());
-        }, 200, array('Content-Type' => 'application/pdf'));
+        return new PdfResponse($report);
     }
 }

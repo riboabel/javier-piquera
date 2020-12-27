@@ -1,0 +1,7 @@
+{% block actions %}
+    <div class="btn-group">
+        <a target="_blank" href="{{ path('app_hostinginvoices_print', {id: record.id}) }}" class="btn btn-default btn-xs">
+            <i class="fa fa-print"></i>
+        </a>
+    </div>
+{% endblock %}
