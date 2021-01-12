@@ -122,14 +122,14 @@ class Invoice extends Report
             $this->pdf->Cell(115, 10, 'Descripción del Servicio', 1, 0, 'C');
             $this->pdf->Cell(10, 10, 'UM', 1, 0, 'C');
             $this->pdf->Cell(23, 10, 'Cantidad', 1, 0, 'C');
-            $this->pdf->Cell(23, 10, 'Precio CUC', 1, 0, 'C');
-            $this->pdf->Cell(0, 10, 'Importe CUC', 1, 1, 'C');
+            $this->pdf->Cell(23, 10, 'Precio CUP', 1, 0, 'C');
+            $this->pdf->Cell(0, 10, 'Importe CUP', 1, 1, 'C');
         } else {
             $this->pdf->Cell(80, 10, 'Descripción del Servicio', 1, 0, 'C');
             $this->pdf->Cell(45, 10, 'Clientes', 1, 0, 'C');
             $this->pdf->Cell(23, 10, 'Referencia', 1, 0, 'C');
             $this->pdf->Cell(23, 10, 'NC', 1, 0, 'C');
-            $this->pdf->Cell(0, 10, 'Importe CUC', 1, 1, 'C');
+            $this->pdf->Cell(0, 10, 'Importe CUP', 1, 1, 'C');
         }
 
         if (null !== $this->logoPath) {
