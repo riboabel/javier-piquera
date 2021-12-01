@@ -98,7 +98,40 @@ define([
         language: 'es',
         minimunInputLength: 1,
         width: '100%'
-    }
+    };
+
+    var reindexAtrioItems = function() {
+        var items = $('#fakedServices .panel-body .item');
+
+        items.each(function(index) {
+            if (index === items.length - 1) {
+                return;
+            }
+
+            var oldIndex = $(this).attr('data-index');
+
+            $('input:text, input:hidden, input[type=number], select', this).each(function() {
+                $(this).attr({
+                    name: $(this).attr('name').replace('[' + oldIndex + ']', '[' + index + ']'),
+                    id: $(this).attr('id').replace('_' + oldIndex + '_', '_' + index + '_')
+                });
+            });
+            $('label', this).each(function() {
+                $(this).attr('for', $(this).attr('for').replace('_' + oldIndex + '_', '_' + index + '_'));
+            });
+
+            $(this).attr('data-index', index);
+        });
+    };
+
+    var updateTotalCharge = function() {
+        var value = 0;
+        $.map($('input[name$="[totalPrice]"]'), function(element) {
+            value += $(element).val() ? $(element).val() * 1 : 0;
+        });
+
+        $('input[name="invoice_form[totalCharge]"]').val(value.toFixed(2));
+    };
 
     var initControls = function() {
         $('#invoice_form_provider').on('change', function() {
@@ -106,9 +139,11 @@ define([
         }).select2({width: '100%'});
         $('#invoice_form_driver').select2({width: '100%'});
         $('#invoice_form_modelName').on('change', function() {
-            var t = handlebars.compile(document.getElementById('entry-atrio').innerHTML);
+            var entry = handlebars.compile(document.getElementById('entry-atrio').innerHTML),
+                item = handlebars.compile(document.getElementById('item-atrio').innerHTML);
+
             if ($(this).val() === 'ATRIO') {
-                $('#fakedServices').removeClass('hidden').find('.panel-body').append(t({}));
+                $('#fakedServices').removeClass('hidden').find('.panel-body').append(entry({item: item({index: 0, index0: false})}));
                 $('#fakedServices').find('select[name$="[service]"]').on('change', serviceOnChange).select2($.extend(true, serviceSelect2Options, {
                     ajax: {
                         url: router.generate('app_invoices_getservices', {id: $('#invoice_form_provider').val()})
@@ -121,6 +156,34 @@ define([
                 $('#invoice_form_lines').closest('.panel').removeClass('hidden');
             }
         }).trigger('change');
+
+        $('.btn-add-atrio-item').on('click', function() {
+            var htmlItem = handlebars.compile(document.getElementById('item-atrio').innerHTML),
+                currentItems = $('#fakedServices .item'),
+                item = $(htmlItem({index: currentItems.length - 2, index0: true}));
+
+            item.insertBefore(currentItems[currentItems.length - 2]);
+            reindexAtrioItems();
+            updateTotalCharge();
+
+            item.find('select[name$="[service]"]').on('change', serviceOnChange).select2($.extend(true, serviceSelect2Options, {
+                ajax: {
+                    url: router.generate('app_invoices_getservices', {id: $('#invoice_form_provider').val()})
+                }
+            }));
+        });
+        $('body').on('click', 'button.btn-remove-atrio-item', function(event) {
+            $(event.currentTarget).closest('.item')
+                .fadeOut(function() {
+                    $(this).remove();
+                    reindexAtrioItems();
+                    updateTotalCharge();
+                });
+        }).on('mouseover', 'button.btn-remove-atrio-item, button.btn-delete-item', function(event) {
+            $(event.currentTarget).closest('.item').css({backgroundColor: '#f3e1e1'});
+        }).on('mouseout', 'button.btn-remove-atrio-item, button.btn-delete-item', function(event) {
+            $(event.currentTarget).closest('.item').css({backgroundColor: ''});
+        });
     }
 
     var initCollection = function() {
@@ -155,15 +218,6 @@ define([
                 url: router.generate('app_invoices_getservices', {id: $('#invoice_form_provider').val()})
             }
         }));
-
-        var updateTotalCharge = function() {
-            var value = 0;
-            $.map($('input[name$="[totalPrice]"]'), function(element) {
-                value += $(element).val() ? $(element).val() * 1 : 0;
-            });
-
-            $('input[name="invoice_form[totalCharge]"]').val(value.toFixed(2));
-        };
 
         $('body').on('change', 'input[name$="[totalPrice]"]', function() {
             updateTotalCharge();

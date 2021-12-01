@@ -14,6 +14,7 @@ use AppBundle\Entity\Reserva;
 use AppBundle\Entity\Invoice;
 use AppBundle\Form\Type\InvoiceFormType;
 use AppBundle\Entity\Provider;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of  InvoicesController
@@ -111,8 +112,7 @@ class InvoicesController extends Controller
     }
 
     /**
-     * @Route("/nuevo")
-     * @Method({"get", "post"})
+     * @Route("/nuevo", methods={"GET", "POST"})
      * @param Request $request
      * @return Response
      */
@@ -134,9 +134,9 @@ class InvoicesController extends Controller
             foreach ($form->get('lines') as $line) {
                 $service = $line->get('service')->getData();
                 $service
-                        ->setInvoicedAt(new \DateTime('now'))
-                        ->setInvoiceNumber($invoiceNumber)
-                        ;
+                    ->setInvoicedAt(new \DateTime('now'))
+                    ->setInvoiceNumber($invoiceNumber)
+                    ;
             }
 
             $manager->flush();
