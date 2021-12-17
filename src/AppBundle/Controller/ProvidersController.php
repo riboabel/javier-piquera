@@ -28,7 +28,7 @@ class ProvidersController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         return $this->render('App/Providers/index.html.twig', array(
-            'records' => $em->getRepository('AppBundle:Provider')->findAll()
+            'records' => $em->getRepository(Provider::class)->findAll()
         ));
     }
 

@@ -1,4 +1,4 @@
-{% extends "frontend.html.twig" %}
+{% extends "frontend-requirejs.html.twig" %}
 
 {% block page_content %}
     <div class="row">
@@ -82,8 +82,12 @@
 
 {% block page_javascripts %}
     <script>
-        $(document).ready(function() {
-            App.Providers.Index.init();
+        require([
+            'js/providers-index'
+        ], function(init) {
+            'use strict';
+
+            init();
         });
     </script>
 {% endblock %}
