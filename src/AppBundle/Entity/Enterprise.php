@@ -64,13 +64,6 @@ class Enterprise
      */
     private $updatedAt;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer", name="last_invoice_number", options={"default": 0})
-     */
-    private $lastInvoiceNumber;
-
     public function __toString()
     {
         return $this->getName();
@@ -79,7 +72,6 @@ class Enterprise
     public function __construct($name)
     {
         $this->name = $name;
-        $this->lastInvoiceNumber = 0;
     }
 
     /**
@@ -205,28 +197,5 @@ class Enterprise
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * Set lastInvoiceNumber
-     *
-     * @param integer $lastInvoiceNumber
-     * @return Enterprise
-     */
-    public function setLastInvoiceNumber($lastInvoiceNumber)
-    {
-        $this->lastInvoiceNumber = $lastInvoiceNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get lastInvoiceNumber
-     *
-     * @return integer 
-     */
-    public function getLastInvoiceNumber()
-    {
-        return $this->lastInvoiceNumber;
     }
 }

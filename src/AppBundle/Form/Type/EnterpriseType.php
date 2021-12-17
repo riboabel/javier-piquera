@@ -22,8 +22,7 @@ class EnterpriseType extends AbstractType
                 ->add('postalAddress')
                 ->add('logoFile', VichImageType::class, array(
                     'required' => false
-                ))
-                ->add('lastInvoiceNumber');
+                ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

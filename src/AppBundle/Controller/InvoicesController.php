@@ -125,9 +125,9 @@ class InvoicesController extends Controller
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($invoice);
 
-            $enterprise = $manager->getRepository('AppBundle:Enterprise')->findOneBy(array());
-            $invoiceNumber = sprintf('%04d/%s', $enterprise->getLastInvoiceNumber() + 1, date('Y'));
-            $enterprise->setLastInvoiceNumber($enterprise->getLastInvoiceNumber() + 1);
+            $lastAutoincrement = (int)$invoice->getProvider()->getLastInvoiceAutoIncrementValue();
+            $invoiceNumber = sprintf('%04d/%s', $lastAutoincrement + 1, date('Y'));
+            $invoice->getProvider()->setLastInvoiceAutoIncrementValue($lastAutoincrement + 1);
 
             $invoice->setSerialNumber($invoiceNumber);
             

@@ -116,6 +116,13 @@ class Provider
      */
     private $contractNumber;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_invoice_auto_increment_value", length=100, nullable=true)
+     */
+    private $lastInvoiceAutoIncrementValue;
+
     public function __construct()
     {
         $this->receiveInvoice = false;
@@ -411,5 +418,29 @@ class Provider
     public function getContractNumber()
     {
         return $this->contractNumber;
+    }
+
+    /**
+     * Set lastInvoiceAutoIncrementValue
+     *
+     * @param string $lastInvoiceAutoIncrementValue
+     *
+     * @return Provider
+     */
+    public function setLastInvoiceAutoIncrementValue($lastInvoiceAutoIncrementValue)
+    {
+        $this->lastInvoiceAutoIncrementValue = $lastInvoiceAutoIncrementValue;
+
+        return $this;
+    }
+
+    /**
+     * Get lastInvoiceAutoIncrementValue
+     *
+     * @return string
+     */
+    public function getLastInvoiceAutoIncrementValue()
+    {
+        return $this->lastInvoiceAutoIncrementValue;
     }
 }

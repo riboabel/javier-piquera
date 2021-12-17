@@ -1,4 +1,6 @@
-{% extends "frontend.html.twig" %}
+{% extends "frontend-requirejs.html.twig" %}
+
+{% form_theme form "App/Providers/form.html.twig" %}
 
 {% block page_content %}
     <div class="row">
@@ -12,7 +14,7 @@
     {{ form_start(form, {action: path("app_providers_create"), attr: {role: "form", id: "provider"}}) }}
         <div class="row">
             <div class="col-lg-12">
-                {{ include("App/Providers/form.html.twig") }}
+                {{ form_row(form) }}
                 <button class="btn btn-success" type="submit">
                     <i class="fa fa-save"></i>
                     Guardar
@@ -29,8 +31,12 @@
 
 {% block page_javascripts %}
     <script>
-        $(document).ready(function() {
-            App.Providers.Form.init();
+        require([
+            'js/form-provider'
+        ], function(initApp) {
+            'use strict';
+
+            initApp();
         });
     </script>
 {% endblock %}

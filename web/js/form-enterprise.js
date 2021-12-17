@@ -7,13 +7,13 @@ App.Enterprise = function() {
         }
     }
 
-    var initHanlerImageInputClear = function() {
+    var initHandlerImageInputClear = function() {
         $('#enterprise_logoFile_file').on('change', handlerImageInputClearClick);
     }
 
     return {
         init: function() {
-            initHanlerImageInputClear();
+            initHandlerImageInputClear();
         }
     }
 }();

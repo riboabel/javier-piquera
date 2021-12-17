@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use AppBundle\Entity\Provider;
-use AppBundle\Form\Type\ProviderType;
+use AppBundle\Form\Type\ProviderFormType;
 
 /**
  * Description of ProvidersController
@@ -20,9 +20,8 @@ use AppBundle\Form\Type\ProviderType;
 class ProvidersController extends Controller
 {
     /**
-     * @Route("/")
-     * @Method({"get"})
-     * @return Response
+     * @Route("/", methods={"GET"})
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction()
     {
@@ -34,11 +33,10 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @Route("/{id}/ver", requirements={"id": "\d+"})
-     * @Method({"get"})
+     * @Route("/{id}/ver", requirements={"id": "\d+"}, methods={"GET"})
      * @ParamConverter("record", class="AppBundle\Entity\Provider")
      * @param Provider $record
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewAction(Provider $record)
     {
@@ -48,14 +46,13 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @Route("/nuevo")
-     * @Method({"get"})
-     * @return Response
+     * @Route("/nuevo", methods={"GET"})
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function newAction()
     {
         $provider = new Provider();
-        $form = $this->createForm(ProviderType::class, $provider);
+        $form = $this->createForm(ProviderFormType::class, $provider);
 
         return $this->render('App/Providers/new.html.twig', array(
             'form' => $form->createView()
@@ -63,16 +60,15 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @Route("/nuevo")
-     * @Method({"post"})
+     * @Route("/nuevo", methods={"POST"})
      * @param Request $request
-     * @return Response
+     * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function createAction(Request $request)
     {
         $provider = new Provider();
         $provider->setEnterprise($this->getUser()->getEnterprises()[0]);
-        $form = $this->createForm(ProviderType::class, $provider);
+        $form = $this->createForm(ProviderFormType::class, $provider);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -89,15 +85,14 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @Route("/{id}/editar", requirements={"id": "\d+"})
-     * @Method({"get"})
+     * @Route("/{id}/editar", requirements={"id": "\d+"}, methods={"GET"})
      * @ParamConverter("record", class="AppBundle\Entity\Provider")
      * @param Provider $record
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editAction(Provider $record)
     {
-        $form = $this->createForm(ProviderType::class, $record);
+        $form = $this->createForm(ProviderFormType::class, $record);
 
         return $this->render('App/Providers/edit.html.twig', array(
             'form' => $form->createView()
@@ -105,15 +100,15 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @Route("/{id}/editar", requirements={"id": "\d+"})
-     * @Method({"post"})
+     * @Route("/{id}/editar", requirements={"id": "\d+"}, methods={"POST"})
      * @ParamConverter("record", class="AppBundle\Entity\Provider")
      * @param Provider $record
-     * @return Response
+     * @param Request $request
+     * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function updateAction(Provider $record, Request $request)
     {
-        $form = $this->createForm(ProviderType::class, $record);
+        $form = $this->createForm(ProviderFormType::class, $record);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -129,8 +124,7 @@ class ProvidersController extends Controller
     }
 
     /**
-     * @Route("/{id}/eliminar", requirements={"id": "\d+"})
-     * @Method({"get", "post"})
+     * @Route("/{id}/eliminar", requirements={"id": "\d+"}, methods={"GET", "POST"})
      * @ParamConverter("record", class="AppBundle\Entity\Provider")
      * @param Provider $record
      * @return RedirectResponse

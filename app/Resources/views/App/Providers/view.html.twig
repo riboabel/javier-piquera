@@ -1,4 +1,4 @@
-{% extends "frontend.html.twig" %}
+{% extends "frontend-requirejs.html.twig" %}
 
 {% block page_content %}
     <div class="row">
@@ -54,6 +54,18 @@
                             <div class="input-wrapper"><input type="checkbox" disabled{{ record.receiveInvoice ? ' checked': '' }}><label for="">Recibe facturas</label></div>
                             <div class="help-block"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Datos del facturación</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <strong>Siguiente número de factura</strong><br>
+                        {{ record.lastInvoiceAutoIncrementValue|default('--') }}
+                        <div class="help-block">Aparece en las facturas</div>
                     </div>
                 </div>
             </div>
