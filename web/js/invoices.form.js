@@ -146,7 +146,9 @@ define([
                 $('#fakedServices').removeClass('hidden').find('.panel-body').append(entry({item: item({index: 0, index0: false})}));
                 $('#fakedServices').find('select[name$="[service]"]').on('change', serviceOnChange).select2($.extend(true, serviceSelect2Options, {
                     ajax: {
-                        url: router.generate('app_invoices_getservices', {id: $('#invoice_form_provider').val()})
+                        url: function() {
+                            return router.generate('app_invoices_getservices', {id: $('#invoice_form_provider').val()});
+                        }
                     }
                 }));
 
