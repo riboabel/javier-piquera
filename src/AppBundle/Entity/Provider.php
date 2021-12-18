@@ -123,6 +123,14 @@ class Provider
      */
     private $lastInvoiceAutoIncrementValue;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="letters_for_invoice", length=2, nullable=true)
+     * @Assert\Length(max=2)
+     */
+    private $lettersForInvoice;
+
     public function __construct()
     {
         $this->receiveInvoice = false;
@@ -442,5 +450,29 @@ class Provider
     public function getLastInvoiceAutoIncrementValue()
     {
         return $this->lastInvoiceAutoIncrementValue;
+    }
+
+    /**
+     * Set lettersForInvoice
+     *
+     * @param string $lettersForInvoice
+     *
+     * @return Provider
+     */
+    public function setLettersForInvoice($lettersForInvoice)
+    {
+        $this->lettersForInvoice = $lettersForInvoice;
+
+        return $this;
+    }
+
+    /**
+     * Get lettersForInvoice
+     *
+     * @return string
+     */
+    public function getLettersForInvoice()
+    {
+        return $this->lettersForInvoice;
     }
 }

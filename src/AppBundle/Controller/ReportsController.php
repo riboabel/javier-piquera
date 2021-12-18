@@ -301,7 +301,7 @@ class ReportsController extends Controller
     }
 
     /**
-     * @Route("/imprimir-factura/{serialNumber}", requirements={"serialNumber": "\d{4}\/\d{4}"})
+     * @Route("/imprimir-factura/{serialNumber}", requirements={"serialNumber": "\d{4}\/\d{4}[a-zA-Z]*"})
      * @Method({"GET"})
      * @ParamConverter("record", class="AppBundle\Entity\Invoice")
      * @param \AppBundle\Entity\Invoice $record

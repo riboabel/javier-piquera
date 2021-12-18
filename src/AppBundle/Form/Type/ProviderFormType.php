@@ -38,7 +38,8 @@ class ProviderFormType extends AbstractType
             ->add('contractNumber', null, array(
                 'required' => false
             ))
-            ->add('lastInvoiceAutoIncrementValue');
+            ->add('lastInvoiceAutoIncrementValue')
+            ->add('lettersForInvoice');
     }
 
     public function configureOptions(OptionsResolver $resolver)
