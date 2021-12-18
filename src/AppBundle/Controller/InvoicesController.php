@@ -131,7 +131,7 @@ class InvoicesController extends Controller
             $provider->setLastInvoiceAutoIncrementValue($lastAutoincrement + 1);
 
             $invoice->setSerialNumber($invoiceNumber);
-            
+
             foreach ($form->get('lines') as $line) {
                 $service = $line->get('service')->getData();
                 $service

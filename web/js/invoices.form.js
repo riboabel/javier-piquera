@@ -23,8 +23,26 @@ define([
             return !error;
         }, 'Hay servicios repetidos en la factura');
 
+        $.validator.addMethod('hasnoletter', function(value, element) {
+            function getOption(optionValue) {
+                var resultOption;
+                $('option', element).each(function(index, option) {
+                    if ($(option).attr('value') == optionValue) {
+                        resultOption = option;
+                        return false;
+                    }
+                });
+
+                return resultOption;
+            }
+
+            var option = getOption(value);
+
+            return !$(option).attr('data-has-no-letter');
+        }, 'Este cliente no tiene una letra para identificar en el número de factura.');
+
         utils.validate($('form#invoice'), {
-            ignore: ':hidden:not([name="services"])',
+            ignore: ':hidden:not([name="services"],[name="invoice_form[provider]"])',
             rules: {
                 'services': {
                     norepeatedservices: true,
@@ -34,6 +52,9 @@ define([
                         },
                         param: 1
                     }
+                },
+                'invoice_form[provider]': {
+                    'hasnoletter': true
                 }
             },
             messages: {

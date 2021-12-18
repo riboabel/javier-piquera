@@ -2,8 +2,11 @@
 
 namespace AppBundle\Form\Type;
 
+use AppBundle\Entity\Provider;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -37,27 +40,37 @@ class InvoiceFormType extends AbstractType
         $qb->where($qb->expr()->eq('p.receiveInvoice', 'true'));
 
         $builder
-                ->add('provider', null, array(
-                    'query_builder' => $qb
-                ))
-                ->add('driver')
-                ->add('modelName', ChoiceType::class, array(
-                    'choices' => array(
-                        'ATRIO' => 'ATRIO',
-                        'GENERAL' => 'GENERAL'
-                    ),
-                    'choices_as_values' => true
-                ))
-                ->add('lines', CollectionType::class, array(
-                    'entry_type' => InvoiceLineType::class,
-                    'allow_add' => true,
-                    'by_reference' => false
-                ))
-                ->add('notes', TextareaType::class, array(
-                    'required' => false
-                ))
-                ->add('totalCharge')
-                ;
+            ->add('provider', null, array(
+                'query_builder' => $qb,
+                'choice_label' => function(Provider $p) {
+                    return sprintf('%s (%s)', $p, $p->getLettersForInvoice() ?: 'sin letra para número de factura');
+                },
+                'choice_attr' => function(Provider $p) {
+                    $attr = [];
+                    if (!$p->getLettersForInvoice()) {
+                        $attr['data-has-no-letter'] = 'true';
+                    }
+
+                    return $attr;
+                }
+            ))
+            ->add('driver')
+            ->add('modelName', ChoiceType::class, array(
+                'choices' => array(
+                    'ATRIO' => 'ATRIO',
+                    'GENERAL' => 'GENERAL'
+                ),
+                'choices_as_values' => true
+            ))
+            ->add('lines', CollectionType::class, array(
+                'entry_type' => InvoiceLineType::class,
+                'allow_add' => true,
+                'by_reference' => false
+            ))
+            ->add('notes', TextareaType::class, array(
+                'required' => false
+            ))
+            ->add('totalCharge');
     }
 
     public function configureOptions(OptionsResolver $resolver)
