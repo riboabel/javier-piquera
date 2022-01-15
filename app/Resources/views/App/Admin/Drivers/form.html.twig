@@ -1,0 +1,57 @@
+{% block driver_form_row %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Datos del conductor
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    {{ form_row(form.name, {label: 'Nombre'}) }}
+                </div>
+                <div class="col-lg-4">
+                    {{ form_row(form.carIndicator) }}
+                </div>
+                <div class="col-lg-4">
+                    {{ form_row(form.isDriverGuide) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-xs-12">
+                    {{ form_label(form.postalAddress, 'Dirección postal') }}
+                    {{ form_widget(form.postalAddress) }}
+                    <div class="help-block">Aparece en la factura</div>
+                </div>
+                <div class="col-lg-6 col-xs-12">
+                    {{ form_row(form.contactInfo, {label: 'Información de contacto'}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-lg-6">
+                    {{ form_row(form.mobilePhone, {label: 'Teléfono móvil'}) }}
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                    {{ form_row(form.fixedPhone, {label: 'Teléfono fijo'}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Datos de facturación
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-6 col-xs-12">
+                    {{ form_label(form.bankAccount, 'Cuenta de banco') }}
+                    {{ form_widget(form.bankAccount) }}
+                    <div class="help-block">Aparece en las facturas de este conductor</div>
+                </div>
+                <div class="col-lg-6 col-xs-12">
+                    {{ form_label(form.nit, 'Número de identificación tributaria') }}
+                    {{ form_widget(form.nit) }}
+                    <div class="help-block">Aparece en las facturas de este conductor</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
