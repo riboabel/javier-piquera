@@ -31,7 +31,7 @@ class DriversController extends Controller
     {
         $form = $this->createForm(DriverFilterFormType::class);
 
-        return $this->render('@App/Admin/Drivers/index.html.twig', array(
+        return $this->render('App/Admin/Drivers/index.html.twig', array(
             'filter' => $form->createView()
         ));
     }
@@ -90,7 +90,7 @@ class DriversController extends Controller
 
         $total = $pagination->getTotalItemCount();
 
-        $template = $this->container->get('twig')->load('@App/Admin/Drivers/_row.html.twig');
+        $template = $this->container->get('twig')->load('App/Admin/Drivers/_row.html.twig');
         $data = array_map(function(Driver $record) use($template) {
             return array(
                 $record->getName(),
@@ -117,7 +117,7 @@ class DriversController extends Controller
      */
     public function viewAction(Driver $driver)
     {
-        return $this->render('@App/Admin/Drivers/view.html.twig', array(
+        return $this->render('App/Admin/Drivers/view.html.twig', array(
             'record' => $driver
         ));
     }
@@ -132,7 +132,7 @@ class DriversController extends Controller
         $driver = new Driver();
         $form = $this->createForm(DriverFormType::class, $driver);
 
-        return $this->render('@App/Admin/Drivers/new.html.twig', array(
+        return $this->render('App/Admin/Drivers/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -160,7 +160,7 @@ class DriversController extends Controller
             return $this->redirect($this->generateUrl('app_admin_drivers_index'));
         }
 
-        return $this->render('@App/Admin/Drivers/new.html.twig', array(
+        return $this->render('App/Admin/Drivers/new.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -176,7 +176,7 @@ class DriversController extends Controller
     {
         $form = $this->createForm(DriverFormType::class, $driver);
 
-        return $this->render('@App/Admin/Drivers/edit.html.twig', array(
+        return $this->render('App/Admin/Drivers/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -202,7 +202,7 @@ class DriversController extends Controller
             return $this->redirect($this->generateUrl('app_admin_drivers_index'));
         }
 
-        return $this->render('!App/Admin/Drivers/edit.html.twig', array(
+        return $this->render('App/Admin/Drivers/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }

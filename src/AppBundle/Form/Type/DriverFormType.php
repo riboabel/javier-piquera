@@ -23,7 +23,8 @@ class DriverFormType extends AbstractType
                     'required' => false
                 ))
                 ->add('isDriverGuide', ICheckType::class, array(
-                    'label' => 'Es conductor guía (driver guide)'
+                    'label' => 'Es conductor guía (driver guide)',
+                    'required' => false
                 ))
                 ->add('carIndicator', null, array(
                     'label' => 'Indicativo del vehículo',
