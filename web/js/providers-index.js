@@ -15,7 +15,6 @@ define([
                 title: 'Acciones'
             }]
         });
-        //App.Tables.initDeleteButtonHandler($('table#dataTables-providers'));
     };
 
     var initDeleteButtonHandler = function() {

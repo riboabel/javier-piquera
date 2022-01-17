@@ -1,4 +1,4 @@
-{% extends "frontend.html.twig" %}
+{% extends "frontend-requirejs.html.twig" %}
 
 {% block page_content %}
     <div class="row">
@@ -50,8 +50,16 @@
 
 {% block page_javascripts %}
     <script>
-        $(document).ready(function() {
-            App.Drivers.Index.init();
+        require([
+            'js/drivers'
+        ], function(app) {
+            'use strict';
+            app();
         });
     </script>
+    {#<script>#}
+        {#$(document).ready(function() {#}
+            {#App.Drivers.Index.init();#}
+        {#});#}
+    {#</script>#}
 {% endblock %}
